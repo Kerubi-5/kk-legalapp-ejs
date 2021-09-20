@@ -4,7 +4,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express')
 const expressLayouts = require('express-ejs-layouts')
-const router = require('./routes/index')
 const passport = require('passport')
 const session = require('express-session')
 const flash = require('express-flash')
@@ -26,15 +25,11 @@ app.use(expressLayouts)
 app.set('layout', './layouts/full-width')
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
-app.use(flash())
 
 // Passport
-const initializePassport = require('./config/passport')
-initializePassport(
-    passport,
-    username => User.find(user => user.username === username)
-)
+require('./config/passport')(passport)
 
+// Session Middleware
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -42,11 +37,19 @@ app.use(session({
     // cookie: { secure: true }
 }))
 
+// Initialize Passport
 app.use(passport.initialize())
 app.use(passport.session())
 
+// Flash
+app.use(flash())
+
 // Routes
-app.use('/', router)
+const index = require('./routes/index')
+const userRoutes = require('./routes/users')
+
+app.use('/', index)
+app.use('/users', userRoutes)
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)

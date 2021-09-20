@@ -1,16 +1,14 @@
-<form action="/login" method="POST">
-    <% if (messages.error) {%>
-        <%= messages.error %>
-            <% } %>
-                <div>
-                    <label>Username:</label>
-                    <input type="text" name="username" />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" name="password" />
-                </div>
-                <div>
-                    <input type="submit" value="Log In" />
-                </div>
+<form action="/users/login" method="POST">
+  <%- include('partials/messages') %>
+  <div>
+    <label>Username:</label>
+    <input type="text" name="username" />
+  </div>
+  <div>
+    <label>Password:</label>
+    <input type="password" name="password" />
+  </div>
+  <div>
+    <input type="submit" value="Log In" />
+  </div>
 </form>
