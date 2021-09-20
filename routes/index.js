@@ -5,7 +5,7 @@ const User = require('../models/User')
 const passport = require('passport')
 
 router.get('/', (req, res) => {
-    res.render('index')
+    res.render('index', { req.user.username })
 })
 
 // LOGIN AND REGISTER VIEW
@@ -37,5 +37,9 @@ router.post('/register', async (req, res) => {
     }
     console.log(User)
 })
+
+
+// PROTECTED ROUTES
+
 
 module.exports = router

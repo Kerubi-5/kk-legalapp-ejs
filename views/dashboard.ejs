@@ -1,0 +1,192 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="m-3 border rounded bg-white shadow">
+                <div class="nav flex-column nav-pills m-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <h4>Services</h4>
+                    <hr>
+                    <button class="nav-link active p-3 text-uppercase" id="v-pills-advice-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-advice" type="button" role="tab" aria-controls="v-pills-advice"
+                        aria-selected="true"><i class="fas fa-comment-medical"></i> Advice</button>
+                    <button class="nav-link p-3 text-uppercase" id="v-pills-consult-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-consult" type="button" role="tab" aria-controls="v-pills-consult"
+                        aria-selected="false"><i class="fas fa-balance-scale"></i> Consult</button>
+                    <h4>Status</h4>
+                    <hr>
+                    <button class="nav-link p-3 text-uppercase" id="v-pills-transaction-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-transaction" type="button" role="tab"
+                        aria-controls="v-pills-transaction" aria-selected="false"><i class="fas fa-receipt"></i>
+                        Transactions</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="m-3 border rounded bg-white shadow">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-advice" role="tabpanel"
+                        aria-labelledby="v-pills-advice-tab">
+                        <div>
+                            <!-- Advice Form -->
+                            <section class="consult-form container mt-3">
+                                <h1>Advice Form</h1>
+                                <hr>
+                                <div class="mb-3">
+                                    <label for="adverse_party" class="form-label">Title ng legal na problema</label>
+                                    <input type="text" class="form-control" id="adverse_party"
+                                        placeholder="Ilagay ang TBD kung hindi sure">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="case_objectives" class="form-label">Description ng legal na
+                                        problema</label>
+                                    <textarea class="form-control" class="form-control" id="case_objectives"
+                                        rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="client_questions" class="form-label">Mga katanungan</label>
+                                    <textarea class="form-control" class="form-control" id="client_questions"
+                                        rows="3"></textarea>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-consult" role="tabpanel"
+                        aria-labelledby="v-pills-consult-tab">
+                        <div>
+                            <!-- ACCORDION FOR CONSULTATION FORM -->
+                            <div class="accordion" id="accordionForm">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne" aria-expanded="true"
+                                            aria-controls="collapseOne">
+                                            Consultation Form
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show"
+                                        aria-labelledby="headingOne" data-bs-parent="#accordionForm">
+                                        <div class="accordion-body">
+                                            <!-- CONSULT FORM -->
+                                            <section class="consult-form container mt-3">
+                                                <h1>Consult Form</h1>
+                                                <hr>
+                                                <div class="mb-3">
+                                                    <label for="facts_of_the_case" class="form-label">Kwento/Detalye
+                                                        ng Legal na Problema</label>
+                                                    <textarea class="form-control" class="form-control"
+                                                        id="facts_of_the_case" rows="3"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="adverse_party" class="form-label">Adverse
+                                                        Party</label>
+                                                    <input type="text" class="form-control" id="adverse_party"
+                                                        placeholder="Ilagay ang TBD kung hindi sure">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="case_objectives" class="form-label">Mga layunin na
+                                                        gustong makamit sa legal na problema</label>
+                                                    <textarea class="form-control" class="form-control"
+                                                        id="case_objectives" rows="3"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="client_questions" class="form-label">Mga
+                                                        katanungan</label>
+                                                    <textarea class="form-control" class="form-control"
+                                                        id="client_questions" rows="3"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="case_file" class="form-label">Mga dokumentong
+                                                        makakatulong sa legal na problema</label>
+                                                    <input class="form-control" type="file" id="case_file">
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                            aria-expanded="false" aria-controls="collapseTwo">
+                                            Available Lawyers
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse"
+                                        aria-labelledby="headingTwo" data-bs-parent="#accordionForm">
+                                        <div class="accordion-body">
+                                            <!-- Available Lawyers List -->
+                                            <div class="row">
+                                                <div class="col">
+                                                    <img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
+                                                        alt="">
+                                                </div>
+                                                <div class="col">
+                                                    Jonathan <br>
+                                                    <i class="fas fa-quidditch"></i><i class="fas fa-quidditch"></i>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="checkbox">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
+                                                        alt="">
+                                                </div>
+                                                <div class="col">
+                                                    Bryan <br>
+                                                    3 stars
+                                                </div>
+                                                <div class="col">
+                                                    <input type="checkbox">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
+                                                        alt="">
+                                                </div>
+                                                <div class="col">
+                                                    John Roy <br>
+                                                    4 stars
+                                                </div>
+                                                <div class="col">
+                                                    <input type="checkbox">
+                                                </div>
+                                            </div>
+
+                                            <button>submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-transaction" role="tabpanel"
+                        aria-labelledby="v-pills-transaction-tab">
+                        <div>
+                            <!-- ONGOING TABLE -->
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#Case ID</th>
+                                        <th scope="col">Legal Title</th>
+                                        <th scope="col">Lawyer</th>
+                                        <th scope="col">Status</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Patayan</td>
+                                        <td>Jonathan</td>
+                                        <td>Complete</td>
+                                        <td><button class="btn btn-primary">View</button></td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
