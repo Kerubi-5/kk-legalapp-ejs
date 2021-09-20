@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const User = require('../models/User')
+const passport = require('passport')
 
 router.get('/', (req, res) => {
     res.render('index')
@@ -17,8 +18,11 @@ router.get('/register', (req, res) => {
 })
 
 // LOGIN AND REGISTER POST
-router.post('/login', (req, res) => {
-})
+router.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+}))
 
 router.post('/register', async (req, res) => {
     try {
