@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
+const User = require('../models/User')
 
 router.get('/', (req, res) => {
     res.render('index')
@@ -19,7 +20,18 @@ router.get('/register', (req, res) => {
 router.post('/login', (req, res) => {
 })
 
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
+    try {
+        const hash = await bcrypt.hash(req.body.password, 10)
+        User.push({
+            username: req.body.username,
+            password: hash
+        })
+        res.redirect('/login')
+    } catch {
+        res.redirect('/register')
+    }
+    console.log(User)
 })
 
 module.exports = router
