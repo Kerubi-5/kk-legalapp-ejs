@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const passport = require('passport')
 
 // User Model
@@ -16,11 +16,13 @@ router.get('/register', (req, res) => {
 })
 
 // LOGIN AND REGISTER POST
-router.post('/login', passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/users/login',
-    failureFlash: true
-}))
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/users/login',
+        failureFlash: true
+    })(req, res, next);
+});
 
 router.post('/register', (req, res) => {
     const { username, password } = req.body
@@ -58,25 +60,31 @@ router.post('/register', (req, res) => {
                         password
                     });
 
-                    //Hash password
-                    const hash = await bcrypt.hash(password, 10)
-                    newUser.password = hash
-                    newUser.save()
-                        .then(user => {
-                            req.flash('sucess_msg', 'You are now registered')
-                            res.redirect('/users/login')
-                        })
-                        .catch(err => console.log(err))
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(newUser.password, salt, (err, hash) => {
+                            if (err) throw err;
+                            newUser.password = hash;
+                            newUser
+                                .save()
+                                .then(user => {
+                                    req.flash(
+                                        'sucess_msg',
+                                        'You are now registered and can log in'
+                                    );
+                                    res.redirect('/users/login');
+                                })
+                                .catch(err => console.log(err));
+                        });
+                    });
                 }
             })
     }
 })
 
 router.get('/logout', (req, res) => {
-    req.session.destroy()
-    req.logout()
-    req.flash('success_msg', 'Succesfully logged out')
-    res.redirect('/')
-})
+    req.logout();
+    req.flash('sucess_msg', 'You are logged out');
+    res.redirect('/users/login');
+});
 
 module.exports = router

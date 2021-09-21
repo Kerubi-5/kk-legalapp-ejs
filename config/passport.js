@@ -4,28 +4,29 @@ const bcrypt = require('bcryptjs')
 // Load User Model
 const User = require('../models/User')
 
-
-
 module.exports = function (passport) {
-    passport.use(new LocalStrategy({ usernameField: 'username' },
-        // Match user
-        //     function (username, password, done) {
-        //         User.findOne({ username: username }, async function (err, user) {
-        //             if (err) { return done(err); }
-        //             if (!user) {
-        //                 return done(null, false, { message: 'Incorrect username.' });
-        //             }
+    passport.use(
+        new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
+            // Match user
+            User.findOne({
+                username: username
+            }).then(user => {
+                if (!user) {
+                    return done(null, false, { message: 'That username is not registered' });
+                }
 
-        //             const match = await bcrypt.compare(password, user.password)
-
-        //             if (!match) {
-        //                 return done(null, false, { message: 'Incorrect password.' });
-        //             }
-
-        //             return done(null, user);
-        //         });
-        //     }
-    ));
+                // Match password
+                bcrypt.compare(password, user.password, (err, isMatch) => {
+                    if (err) throw err;
+                    if (isMatch) {
+                        return done(null, user);
+                    } else {
+                        return done(null, false, { message: 'Password incorrect' });
+                    }
+                });
+            });
+        })
+    );
 
     passport.serializeUser(function (user, done) {
         done(null, user.id);
@@ -36,5 +37,5 @@ module.exports = function (passport) {
             done(err, user);
         });
     });
-}
+};
 
