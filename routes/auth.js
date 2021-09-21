@@ -1,9 +1,11 @@
-function isAuth(req, res, next) {
+module.exports.isAuth = (req, res, next) => {
     if (req.isAuthenticated()) {
-        return next()
+        next();
     }
-    req.flash('error_msg', "Login to view this resource")
+    req.flash('error_msg', 'You need to login to continue')
     res.redirect('/users/login')
 }
 
-module.exports = isAuth
+module.exports.isAdmin = (req, res, next) => {
+
+}

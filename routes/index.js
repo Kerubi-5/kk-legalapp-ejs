@@ -1,6 +1,6 @@
 const express = require('express')
-const isAuth = require('./auth').isAuth
 const router = express.Router()
+const isAuth = require('./auth').isAuth
 
 router.get('/', (req, res) => {
     res.render('index')
