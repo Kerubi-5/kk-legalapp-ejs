@@ -1,14 +1,19 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router()
-const isAuth = require('./auth').isAuth
 
-router.get('/', (req, res) => {
-    res.render('index')
-})
+// Auth types
+const isClient = require('./auth').isClient
+const isLawyer = require('./auth').isLawyer
+const isAdmin = require('./auth').isAdmin
 
-// PROTECTED ROUTES
-router.get('/dashboard', isAuth, (req, res) => {
-    res.render('dashboard')
-})
+// Welcome Page
+router.get('/', (req, res) => res.render('index'))
 
-module.exports = router
+// Dashboard
+router.get('/dashboard', isClient, (req, res) =>
+    res.render('dashboard', {
+        user: req.user
+    })
+);
+
+module.exports = router;
