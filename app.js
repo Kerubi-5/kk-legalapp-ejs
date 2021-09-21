@@ -38,6 +38,9 @@ app.set('view engine', 'ejs')
  * -------------- SESSION SETUP ----------------
  */
 
+// FLASH MIDDLEWARE
+app.use(flash())
+
 app.use(
     session({
         secret: 'secret',
@@ -57,9 +60,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-// FLASH MIDDLEWARE
-app.use(flash())
-
 /**
  * -------------- ROUTES ----------------
  */
@@ -67,10 +67,13 @@ app.use(flash())
 const index = require('./routes/index')
 const userRoutes = require('./routes/users')
 
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.isAuthenticated()
+    next()
+})
+
 app.use('/', index)
 app.use('/users', userRoutes)
-
-
 
 // Listening to port
 app.listen(port, () => {

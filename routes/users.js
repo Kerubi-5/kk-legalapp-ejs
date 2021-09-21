@@ -16,10 +16,24 @@ router.get('/register', forwardAuthenticated, (req, res) => res.render('register
 
 // Register
 router.post('/register', (req, res) => {
-    const { username, email, password, password2, user_type } = req.body;
+    const {
+        username,
+        email,
+        password,
+        password2,
+        user_fname,
+        user_lname,
+        birthdate,
+        contact_number,
+        permanent_address,
+        city,
+        zip,
+        user_type,
+        affiliation } = req.body;
+
     let errors = [];
 
-    if (!username || !email || !password || !password2) {
+    if (!username || !email || !password || !password2 || !user_fname || !user_lname || !birthdate || !contact_number || !permanent_address || !city || !zip) {
         errors.push({ msg: 'Please enter all fields' });
     }
 
@@ -38,6 +52,13 @@ router.post('/register', (req, res) => {
             email,
             password,
             password2,
+            user_fname,
+            user_lname,
+            birthdate,
+            contact_number,
+            permanent_address,
+            city,
+            zip,
             user_type
         });
     } else {
@@ -50,6 +71,13 @@ router.post('/register', (req, res) => {
                     email,
                     password,
                     password2,
+                    user_fname,
+                    user_lname,
+                    birthdate,
+                    contact_number,
+                    permanent_address,
+                    city,
+                    zip,
                     user_type
                 });
             } else {
@@ -57,6 +85,13 @@ router.post('/register', (req, res) => {
                     username,
                     email,
                     password,
+                    user_fname,
+                    user_lname,
+                    birthdate,
+                    contact_number,
+                    permanent_address,
+                    city,
+                    zip,
                     user_type
                 });
 
@@ -95,6 +130,7 @@ router.get('/logout', (req, res) => {
     req.logout();
     req.flash('sucess_msg', 'You are logged out');
     res.redirect('/users/login');
+
 });
 
 // Protected Routes
