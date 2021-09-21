@@ -1,0 +1,62 @@
+<div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1"><i class="fa fa-user" aria-hidden="true"></i>
+    </span>
+    <input type="username" id="username" name="username" class="form-control" placeholder="Enter Username"
+      value="<%= typeof username != 'undefined' ? username : '' %>" />
+  </div>
+  <!-- EMAIL -->
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope" aria-hidden="true"></i>
+    </span>
+    <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email"
+      value="<%= typeof email != 'undefined' ? email : '' %>" />
+  </div>
+  <!-- PASSWORD -->
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1"><i class="fa fa-key" aria-hidden="true"></i>
+    </span>
+    <input type="password" id="password" name="password" class="form-control" placeholder="Create Password"
+      value="<%= typeof password != 'undefined' ? password : '' %>" />
+  </div>
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1"><i class="fa fa-key" aria-hidden="true"></i>
+    </span>
+    <input type="password" id="password2" name="password2" class="form-control" placeholder="Confirm Password"
+      value="<%= typeof password2 != 'undefined' ? password2 : '' %>" />
+  </div>
+  <!-- FIRST AND LAST NAME -->
+  <div class="input-group mb-3">
+    <input type="user_fname" id="user_fname" name="user_fname" class="form-control" placeholder="First name"
+    value="<%= typeof user_fname != 'undefined' ? user_fname : '' %>" />
+    <span class="input-group-text"></span>
+    <input type="user_lname" id="user_lname" name="user_lname" class="form-control" placeholder="Last name"
+    value="<%= typeof user_lname != 'undefined' ? user_lname : '' %>" />
+  </div>
+  <!-- BIRTHDATE -->
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i>
+    </span>
+    <input type="date" id="birthdate" name="birthdate" class="form-control" placeholder="Enter Email"
+    value="<%= typeof birthdate != 'undefined' ? birthdate : '' %>" />
+  </div>
+  <!-- CONTACT NUMBER -->
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1"><i class="fa fa-phone" aria-hidden="true"></i>
+    </span>
+    <input type="contact_number" id="contact_number" name="contact_number" class="form-control" placeholder="Enter Contact number"
+      value="<%= typeof contact_number != 'undefined' ? contact_number : '' %>" />
+  </div>
+  <!-- PERMANENT ADDRESS -->
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1"><i class="fa fa-home" aria-hidden="true"></i>
+    </span>
+    <input type="permanent_address" id="permanent_address" name="permanent_address" class="form-control" placeholder="Enter permanent address"
+      value="<%= typeof permanent_address != 'undefined' ? permanent_address : '' %>" />
+  </div>
+  <div class="input-group mb-3">
+    <input type="city" id="city" name="city" class="form-control" placeholder="City"
+    value="<%= typeof city != 'undefined' ? city : '' %>" />
+    <span class="input-group-text"></span>
+    <input type="zip" id="zip" name="zip" class="form-control" placeholder="Zip"
+    value="<%= typeof zip != 'undefined' ? zip : '' %>" />
+  </div>
