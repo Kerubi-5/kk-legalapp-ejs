@@ -4,7 +4,8 @@ const authUtils = require('../utils/crypto')
 const passport = require('passport');
 // Load User model
 const User = require('../models/User');
-const forwardAuthenticated = require('./auth').isNotAuth
+const forwardAuthenticated = require('./auth').isNotAuth;
+const { isClient } = require('./auth');
 
 
 
@@ -33,17 +34,13 @@ router.post('/register', (req, res) => {
 
     let errors = [];
 
-    if (!username || !email || !password || !password2 || !user_fname || !user_lname || !birthdate || !contact_number || !permanent_address || !city || !zip) {
-        errors.push({ msg: 'Please enter all fields' });
-    }
+    if (!username || !email || !password || !password2 || !user_fname || !user_lname || !birthdate || !contact_number || !permanent_address || !city || !zip) errors.push({ msg: 'Please enter all fields' });
 
-    if (password != password2) {
-        errors.push({ msg: 'Passwords do not match' });
-    }
+    if (username.length > 20) errors.push({ msg: 'Username cannot be longer than 20 characters' })
 
-    if (password.length < 6) {
-        errors.push({ msg: 'Password must be at least 6 characters' });
-    }
+    if (password != password2) errors.push({ msg: 'Passwords do not match' });
+
+    if (password.length < 6 || password.length > 20) errors.push({ msg: 'Password must be at least 6 characters, and not more than 20 characters long' });
 
     if (errors.length > 0) {
         res.render('register', {
@@ -122,6 +119,16 @@ router.get('/logout', (req, res) => {
 });
 
 // Protected Routes
-router.get('./dashboard',)
+router.get('/edit/:username', isClient, (req, res) => {
+    const id = req.session.passport.user
+    User.findOne({ _id: id }, (err, result) => {
+        if (err) throw err
+
+        res.render('profile-edit', { result })
+    })
+})
+router.put('/edit/:username', (req, res) => {
+
+})
 
 module.exports = router;
