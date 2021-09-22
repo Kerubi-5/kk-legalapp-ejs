@@ -1,0 +1,7 @@
+PATCH http://localhost:3000/users/edit/614aad2b83b475a420ad134f
+Content-Type: application/json
+
+{
+    "username": "keruzxczxczcxuu",
+    "email": "ssdadd@gmail.com"
+}
