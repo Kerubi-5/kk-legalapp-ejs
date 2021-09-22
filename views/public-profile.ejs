@@ -1,0 +1,10 @@
+<%- include ("./partials/messages"); %>
+
+<% if (result) { %>
+
+<h2><%- result.username %>  's profile</h2>
+<% } %>
+
+<% if (isAuthenticated) { %>
+    <a href="/dashboard/<%- result.username %>">Edit Page</a>
+<% } %>
