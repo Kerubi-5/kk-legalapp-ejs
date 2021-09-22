@@ -39,11 +39,10 @@
                             <td><%- result.permanent_address %></td>
                         </tr>
                         <tr>
-                            
+
                         </tr>
                       </table>
-                    <% if (isAuthenticated) { %>
-                        
+                    <% if (isAuthenticated && result._id == id)  { %>
                         <a href="/users/edit/<%- result.username %>">Edit Page</a>
                     <% } %>
                 </div>

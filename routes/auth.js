@@ -13,7 +13,7 @@ module.exports.isClient = (req, res, next) => {
     }
     else {
         req.flash('error_msg', 'You need to login to continue')
-        res.redirect('users/login')
+        res.redirect('/users/login')
     }
 }
 
@@ -22,7 +22,7 @@ module.exports.isLawyer = (req, res, next) => {
         return next()
     }
     else {
-        res.redirect('users/login')
+        res.redirect('/users/login')
     }
 }
 
@@ -31,6 +31,6 @@ module.exports.isAdmin = (req, res, next) => {
         return next()
     }
     else {
-        res.redirect('users/login')
+        res.redirect('/users/login')
     }
 }

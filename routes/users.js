@@ -124,11 +124,21 @@ router.get('/edit/:username', isClient, (req, res) => {
     User.findOne({ _id: id }, (err, result) => {
         if (err) throw err
 
-        res.render('profile-edit', { result })
+        res.render('profile-edit', { result, id })
     })
 })
 router.put('/edit/:username', (req, res) => {
 
+})
+
+router.get('/:username', isClient, (req, res) => {
+    const userName = req.params.username
+    const id = req.session.passport.user
+    User.findOne({ username: userName }, (err, result) => {
+        if (err) throw err
+
+        res.render('public-profile', { result, id: id })
+    })
 })
 
 module.exports = router;
