@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
+const authUtils = require('../utils/crypto')
 const passport = require('passport');
 // Load User model
 const User = require('../models/User');
@@ -95,35 +95,23 @@ router.post('/register', (req, res) => {
                     user_type
                 });
 
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if (err) throw err;
-                        newUser.password = hash;
-                        newUser
-                            .save()
-                            .then(user => {
-                                req.flash(
-                                    'sucess_msg',
-                                    'You are now registered and can log in'
-                                );
-                                res.redirect('/users/login');
-                            })
-                            .catch(err => console.log(err));
-                    });
-                });
+                newUser.password = authUtils.hashPassword(password);
+                newUser.save()
+                req.flash('sucess_msg', 'You are now registered please log in to continue')
+                res.redirect('/users/login')
             }
         });
     }
 });
 
 // Login
-router.post('/login', (req, res, next) => {
+router.post('/login',
     passport.authenticate('local', {
         successRedirect: '/dashboard',
         failureRedirect: '/users/login',
         failureFlash: true
-    })(req, res, next);
-});
+    })
+);
 
 // Logout
 router.get('/logout', (req, res) => {

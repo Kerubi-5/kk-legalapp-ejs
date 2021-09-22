@@ -38,14 +38,11 @@ app.set('view engine', 'ejs')
  * -------------- SESSION SETUP ----------------
  */
 
-// FLASH MIDDLEWARE
-app.use(flash())
-
 app.use(
     session({
         secret: 'secret',
-        resave: true,
-        saveUninitialized: true
+        resave: false,
+        saveUninitialized: false
     })
 );
 
@@ -58,7 +55,14 @@ require('./config/passport')(passport);
 
 app.use(passport.initialize());
 app.use(passport.session());
+// FLASH MIDDLEWARE
+app.use(flash())
 
+// Save to Global Vars Logged In
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.isAuthenticated()
+    next()
+})
 
 /**
  * -------------- ROUTES ----------------
@@ -66,11 +70,6 @@ app.use(passport.session());
 
 const index = require('./routes/index')
 const userRoutes = require('./routes/users')
-
-app.use((req, res, next) => {
-    res.locals.isAuthenticated = req.isAuthenticated()
-    next()
-})
 
 app.use('/', index)
 app.use('/users', userRoutes)

@@ -11,9 +11,7 @@ router.get('/', (req, res) => res.render('index'))
 
 // Dashboard
 router.get('/dashboard', isClient, (req, res) =>
-    res.render('dashboard', {
-        user: req.user
-    })
+    res.render('dashboard')
 );
 
 module.exports = router;
