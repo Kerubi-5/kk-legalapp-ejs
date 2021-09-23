@@ -12,6 +12,20 @@ const isAdmin = require('./auth').isAdmin
 // Welcome Page
 router.get('/', (req, res) => res.render('index'))
 
+router.get('/about', (req, res) => {
+    res.render('about')
+})
+
+// Protected Routes
+
 // Dashboard
-router.get('/dashboard', isClient, (req, res) => res.render('dashboard'));
+router.get('/dashboard', isClient, (req, res) => {
+    User.findOne({ _id: req.user._id }, (err, result) => {
+        if (err) throw err
+
+        res.render('dashboard', { result })
+    })
+});
+
+
 module.exports = router;

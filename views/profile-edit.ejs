@@ -1,5 +1,15 @@
-
-
-<div class="container">
-    <%- include ('./partials/registration-form') %> 
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card">
+            <div class="card-body">
+                <form action="/users/edit/<%- id %>?_method=PATCH" method="POST">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa fa-user" aria-hidden="true"></i>
+                    </span>
+                    <input type="username" id="username" name="username" class="form-control"
+                        placeholder="Enter Username" value="<%= typeof username != 'undefined' ? username : '' %>" />
+                    <button type="submit">Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

@@ -15,7 +15,7 @@ router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 // Register Page
 router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
 
-// Register
+// Register POST
 router.post('/register', (req, res) => {
     const {
         username,
@@ -119,26 +119,56 @@ router.get('/logout', (req, res) => {
 });
 
 // Protected Routes
-router.get('/edit/:username', isClient, (req, res) => {
+
+// Public Profile View
+router.get('/:objectId', isClient, (req, res) => {
+    const objectId = req.params.objectId
     const id = req.session.passport.user
     User.findOne({ _id: id }, (err, result) => {
         if (err) throw err
 
-        res.render('profile-edit', { result, id })
-    })
-})
-router.put('/edit/:username', (req, res) => {
-
-})
-
-router.get('/:username', isClient, (req, res) => {
-    const userName = req.params.username
-    const id = req.session.passport.user
-    User.findOne({ username: userName }, (err, result) => {
-        if (err) throw err
-
         res.render('public-profile', { result, id: id })
     })
+})
+
+// Profile Edit View
+router.get('/edit/:id', isClient, (req, res) => {
+    const id = req.session.passport.user
+    const user_id = req.params.id
+
+    if (id == req.params.id) {
+        User.findOne({ _id: id }, (err, result) => {
+            if (err) throw err
+
+            res.render('profile-edit', { result, id: user_id })
+        })
+    }
+})
+
+// DELETE with 404 Status
+router.delete('/edit/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+        await user.remove()
+        res.send({ data: true })
+    } catch {
+        res.status(404).send({ error: 'User is not found' })
+    }
+})
+
+
+// UPDATE with 500 Status
+router.patch('/edit/:id', async (req, res, next) => {
+    try {
+        const filter = req.params.id
+        const update = req.body
+        const result = await User.findOneAndUpdate({ _id: filter }, update)
+
+        req.flash('sucess_msg', 'You are now registered please log in to continue')
+        res.redirect('/dashboard')
+    } catch (err) {
+        res.status(500).send({ message: "gg" })
+    }
 })
 
 module.exports = router;

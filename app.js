@@ -8,6 +8,8 @@ const passport = require('passport')
 const session = require('express-session')
 const flash = require('express-flash')
 const dbConnection = require('./config/db')
+const methodOverride = require('method-override')
+const ObjectID = require('mongodb').ObjectId
 
 /**
  * -------------- DATABASE CONNECTION ----------------
@@ -33,6 +35,9 @@ app.use('./css', express.static(__dirname + 'public/css'))
 app.use(expressLayouts)
 app.set('layout', './layouts/full-width')
 app.set('view engine', 'ejs')
+
+// Method Override
+app.use(methodOverride('_method'))
 
 /**
  * -------------- SESSION SETUP ----------------
@@ -61,6 +66,7 @@ app.use(flash())
 // Save to Global Vars Logged In
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.isAuthenticated()
+    res.locals.user_id = req.session.passport
     next()
 })
 
