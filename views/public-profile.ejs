@@ -8,19 +8,19 @@
     <div class="row">
         <div class="card">
             <div class="card-body">
-                <div class="col-md-2 bg-success">           
+                <div class="col-md-2">           
                     <% if (result) { %>
                         <img src="https://picsum.photos/300/300.jpg?hmac=2Z_fr-yUH1ByQu36MAR319aTCndT4FjG1VBksAKGVKU" class="img-thumbnail" alt="...">
-        
-                        <h3><%- result.username %>  's profile</h3>
+                        <h3><%- result.username %>'s profile</h3>
                     <% } %>
                 </div>
             </div>
+            <%- include ("./partials/messages"); %>
         </div>
 
         <div class="card">
             <div class="card-body">
-                <div class="col-md-10 bg-light">
+                <div class="col-md-10">
                     <table class="table table-borderless">
                         <tr>
                             <td> First Name </td>
@@ -39,16 +39,15 @@
                             <td><%- result.permanent_address %></td>
                         </tr>
                         <tr>
-
+                            <td> Contact Number </td>
+                            <td><%- result.contact_number %></td>
                         </tr>
                       </table>
                     <% if (isAuthenticated && result._id == id)  { %>
-                        <a href="/users/edit/<%- result._id %>">Edit Page</a>
+                        <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Profile</a>
                     <% } %>
                 </div>
             </div>
         </div>
-
- 
     </div>
 </div>

@@ -122,7 +122,6 @@ router.get('/logout', (req, res) => {
 
 // Public Profile View
 router.get('/:objectId', isClient, (req, res) => {
-    const objectId = req.params.objectId
     const id = req.session.passport.user
     User.findOne({ _id: id }, (err, result) => {
         if (err) throw err
