@@ -5,7 +5,7 @@ const passport = require('passport');
 // Load User model
 const User = require('../models/User');
 const forwardAuthenticated = require('./auth').isNotAuth;
-const { isClient } = require('./auth');
+const { isClient, isLawyer, isAdmin } = require('./auth');
 
 
 
@@ -121,7 +121,7 @@ router.get('/logout', (req, res) => {
 // Protected Routes
 
 // Public Profile View
-router.get('/:objectId', isClient, (req, res) => {
+router.get('/:id', isClient, (req, res) => {
     const id = req.session.passport.user
     User.findOne({ _id: id }, (err, result) => {
         if (err) throw err
