@@ -76,9 +76,11 @@ app.use((req, res, next) => {
 
 const index = require('./routes/index')
 const userRoutes = require('./routes/users')
+const complaintRoutes = require('./routes/complaints')
 
 app.use('/', index)
 app.use('/users', userRoutes)
+app.use('/submit', complaintRoutes)
 
 // Listening to port
 app.listen(port, () => {

@@ -7,8 +7,6 @@ const User = require('../models/User');
 const forwardAuthenticated = require('./auth').isNotAuth;
 const { isClient, isLawyer, isAdmin } = require('./auth');
 
-
-
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 
@@ -142,6 +140,9 @@ router.get('/edit/:id', isClient, (req, res) => {
             res.render('profile-edit', { result, id: user_id })
         })
     }
+    else {
+        res.send("You cannot view this resource")
+    }
 })
 
 // DELETE with 404 Status
@@ -154,7 +155,6 @@ router.delete('/edit/:id', async (req, res) => {
         res.status(404).send({ error: 'User is not found' })
     }
 })
-
 
 // UPDATE with 500 Status
 router.patch('/edit/:id', async (req, res, next) => {
