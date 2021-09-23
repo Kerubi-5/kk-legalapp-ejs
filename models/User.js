@@ -48,6 +48,10 @@ const UserSchema = new mongoose.Schema({
     affiliation: {
         type: String,
     },
+    complaints: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Complaint"
+    }],
     date: {
         type: Date,
         default: Date.now
