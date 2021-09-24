@@ -9,7 +9,8 @@ const forwardAuthenticated = require('./auth').isNotAuth;
 // Auth types
 const isClient = require('./auth').isClient
 const isLawyer = require('./auth').isLawyer
-const isAdmin = require('./auth').isAdmin
+const isAdmin = require('./auth').isAdmin;
+const { ObjectId } = require('bson');
 
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
@@ -145,29 +146,29 @@ router.get('/logout', (req, res) => {
 
 // Public Profile View
 router.get('/:id', isClient, (req, res) => {
-    const id = req.user._id
+    const id = ObjectId(req.user._id)
     const _id = req.params.id
     User.findOne({ _id }, (err, result) => {
         if (err) throw err
 
-        res.render('public-profile', { result, id: id, user_id: id })
+        res.render('public-profile', { result, user_id: id, param_id: _id })
     })
 })
 
 // Profile Edit View
 router.get('/edit/:id', isClient, (req, res) => {
-    const id = req.session.passport.user
-    const user_id = req.params.id
+    const id = ObjectId(req.user._id)
 
     if (id == req.params.id) {
         User.findOne({ _id: id }, (err, result) => {
             if (err) throw err
 
-            res.render('profile-edit', { result, id: user_id })
+            res.render('profile-edit', { result, user_id: id })
         })
     }
     else {
-        res.send("You cannot view this resource")
+        req.flash('error_msg', 'You do not have the authority to view that resource')
+        res.redirect('/users/' + id)
     }
 })
 
@@ -189,8 +190,8 @@ router.patch('/edit/:id', async (req, res, next) => {
         const update = req.body
         const result = await User.findOneAndUpdate({ _id: filter }, update)
 
-        req.flash('sucess_msg', 'You are now registered please log in to continue')
-        res.redirect('/dashboard')
+        req.flash('sucess_msg', 'Profile Succesfully Updated')
+        res.redirect('/users/' + filter)
     } catch (err) {
         res.status(500).send({ message: "gg" })
     }
