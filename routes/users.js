@@ -5,7 +5,11 @@ const passport = require('passport');
 // Load User model
 const User = require('../models/User');
 const forwardAuthenticated = require('./auth').isNotAuth;
-const { isClient, isLawyer, isAdmin } = require('./auth');
+
+// Auth types
+const isClient = require('./auth').isClient
+const isLawyer = require('./auth').isLawyer
+const isAdmin = require('./auth').isAdmin
 
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
@@ -141,12 +145,12 @@ router.get('/logout', (req, res) => {
 
 // Public Profile View
 router.get('/:id', isClient, (req, res) => {
-    const id = req.user
+    const id = req.user._id
     const _id = req.params.id
     User.findOne({ _id }, (err, result) => {
         if (err) throw err
 
-        res.render('public-profile', { result, id: id })
+        res.render('public-profile', { result, id: id, user_id: id })
     })
 })
 

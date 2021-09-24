@@ -66,7 +66,6 @@ app.use(flash())
 // Save to Global Vars Logged In
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.isAuthenticated()
-    res.locals.user_id = req.session.passport
     next()
 })
 

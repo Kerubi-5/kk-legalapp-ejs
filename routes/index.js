@@ -1,13 +1,12 @@
-const express = require('express');;
+const { ObjectID } = require('bson')
+const express = require('express')
 const router = express.Router()
 
 // Load User model
 const User = require('../models/User');
 
 // Auth types
-const isClient = require('./auth').isClient
-const isLawyer = require('./auth').isLawyer
-const isAdmin = require('./auth').isAdmin
+const { isClient } = require('./auth')
 
 // Welcome Page
 router.get('/', (req, res) => res.render('index'))
@@ -20,12 +19,18 @@ router.get('/about', (req, res) => {
 
 // Dashboard
 router.get('/dashboard', isClient, (req, res) => {
-    User.findOne({ _id: req.user._id }, (err, result) => {
+    const id = ObjectID(req.user._id)
+    console.log(id)
+    User.find({}, function (err, data) {
         if (err) throw err
+        // note that data is an array of objects, not a single object!
+        res.render('dashboard', {
+            result: data,
+            user_id: id
+        });
+    });
 
-        res.render('dashboard', { result })
-    })
+
 });
-
 
 module.exports = router;
