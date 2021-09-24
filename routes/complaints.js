@@ -10,7 +10,6 @@ const Complaint = require('../models/Complaint')
 const isClient = require('./auth').isClient
 const isLawyer = require('./auth').isLawyer
 const isAdmin = require('./auth').isAdmin;
-const { ObjectId } = require('bson');
 
 // This is how to populate subfields
 // router.get('/', (req, res) => {
