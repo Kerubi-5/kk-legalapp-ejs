@@ -28,7 +28,9 @@ router.post('/register', (req, res) => {
         city,
         zip,
         user_type,
-        affiliation } = req.body;
+        is_available,
+        affiliation,
+    } = req.body;
 
     let errors = [];
 
@@ -76,19 +78,38 @@ router.post('/register', (req, res) => {
                     user_type
                 });
             } else {
-                const newUser = new User({
-                    username,
-                    email,
-                    password,
-                    user_fname,
-                    user_lname,
-                    birthdate,
-                    contact_number,
-                    permanent_address,
-                    city,
-                    zip,
-                    user_type
-                });
+                let newUser = new User()
+                if (user_type == "client") {
+                    newUser = new User({
+                        username,
+                        email,
+                        password,
+                        user_fname,
+                        user_lname,
+                        birthdate,
+                        contact_number,
+                        permanent_address,
+                        city,
+                        zip,
+                        user_type
+                    });
+                } else if (user_type == "lawyer") {
+                    newUser = new User({
+                        username,
+                        email,
+                        password,
+                        user_fname,
+                        user_lname,
+                        birthdate,
+                        contact_number,
+                        permanent_address,
+                        city,
+                        zip,
+                        user_type,
+                        is_available,
+                        affiliation
+                    });
+                }
 
                 newUser.password = authUtils.hashPassword(password);
                 newUser.save()
@@ -120,8 +141,9 @@ router.get('/logout', (req, res) => {
 
 // Public Profile View
 router.get('/:id', isClient, (req, res) => {
-    const id = req.session.passport.user
-    User.findOne({ _id: id }, (err, result) => {
+    const id = req.user
+    const _id = req.params.id
+    User.findOne({ _id }, (err, result) => {
         if (err) throw err
 
         res.render('public-profile', { result, id: id })
