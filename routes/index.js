@@ -16,7 +16,7 @@ router.get('/', (req, res) => res.render('index'))
 // Dashboard
 router.get('/dashboard', isClient, (req, res) => {
     const id = ObjectID(req.user._id)
-    console.log(id)
+
     User.find({}, function (err, data) {
         if (err) throw err
         // note that data is an array of objects, not a single object!
