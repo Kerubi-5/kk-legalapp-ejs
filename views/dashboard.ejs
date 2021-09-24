@@ -55,6 +55,7 @@
                             <!-- ACCORDION FOR CONSULTATION FORM -->
                             <form action="">
                             <div class="accordion" id="accordionForm">
+                                <form action="/complaints/submit" method="POST"></form>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -115,47 +116,36 @@
                                         aria-labelledby="headingTwo" data-bs-parent="#accordionForm">
                                         <div class="accordion-body">
                                             <!-- Available Lawyers List -->
-                                            <div class="row">
-                                                <div class="col">
-                                                    <img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
-                                                        alt="">
-                                                </div>
-                                                <div class="col">
-                                                    Jonathan <br>
-                                                    <i class="fas fa-quidditch"></i><i class="fas fa-quidditch"></i>
-                                                </div>
-                                                <div class="col">
-                                                    <input type="checkbox">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
-                                                        alt="">
-                                                </div>
-                                                <div class="col">
-                                                    Bryan <br>
-                                                    3 stars
-                                                </div>
-                                                <div class="col">
-                                                    <input type="checkbox">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
-                                                        alt="">
-                                                </div>
-                                                <div class="col">
-                                                    John Roy <br>
-                                                    4 stars
-                                                </div>
-                                                <div class="col">
-                                                    <input type="checkbox">
-                                                </div>
-                                            </div>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <caption>Choose one from the available lawyers</caption>    
+                                                <!-- LALAGAY DITO YUNG NASA DASHBOARD.TXT -->
+                                                <table class="table table-striped" style="overflow-y:auto;">     
+                                                    <% result.forEach((lawyer) => { %>
+                                                        <% if (lawyer.user_type == "lawyer") { %>
+                                                            <tr>
+                                                                <td width="20">
+                                                                    <img src="https://i.picsum.photos/id/276/200/200.jpg?hmac=nEmegloU9V9ajpTC6GdgRRIz-d0EliWd5cQ-F1olB54" style="display: table-cell;">
+                                                                </td>
+                                                                <td width="70%"> 
+                                                                    <a href="/users/<%- lawyer._id %> ">
+                                                                        <%- lawyer.user_fname %> 
+                                                                        <%- lawyer.user_lname %> 
+                                                                    </a>
 
-                                            <button type="submit" class="btn">submit</button>
+                                                                </td>
+                                                                <td width="10%" vertical="centered" vertical> 
+                                                                    <input class="form-check-input big" type="radio" name="lawyer_chosen" value="<% lawyer._id %> " id="flexRadioDefault1">
+                                                                </td>
+                                                            </tr>   
+                                                        <% } %>
+                                                    <% }) %>                                                                       
+                                                </table>
+                                                </div>
+                                                </div>
+                                            <div class="text-center mt-3">
+                                                <button type="submit" class="btn btn-primary">Submit Complaint</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
