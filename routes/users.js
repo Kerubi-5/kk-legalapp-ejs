@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const authUtils = require('../utils/crypto')
 const passport = require('passport');
+
 // Load User model
 const User = require('../models/User');
-const forwardAuthenticated = require('./auth').isNotAuth;
 
 // Auth types
+const forwardAuthenticated = require('./auth').isNotAuth;
 const isClient = require('./auth').isClient
 const isLawyer = require('./auth').isLawyer
 const isAdmin = require('./auth').isAdmin;

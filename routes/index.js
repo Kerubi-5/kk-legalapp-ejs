@@ -1,4 +1,3 @@
-const { ObjectID } = require('bson')
 const express = require('express')
 const router = express.Router()
 
@@ -7,6 +6,8 @@ const User = require('../models/User');
 
 // Auth types
 const { isClient } = require('./auth')
+
+const { ObjectID } = require('bson')
 
 // Welcome Page
 router.get('/', (req, res) => res.render('index'))
