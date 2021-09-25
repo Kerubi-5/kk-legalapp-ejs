@@ -17,6 +17,11 @@
                     <h1>Consult Form</h1>
                     <hr>
                     <div class="mb-3">
+                        <label for="adverse_party" class="form-label">Pamagat ng legal na problema</label>
+                        <input type="text" class="form-control" id="adverse_party"
+                            placeholder="Ano ang kabuuhang ideya ng problema">
+                    </div>
+                    <div class="mb-3">
                         <label for="facts_of_the_case" class="form-label">Kwento/Detalye
                             ng Legal na Problema</label>
                         <textarea class="form-control" class="form-control"
@@ -75,14 +80,14 @@
                                             <td width="70%">
                                                 <a href="/users/<%- lawyer._id %> ">
                                                     <%- lawyer.user_fname %>
-                                                        <%- lawyer.user_lname %>
+                                                    <%- lawyer.user_lname %>
                                                 </a>
 
                                             </td>
                                             <td width="10%" vertical="centered" vertical>
                                                 <input class="form-check-input big"
-                                                    type="radio" name="lawyer_chosen"
-                                                    value="<% lawyer._id %> "
+                                                    type="radio" name="lawyer_id"
+                                                    value="<%- lawyer._id %> "
                                                     id="flexRadioDefault1">
                                             </td>
                                         </tr>
