@@ -27,84 +27,12 @@
                     <div class="tab-content" id="v-pills-tabContent">
                         <div class="tab-pane fade show active" id="v-pills-advice" role="tabpanel"
                             aria-labelledby="v-pills-advice-tab">
-                            <div>
-                                <!-- Advice Form -->
-                                <%- include ("./partials/advice-form") %>
-                            </div>
+                            <!-- Advice Form -->
+                            <%- include ("./partials/advice-form") %>
                         </div>
                         <div class="tab-pane fade" id="v-pills-consult" role="tabpanel"
                             aria-labelledby="v-pills-consult-tab">
-                            <div>
-                                <!-- ACCORDION FOR CONSULTATION FORM -->
-                                <div class="accordion" id="accordionForm">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingOne">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#collapseOne" aria-expanded="true"
-                                                aria-controls="collapseOne">
-                                                Consultation Form
-                                            </button>
-                                        </h2>
-                                        <div id="collapseOne" class="accordion-collapse collapse show"
-                                            aria-labelledby="headingOne" data-bs-parent="#accordionForm">
-                                            <div class="accordion-body">
-                                                <!-- CONSULT FORM -->
-                                                <%- include ("./partials/consultation-form") %>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingTwo">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                                aria-expanded="false" aria-controls="collapseTwo">
-                                                Available Lawyers
-                                            </button>
-                                        </h2>
-                                        <div id="collapseTwo" class="accordion-collapse collapse"
-                                            aria-labelledby="headingTwo" data-bs-parent="#accordionForm">
-                                            <div class="accordion-body">
-                                                <!-- Available Lawyers List -->
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <caption>Choose one from the available lawyers</caption>
-                                                        <!-- LALAGAY DITO YUNG NASA DASHBOARD.TXT -->
-                                                        <table class="table table-striped" style="overflow-y:auto;">
-                                                            <% result.forEach((lawyer)=> { %>
-                                                                <% if (lawyer.user_type=="lawyer" ) { %>
-                                                                    <tr>
-                                                                        <td width="20">
-                                                                            <img src="https://i.picsum.photos/id/276/200/200.jpg?hmac=nEmegloU9V9ajpTC6GdgRRIz-d0EliWd5cQ-F1olB54"
-                                                                                style="display: table-cell;">
-                                                                        </td>
-                                                                        <td width="70%">
-                                                                            <a href="/users/<%- lawyer._id %> ">
-                                                                                <%- lawyer.user_fname %>
-                                                                                    <%- lawyer.user_lname %>
-                                                                            </a>
-
-                                                                        </td>
-                                                                        <td width="10%" vertical="centered" vertical>
-                                                                            <input class="form-check-input big"
-                                                                                type="radio" name="lawyer_chosen"
-                                                                                value="<% lawyer._id %> "
-                                                                                id="flexRadioDefault1">
-                                                                        </td>
-                                                                    </tr>
-                                                                    <% } %>
-                                                                        <% }) %>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <div class="text-center mt-3">
-                                                    <button type="submit" class="btn btn-primary">Submit
-                                                        Complaint</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <%- include ("./partials/consultation-form") %>
                         </div>
                         <div class="tab-pane fade" id="v-pills-transaction" role="tabpanel"
                             aria-labelledby="v-pills-transaction-tab">
