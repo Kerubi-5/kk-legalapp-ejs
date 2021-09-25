@@ -21,27 +21,16 @@ const { ObjectId } = require('bson');
 //     })
 // })
 
-// COMPLAINT POST CONFIRMATION VIEW
-router.post('/consultation', async (req, res) => {
-    //    const client_id = ObjectId(req.user._id)
-    const client_id = ObjectId(req.user._id)
-    const details = req.body
-
-    res.render('consultation-confirmation', {
-        user_id: client_id, details
-    })
-})
-
 // COMPLAINT POST SUBMIT
-router.post('/consultation/submit', (req, res) => {
+router.post('/consultation', isClient, (req, res) => {
     const client_id = ObjectId(req.user._id)
+    const lawyer_id = (req.body.lawyer_id)
 
     const {
         parent_name,
         parent_address,
         service_id,
         files_and_attachments,
-        lawyer_id,
     } = req.body
 
     let errors = []
@@ -50,33 +39,52 @@ router.post('/consultation/submit', (req, res) => {
         errors.push('Please fill all the required fields')
     }
 
-    if (errors.length > 0) {
-        res.render('dashboard', {
-            errors
+    // if (errors.length > 0) {
+    //     res.render('dashboard', {
+    //         errors,
+    //         user_id: client_id,
+    //         result: req.user
+    //     })
+    // } else {
+    let newComplaint = new Complaint()
+    const id_of_lawyer = ObjectId(req.body.lawyer_id)
+    // If minor or not
+    if (!parent_name) {
+        newComplaint = new Complaint({
+            client_id,
+            files_and_attachments,
+            id_of_lawyer,
         })
     } else {
-        let newComplaint = new Complaint
-        // If minor or not
-        if (!parent_name) {
-            newComplaint = new Complaint({
-                service_id,
-                files_and_attachments,
-                lawyer_id,
-            })
-        } else {
-            newComplaint = new Complaint({
-                parent_name,
-                parent_address,
-                service_id,
-                files_and_attachments,
-                lawyer_id,
-            })
-        }
-
-        newComplaint.save()
-        req.flash('sucess_msg', 'Complaint Successfully Submitted')
-        res.redirect('/dashboard')
+        newComplaint = new Complaint({
+            client_id,
+            parent_name,
+            parent_address,
+            files_and_attachments,
+            id_of_lawyer,
+        })
     }
+
+    newComplaint.save()
+
+    User.findOne({ _id: client_id }, (err, result) => {
+        if (err) throw err
+        result.complaints.push(newComplaint)
+        result.save()
+    })
+
+    User.findOne({ _id: lawyer_id }, (err, result) => {
+        if (err) throw err
+        result.complaints.push(newComplaint)
+        result.save()
+    })
+
+    console.log(lawyer_id)
+
+
+    req.flash('sucess_msg', 'Complaint Successfully Submitted')
+    res.redirect('/dashboard')
+    //}
 })
 
 
