@@ -24,7 +24,7 @@ const { ObjectId } = require('bson');
 // COMPLAINT POST SUBMIT
 router.post('/consultation', isClient, (req, res) => {
     const client_id = ObjectId(req.user._id)
-    const lawyer_id = (req.body.lawyer_id)
+    const lawyer_id = ObjectId(req.body.lawyer_id)
 
     const {
         parent_name,
@@ -47,13 +47,13 @@ router.post('/consultation', isClient, (req, res) => {
     //     })
     // } else {
     let newComplaint = new Complaint()
-    const id_of_lawyer = ObjectId(req.body.lawyer_id)
+
     // If minor or not
     if (!parent_name) {
         newComplaint = new Complaint({
             client_id,
             files_and_attachments,
-            id_of_lawyer,
+            lawyer_id
         })
     } else {
         newComplaint = new Complaint({
@@ -61,26 +61,26 @@ router.post('/consultation', isClient, (req, res) => {
             parent_name,
             parent_address,
             files_and_attachments,
-            id_of_lawyer,
+            lawyer_id
         })
     }
 
     newComplaint.save()
 
-    User.findOne({ _id: client_id }, (err, result) => {
+    // Find User Client
+    User.findOne({ _id: client_id, user_type: 'client' }, (err, result) => {
         if (err) throw err
         result.complaints.push(newComplaint)
         result.save()
     })
 
-    User.findOne({ _id: lawyer_id }, (err, result) => {
+    // Find User Lawyer
+    User.findOne({ _id: lawyer_id, user_type: 'lawyer' }, (err, result) => {
         if (err) throw err
         result.complaints.push(newComplaint)
+        console.log(result)
         result.save()
     })
-
-    console.log(lawyer_id)
-
 
     req.flash('sucess_msg', 'Complaint Successfully Submitted')
     res.redirect('/dashboard')
