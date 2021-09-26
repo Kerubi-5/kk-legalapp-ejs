@@ -21,21 +21,30 @@ const { ObjectId } = require('bson');
 //     })
 // })
 
+
+// COMPLAINT VIEW
+router.get('/complaints/:id', isClient, (req, res) => {
+
+})
+
 // COMPLAINT POST SUBMIT
 router.post('/consultation', isClient, (req, res) => {
     const client_id = ObjectId(req.user._id)
     const lawyer_id = ObjectId(req.body.lawyer_id)
 
     const {
-        parent_name,
-        parent_address,
+        legal_title,
         service_id,
-        files_and_attachments,
+        case_facts,
+        adverse_party,
+        case_objectives,
+        client_questions,
+        case_file,
     } = req.body
 
     let errors = []
 
-    if (!service_id || !files_and_attachments || lawyer_id) {
+    if (!service_id || !case_file || !lawyer_id || !client_id || !case_facts || !adverse_party || !case_objectives || !client_questions) {
         errors.push('Please fill all the required fields')
     }
 
@@ -46,24 +55,14 @@ router.post('/consultation', isClient, (req, res) => {
     //         result: req.user
     //     })
     // } else {
-    let newComplaint = new Complaint()
-
-    // If minor or not
-    if (!parent_name) {
-        newComplaint = new Complaint({
-            client_id,
-            files_and_attachments,
-            lawyer_id
-        })
-    } else {
-        newComplaint = new Complaint({
-            client_id,
-            parent_name,
-            parent_address,
-            files_and_attachments,
-            lawyer_id
-        })
-    }
+    const newComplaint = new Complaint({
+        client_id,
+        legal_title,
+        adverse_party,
+        case_objectives,
+        client_questions,
+        lawyer_id
+    })
 
     newComplaint.save()
 
@@ -78,7 +77,6 @@ router.post('/consultation', isClient, (req, res) => {
     User.findOne({ _id: lawyer_id, user_type: 'lawyer' }, (err, result) => {
         if (err) throw err
         result.complaints.push(newComplaint)
-        console.log(result)
         result.save()
     })
 

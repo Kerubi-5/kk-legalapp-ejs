@@ -39,24 +39,7 @@
                             aria-labelledby="v-pills-transaction-tab">
                             <div>
                                 <!-- ONGOING TABLE -->
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">#Case ID</th>
-                                            <th scope="col">Legal Title</th>
-                                            <th scope="col">Lawyer</th>
-                                            <th scope="col">Status</th>
-                                            <th></th>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Patayan</td>
-                                            <td>Jonathan</td>
-                                            <td>Complete</td>
-                                            <td><button class="btn btn-primary">View</button></td>
-                                        </tr>
-                                    </thead>
-                                </table>
+                                <%- include ("./partials/transactions-table") %> 
                             </div>
                         </div>
                     </div>

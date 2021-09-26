@@ -5,21 +5,30 @@ const ComplaintSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: "User"
     },
-    date: {
+    date_submitted: {
         type: Date,
-        default: Date.now
+        default: Date.now()
     },
-    parent_name: {
+    legal_title: {
         type: String
     },
-    parent_address: {
+    case_facts: {
+        type: String
+    },
+    adverse_party: {
+        type: String
+    },
+    case_objectives: {
+        type: String
+    },
+    client_questions: {
         type: String
     },
     service_id: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Service"
     },
-    files_and_attachments: [{
+    case_file: [{
         imageUrl: {
             type: String,
             required: true

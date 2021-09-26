@@ -60,9 +60,9 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Complaint"
     }],
-    date: {
+    date_created: {
         type: Date,
-        default: Date.now
+        default: Date.now()
     }
 })
 
