@@ -14,7 +14,12 @@ const ObjectID = require('mongodb').ObjectId
 /**
  * -------------- DATABASE CONNECTION ----------------
  */
+
 dbConnection()
+
+/**
+ * -------------- BODY PARSER ----------------
+ */
 
 const app = express()
 app.use(express.json());

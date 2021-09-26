@@ -1,3 +1,14 @@
+module.exports.isAuth = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    else {
+        req.flash('error_msg', 'You need to login to continue')
+
+        res.redirect('/users/login');
+    }
+}
+
 module.exports.isNotAuth = (req, res, next) => {
     if (!req.isAuthenticated()) {
         return next();

@@ -10,6 +10,7 @@ const Complaint = require('../models/Complaint')
 const isClient = require('./auth').isClient
 const isLawyer = require('./auth').isLawyer
 const isAdmin = require('./auth').isAdmin;
+const isAuth = require('./auth').isAuth
 const { ObjectId } = require('bson');
 
 // This is how to populate subfields
@@ -23,8 +24,18 @@ const { ObjectId } = require('bson');
 
 
 // COMPLAINT VIEW
-router.get('/complaints/:id', isClient, (req, res) => {
+router.get('/complaints/:id', isAuth, (req, res) => {
+    const client_id = ObjectId(req.user._id)
+    const complaint_id = ObjectId(req.params.id)
 
+    Complaint.findOne({ _id: complaint_id }).populate("client_id").populate("lawyer_id").exec((err, result) => {
+        if (err) throw err
+
+        if (client_id.equals(result.client_id._id) || client_id.equals(result.lawyer_id._id)) res.send(result)
+        else {
+            res.send("You do not have resources to view this resources")
+        }
+    })
 })
 
 // COMPLAINT POST SUBMIT
