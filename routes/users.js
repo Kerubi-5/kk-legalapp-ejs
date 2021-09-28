@@ -194,7 +194,7 @@ router.patch('/edit/:id', async (req, res, next) => {
         req.flash('sucess_msg', 'Profile Succesfully Updated')
         res.redirect('/users/' + filter)
     } catch (err) {
-        res.status(500).send({ message: "gg" })
+        res.status(500).send({ error: "There was an error in updating the user" })
     }
 })
 

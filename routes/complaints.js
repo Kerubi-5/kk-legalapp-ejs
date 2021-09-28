@@ -21,9 +21,9 @@ router.get('/complaints/:id', isAuth, (req, res) => {
     Complaint.findOne({ _id: complaint_id }).populate("client_id").populate("lawyer_id").exec(async (err, result) => {
         if (err) throw err
 
-        let client_user = await User.findOne({ _id: user_id })
+        let user_doc = await User.findOne({ _id: user_id })
 
-        const user_type = client_user.user_type
+        const user_type = user_doc.user_type
 
         // Only users involved in this complaint will be able to see the content of the complaint
         if (user_id.equals(result.client_id._id) || user_id.equals(result.lawyer_id._id))
