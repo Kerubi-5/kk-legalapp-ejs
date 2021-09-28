@@ -13,27 +13,21 @@ const isAdmin = require('./auth').isAdmin;
 const isAuth = require('./auth').isAuth
 const { ObjectId } = require('bson');
 
-// This is how to populate subfields
-// router.get('/', (req, res) => {
-//     const id = '614c3328302dfd9f36f4907c'
-//     Complaint.find({ id }).populate("client_id").populate("lawyer_id").exec((err, result) => {
-//         if (err) throw err
-//         res.send(result)
-//     })
-// })
-
-
 // COMPLAINT VIEW
 router.get('/complaints/:id', isAuth, (req, res) => {
-    const client_id = ObjectId(req.user._id)
+    const user_id = ObjectId(req.user._id)
     const complaint_id = ObjectId(req.params.id)
 
     Complaint.findOne({ _id: complaint_id }).populate("client_id").populate("lawyer_id").exec((err, result) => {
         if (err) throw err
 
-        if (client_id.equals(result.client_id._id) || client_id.equals(result.lawyer_id._id)) res.send(result)
+        console.log(result.client_id)
+
+        // Only users involved in this complaint will be able to see the content of the complaint
+        if (user_id.equals(result.client_id._id) || user_id.equals(result.lawyer_id._id)) res.render('consultation-view', { user_id: user_id, result })
         else {
-            res.send("You do not have resources to view this resources")
+            res.status(401)
+            res.send("You do not have the authority to view this resource")
         }
     })
 })
@@ -51,27 +45,17 @@ router.post('/consultation', isClient, (req, res) => {
         case_objectives,
         client_questions,
         case_file,
+        case_status
     } = req.body
 
-    let errors = []
-
-    if (!service_id || !case_file || !lawyer_id || !client_id || !case_facts || !adverse_party || !case_objectives || !client_questions) {
-        errors.push('Please fill all the required fields')
-    }
-
-    // if (errors.length > 0) {
-    //     res.render('dashboard', {
-    //         errors,
-    //         user_id: client_id,
-    //         result: req.user
-    //     })
-    // } else {
     const newComplaint = new Complaint({
         client_id,
         legal_title,
+        case_facts,
         adverse_party,
         case_objectives,
         client_questions,
+        case_status,
         lawyer_id
     })
 
@@ -93,12 +77,14 @@ router.post('/consultation', isClient, (req, res) => {
 
     req.flash('sucess_msg', 'Complaint Successfully Submitted')
     res.redirect('/dashboard')
-    //}
 })
-
 
 // TRANSACTION VIEW
 router.get('/:id', (req, res) => {
+
+})
+
+router.get('/', (req, res) => {
 
 })
 
