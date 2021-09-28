@@ -17,7 +17,7 @@ router.get('/', isNotAuth, (req, res) => res.render('index'))
 
 // Dashboard
 router.get('/dashboard', isClient, (req, res) => {
-    const id = ObjectID(req.user._id)
+    const id = ObjectId(req.user._id)
 
     User.find({}).populate('complaints').exec(async (err, data) => {
         if (err) throw err
