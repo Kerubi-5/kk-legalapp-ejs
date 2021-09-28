@@ -1,55 +1,59 @@
 <!-- CONSULTATION DETAILS -->
 <div class="container">
-    <div class="">
-        <div class="m-3 border rounded bg-white shadow" style="padding-left: 20px; padding-right: 20px;">
-            <!-- Info for merit test -->
-            <section class="consult-view container mt-3">
-                <h1>Impormasyon tungkol sa Kaso</h1>
-                <hr>
-                <div class="mb-3">
-                    <label for="case_no" class="form-label">#Case ID:</label>
-                    <span class="badge bg-dark rounded-pill">
-                        <%- result._id %>
-                    </span>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Pangalan ng Kliyente</label>
-                    <input type="text" class="form-control" id="client_name" value="<%- result.client_id.user_fname %>"
-                        readonly>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Perang kinikita sa isang taon</label>
-                    <input type="text" class="form-control" id="client_name" value="50,000-70,000" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="case_facts" class="form-label">Kwento/Detalye
-                        ng Legal na Problema</label>
-                    <textarea class="form-control" class="form-control" id="case_facts" rows="3"
-                        readonly><%- result.case_facts %></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="adverse_party" class="form-label">Kalabang Partido</label>
-                    <input type="text" class="form-control" id="adverse_party" readonly
-                        value="<%- result.adverse_party %>">
-                </div>
-                <div class="mb-3">
-                    <label for="case_objectives" class="form-label">Mga layunin na
-                        gustong makamit sa legal na problema</label>
-                    <textarea class="form-control" class="form-control" id="case_objectives" rows="3"
-                        readonly><%- result.case_objectives %></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="client_questions" class="form-label">Mga
-                        katanungan</label>
-                    <textarea class="form-control" class="form-control" id="client_questions" rows="3"
-                        readonly><%- result.client_questions %></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="case_file" class="form-label">Mga dokumentong
-                        makakatulong sa legal na problema</label>
 
-                </div>
+    <div class="m-3 border rounded bg-white shadow" style="padding-left: 20px; padding-right: 20px;">
+        <!-- Info for merit test -->
+        <section class="consult-view container mt-3">
+            <h1>Impormasyon tungkol sa Kaso</h1>
+            <hr>
+            <div class="mb-3">
+                <label for="case_no" class="form-label">#Case ID:</label>
+                <span class="badge bg-dark rounded-pill">
+                    <%- result._id %>
+                </span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Pangalan ng Kliyente</label>
+                <input type="text" class="form-control" id="client_name" value="<%- result.client_id.user_fname %>"
+                    readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Perang kinikita sa isang taon</label>
+                <input type="text" class="form-control" id="client_name" value="50,000-70,000" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="case_facts" class="form-label">Kwento/Detalye
+                    ng Legal na Problema</label>
+                <textarea class="form-control" class="form-control" id="case_facts" rows="3"
+                    readonly><%- result.case_facts %></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="adverse_party" class="form-label">Kalabang Partido</label>
+                <input type="text" class="form-control" id="adverse_party" readonly value="<%- result.adverse_party %>">
+            </div>
+            <div class="mb-3">
+                <label for="case_objectives" class="form-label">Mga layunin na
+                    gustong makamit sa legal na problema</label>
+                <textarea class="form-control" class="form-control" id="case_objectives" rows="3"
+                    readonly><%- result.case_objectives %></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
+                <input type="text" class="form-control" id="lawyer_details" readonly
+                    value="<%- result.lawyer_id.user_fname %>">
+            </div>
+            <div class="mb-3">
+                <label for="client_questions" class="form-label">Mga
+                    katanungan sa abogado</label>
+                <textarea class="form-control" class="form-control" id="client_questions" rows="3"
+                    readonly><%- result.client_questions %></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="case_file" class="form-label">Mga dokumentong
+                    makakatulong sa legal na problema</label>
 
+            </div>
+            <% if (user_type=="lawyer" ) { %>
                 <hr>
                 <div class="mb-3 mt-5">
                     <label for="buttons" class="form-label" style="font-size:x-large"><b>Tanggapin ang
@@ -59,7 +63,8 @@
 
                     <a><button class="btn btn-danger btn-lg">Reject</button></a>
                 </div>
-            </section>
-        </div>
+                <% } %>
+
+        </section>
     </div>
 </div>

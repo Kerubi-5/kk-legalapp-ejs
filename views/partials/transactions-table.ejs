@@ -4,17 +4,15 @@
             <thead>
                 <th scope="col">#Case ID</th>
                 <th scope="col">Legal Title</th>
-                <th scope="col">Lawyer</th>
                 <th scope="col">Status</th>
                 <th></th>
             </thead>
-            <% result.forEach(complaint => { %>
+            <% result.forEach(complaint => { %> 
                 <% if (user_id.equals(complaint._id)) { %>
                     <% for( let index = 0; index < complaint.complaints.length; index++ ) { %>
                         <tr>
                             <td><%- complaint.complaints[index]._id %> </td>
                             <td><%- complaint.complaints[index].legal_title %> </td>
-                            <td><%- complaint.complaints[index].lawyer_id %> </td>
                             <td><%- complaint.complaints[index].case_status %> </td>
                             <td><a href="/form/complaints/<%- complaint.complaints[index]._id %>" class="btn btn-primary"><i class="far fa-eye"></i> View</a></td>
                         </tr>

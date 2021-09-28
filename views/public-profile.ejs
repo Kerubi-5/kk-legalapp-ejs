@@ -3,42 +3,73 @@
         <div class="card">
             <div class="card-body">
                 <%- include ("./partials/messages"); %>
-                <div class="col">           
-                    <% if (result) { %>
-                        <img src="https://picsum.photos/300/300.jpg?hmac=2Z_fr-yUH1ByQu36MAR319aTCndT4FjG1VBksAKGVKU" class="img-thumbnail" alt="...">
-                        <span><h3><%- result.username %>'s profile</h3></span>
-                    <% } %>
-                </div>
+                    <div class="col">
+                        <% if (result) { %>
+                            <img src="https://picsum.photos/300/300.jpg?hmac=2Z_fr-yUH1ByQu36MAR319aTCndT4FjG1VBksAKGVKU"
+                                class="img-thumbnail" alt="...">
+                            <span>
+                                <h3>
+                                    <%- result.username %>'s profile
+                                </h3>
+                            </span>
+                            <% } %>
+                    </div>
             </div>
         </div>
         <div class="card">
             <div class="card-body">
                 <div class="col">
                     <table class="table table-borderless">
+                        <h4>Personal Information</h4>
+                        <hr>
                         <tr>
                             <td> First Name </td>
-                            <td><%- result.user_fname %> </td>
+                            <td>
+                                <%- result.user_fname %>
+                            </td>
                         </tr>
                         <tr>
                             <td> Last Name </td>
-                            <td><%- result.user_lname %> </td>
+                            <td>
+                                <%- result.user_lname %>
+                            </td>
                         </tr>
                         <tr>
                             <td> Birthdate </td>
-                            <td> <%- result.birthdate %> </td>
+                            <td>
+                                <%- result.birthdate %>
+                            </td>
                         </tr>
                         <tr>
                             <td> Full Address </td>
-                            <td><%- result.permanent_address %></td>
+                            <td>
+                                <%- result.permanent_address %>
+                            </td>
                         </tr>
                         <tr>
                             <td> Contact Number </td>
-                            <td><%- result.contact_number %></td>
+                            <td>
+                                <%- result.contact_number %>
+                            </td>
                         </tr>
-                      </table>
-                    <% if (isAuthenticated && param_id == user_id)  { %>
-                        <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Profile</a>
+                    </table>
+
+                    <% if (result.user_type == "lawyer") { %>
+                        <table class="table table-borderless">
+                            <h4>Credentials</h4>
+                            <hr>
+                            <tr>
+                                <td> First Name </td>
+                                <td>
+                                    <%- result.user_fname %>
+                                </td>
+                            </tr>
+                        </table>
                     <% } %>
+
+                    <% if (isAuthenticated && param_id==user_id) { %>
+                        <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Profile</a>
+                        <% } %>
                 </div>
             </div>
         </div>
