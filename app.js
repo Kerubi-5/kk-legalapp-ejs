@@ -9,7 +9,6 @@ const session = require('express-session')
 const flash = require('express-flash')
 const dbConnection = require('./config/db')
 const methodOverride = require('method-override')
-const ObjectID = require('mongodb').ObjectId
 
 /**
  * -------------- DATABASE CONNECTION ----------------
@@ -25,6 +24,8 @@ const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const port = process.env.PORT || 3000
+
+
 
 /**
  * -------------- STATIC FILES ----------------

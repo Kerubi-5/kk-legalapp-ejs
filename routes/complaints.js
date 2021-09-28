@@ -24,11 +24,10 @@ router.get('/complaints/:id', isAuth, (req, res) => {
         console.log(result.client_id)
 
         // Only users involved in this complaint will be able to see the content of the complaint
-        if (user_id.equals(result.client_id._id) || user_id.equals(result.lawyer_id._id)) res.render('consultation-view', { user_id: user_id, result })
-        else {
-            res.status(401)
-            res.send("You do not have the authority to view this resource")
-        }
+        if (user_id.equals(result.client_id._id) || user_id.equals(result.lawyer_id._id))
+            res.render('consultation-view', { user_id: user_id, result })
+        else
+            res.status(401).send("You do not have the authority to view this resource")
     })
 })
 
@@ -36,7 +35,6 @@ router.get('/complaints/:id', isAuth, (req, res) => {
 router.post('/consultation', isClient, (req, res) => {
     const client_id = ObjectId(req.user._id)
     const lawyer_id = ObjectId(req.body.lawyer_id)
-
     const {
         legal_title,
         service_id,
