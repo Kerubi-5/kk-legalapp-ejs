@@ -21,8 +21,6 @@ router.get('/complaints/:id', isAuth, (req, res) => {
     Complaint.findOne({ _id: complaint_id }).populate("client_id").populate("lawyer_id").exec((err, result) => {
         if (err) throw err
 
-        console.log(result.client_id)
-
         // Only users involved in this complaint will be able to see the content of the complaint
         if (user_id.equals(result.client_id._id) || user_id.equals(result.lawyer_id._id))
             res.render('consultation-view', { user_id: user_id, result })
