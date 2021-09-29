@@ -1,7 +1,6 @@
 <!-- CONSULTATION DETAILS -->
 <div class="container">
     <%- include ("./partials/messages"); %>
-
     <div class="m-3 border rounded bg-white shadow" style="padding-left: 20px; padding-right: 20px;">
         <!-- Info for merit test -->
         <section class="consult-view container mt-3">
@@ -53,25 +52,19 @@
                 <label for="case_file" class="form-label">Mga dokumentong
                     makakatulong sa legal na problema</label>
 
-            </div>
-            <% if (user_type=="lawyer" ) { %>
-                <hr>
-                <label for="buttons" class="form-label" style="font-size:x-large"><b>Tanggapin ang
-                    request?</b></label>
-                <div class="mb-3 mt-2 d-flex">
-                <form action="/form/complaints/<%- result._id %>?_method=PATCH" method="POST">                   
-                        <input name="case_status" type="text" value="ongoing" hidden>
-                        <button type="submit" class="btn btn-primary btn-lg">Accept</button>
-                        
-                </form>
-                <form action="/form/complaints/<%- result._id %>?_method=PATCH" method="POST">                
-                        <input name="case_status" type="text" value="denied" hidden>
-                        <button type="submit" class="btn btn-danger btn-lg">Reject</button>
-                            
-                </form>
+            </div> 
+            <% if (user_type == "lawyer" && a_type == "pending") { %>
+                <%- include ('./partials/complaint-pending') %> 
+            <% } else if (user_type == "lawyer" && a_type == "ongoing"){ %>
+                <div class="mb-3">
+                    <label for="case_objectives" class="form-label"><b>Buod ng mga Napagusapan</b></label>
+                    <textarea class="form-control" class="form-control" id="case_objectives"
+                        rows="10"></textarea>
                 </div>
-                <% } %>
-
+               <div class="mb-3 mt-3">
+                   <button class="btn btn-primary btn-lg" >Tapusin ang Transaksyon </button>
+            </div>
+            <% } %> 
         </section>
     </div>
 </div>
