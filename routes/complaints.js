@@ -33,6 +33,20 @@ router.get('/complaints/:id', isAuth, (req, res) => {
     })
 })
 
+// COMPLAINT ACCEPT UPDATED LAWYER SIDE
+router.patch('/complaints/:id', isLawyer, async (req, res) => {
+    try {
+        const filter = req.params.id
+        const update = req.body.case_status
+        await Complaint.findOneAndUpdate({ _id: filter }, { case_status: update })
+
+        req.flash('sucess_msg', `Succesfully accepted case with id: ${filter}`)
+        res.redirect('/dashboard')
+    } catch (err) {
+        res.status(500).send({ error: "There was an error in updating the complaint" })
+    }
+})
+
 // COMPLAINT POST SUBMIT
 router.post('/consultation', isClient, (req, res) => {
     const client_id = ObjectId(req.user._id)

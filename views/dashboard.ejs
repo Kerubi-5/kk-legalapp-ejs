@@ -52,6 +52,7 @@
 <% } else { %>
     <!-- Lawyer Dashboard -->
     <div class="container-fluid">
+        <%- include ("./partials/messages"); %>
         <div class="row">
             <div class="col-md-4">
                 <div class="m-3 border rounded bg-white shadow">
@@ -80,22 +81,19 @@
                         <div class="tab-pane fade show active" id="v-pills-advice" role="tabpanel"
                             aria-labelledby="v-pills-advice-tab">
                             <div>
-                                <!-- Consult Req TABLE -->
+                                <!-- Advice Req TABLE -->
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-    
                                             <th scope="col">Legal Title</th>
                                             <th scope="col">Client Name</th>
-                                            
                                             <th></th>
                                         </tr>
                                         <tr>
-                                            
                                             <td>Physical abuse</td>
                                             <td>Pedro</td>
-                                            
-                                            <td><a href="test_details.html"><button class="btn btn-primary">Advice</button></a></td>
+                                            <td><a href="test_details.html"><button
+                                                        class="btn btn-primary">Advice</button></a></td>
                                         </tr>
                                     </thead>
                                 </table>
@@ -105,49 +103,65 @@
                             aria-labelledby="v-pills-consult-tab">
                             <div>
                                 <!-- Consult Req TABLE -->
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">#Case ID</th>
-                                            <th scope="col">Legal Title</th>
-                                            <th scope="col">Client Name</th>
-                                            
-                                            <th></th>
-                                        </tr>
-                                        <tr>
-                                            <td>032</td>
-                                            <td>Physical Abuse</td>
-                                            <td>Pedro</td>
-                                            
-                                            <td><a href="consultation_details.html"><button class="btn btn-primary">Review</button></a></td>
-                                        </tr>
-                                    </thead>
-                                </table>
+                                <div style="overflow: auto">
+                                    <table class="table table-striped" overflow: auto>
+                                        <thead>
+                                            <thead>
+                                                <th scope="col">#Case ID</th>
+                                                <th scope="col">Legal Title</th>
+                                                <th scope="col">Status</th>
+                                                <th></th>
+                                            </thead>
+                                            <% result.forEach(complaint => { %> 
+                                                <% if (user_id.equals(complaint._id)) { %>
+                                                    <% for( let index = 0; index < complaint.complaints.length; index++ ) { %>
+                                                        <% if (complaint.complaints[index].case_status == "pending") { %>
+                                                            <tr>
+                                                                <td><%- complaint.complaints[index]._id %> </td>
+                                                                <td><%- complaint.complaints[index].legal_title %> </td>
+                                                                <td><%- complaint.complaints[index].case_status %> </td>
+                                                                <td><a href="/form/complaints/<%- complaint.complaints[index]._id %>" class="btn btn-primary"><i class="far fa-eye"></i> View</a></td>
+                                                            </tr>
+                                                        <% } %>
+                                                    <% } %>
+                                                <% } %>
+                                            <% }) %> 
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
-                            
+
                         </div>
                         <div class="tab-pane fade" id="v-pills-transaction" role="tabpanel"
                             aria-labelledby="v-pills-transaction-tab">
                             <div>
                                 <!-- ONGOING TABLE -->
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">#Case ID</th>
-                                            <th scope="col">Legal Title</th>
-                                            <th scope="col">Client Name</th>
-                                            <th scope="col">Status</th>
-                                            <th></th>
-                                        </tr>
-                                        <tr>
-                                            <td>01</td>
-                                            <td>Patayan</td>
-                                            <td>Jonathan</td>
-                                            <td>Ongoing</td>
-                                            <td><a href="consultation_documentation.html"><button class="btn btn-primary">View</button></a></td>
-                                        </tr>
-                                    </thead>
-                                </table>
+                                <div style="overflow: auto">
+                                    <table class="table table-striped" overflow: auto>
+                                        <thead>
+                                            <thead>
+                                                <th scope="col">#Case ID</th>
+                                                <th scope="col">Legal Title</th>
+                                                <th scope="col">Status</th>
+                                                <th></th>
+                                            </thead>
+                                            <% result.forEach(complaint => { %> 
+                                                <% if (user_id.equals(complaint._id)) { %>
+                                                    <% for( let index = 0; index < complaint.complaints.length; index++ ) { %>
+                                                        <% if (complaint.complaints[index].case_status == "ongoing") { %>
+                                                            <tr>
+                                                                <td><%- complaint.complaints[index]._id %> </td>
+                                                                <td><%- complaint.complaints[index].legal_title %> </td>
+                                                                <td><%- complaint.complaints[index].case_status %> </td>
+                                                                <td><a href="/form/complaints/<%- complaint.complaints[index]._id %>" class="btn btn-primary"><i class="far fa-eye"></i> View</a></td>
+                                                            </tr>
+                                                        <% } %>
+                                                    <% } %>
+                                                <% } %>
+                                            <% }) %> 
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -155,4 +169,4 @@
             </div>
         </div>
     </div>
-<% } %> 
+<% } %>
