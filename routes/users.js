@@ -12,6 +12,7 @@ const isClient = require('./auth').isClient
 const isLawyer = require('./auth').isLawyer
 const isAdmin = require('./auth').isAdmin;
 const { ObjectId } = require('bson');
+const { isAuth } = require('./auth');
 
 
 // Login Page
@@ -160,7 +161,7 @@ router.get('/logout', (req, res) => {
 // Protected Routes
 
 // Public Profile View
-router.get('/:id', isClient, (req, res) => {
+router.get('/:id', isAuth, (req, res) => {
     const id = ObjectId(req.user._id)
     const _id = req.params.id
     User.findOne({ _id }, (err, result) => {
@@ -171,7 +172,7 @@ router.get('/:id', isClient, (req, res) => {
 })
 
 // Profile Edit View
-router.get('/edit/:id', isClient, (req, res) => {
+router.get('/edit/:id', isAuth, (req, res) => {
     const id = ObjectId(req.user._id)
 
     if (id == req.params.id) {
@@ -199,7 +200,7 @@ router.delete('/edit/:id', async (req, res) => {
 })
 
 // UPDATE with 500 Status
-router.patch('/edit/:id', async (req, res, next) => {
+router.patch('/edit/:id', isAuth, async (req, res, next) => {
     try {
         const filter = req.params.id
         const update = req.body
