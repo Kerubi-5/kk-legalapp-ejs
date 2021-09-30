@@ -46,7 +46,7 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     // Lawyer Related Fields
-    affiliation: {
+    lawyer_credential: {
         type: String,
     },
     is_available: {

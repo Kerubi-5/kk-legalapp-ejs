@@ -24,16 +24,9 @@ const ComplaintSchema = new mongoose.Schema({
     client_questions: {
         type: String
     },
-    service_id: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "Service"
+    case_file: {
+        type: String
     },
-    case_file: [{
-        imageUrl: {
-            type: String,
-            required: true
-        }
-    }],
     case_status: {
         type: String,
         default: "pending"
