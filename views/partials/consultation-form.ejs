@@ -1,4 +1,4 @@
-<form action="/form/consultation" method="POST">
+<form action="/form/consultation" method="POST" enctype="multipart/form-data">
 <section id="consult-form">
     <!-- ACCORDION FOR CONSULTATION FORM -->
     <div class="accordion" id="accordionForm">
@@ -47,7 +47,7 @@
                     <div class="mb-3">
                         <label for="case_file" class="form-label">Mga dokumentong
                             makakatulong sa legal na problema</label>
-                        <input name="case_file" class="form-control" type="file" id="case_file">
+                        <input name="case_file" class="form-control" type="file" id="case_file" accept="application/pdf">
                     </div>
                     <input name="case_status" type="text" value="pending" hidden> 
                 </div>
