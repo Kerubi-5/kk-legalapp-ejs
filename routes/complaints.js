@@ -13,6 +13,9 @@ const isAdmin = require('./auth').isAdmin;
 const isAuth = require('./auth').isAuth
 const { ObjectId } = require('bson');
 
+// Multer Middleware
+const upload = require('../middleware/upload')
+
 // COMPLAINT PENDING VIEW LAWYER SIDE
 router.get('/complaints/pending/:id', isLawyer, (req, res) => {
     const user_id = ObjectId(req.user._id)
@@ -88,19 +91,19 @@ router.patch('/complaints/:id', isLawyer, async (req, res) => {
 })
 
 // COMPLAINT POST SUBMIT
-router.post('/consultation', isClient, (req, res) => {
+router.post('/consultation', isClient, upload.single('case_file'), (req, res) => {
     const client_id = ObjectId(req.user._id)
     const lawyer_id = ObjectId(req.body.lawyer_id)
     const {
         legal_title,
-        service_id,
         case_facts,
         adverse_party,
         case_objectives,
         client_questions,
-        case_file,
         case_status
     } = req.body
+
+    const case_file = req.file.filename
 
     const newComplaint = new Complaint({
         client_id,
@@ -110,6 +113,7 @@ router.post('/consultation', isClient, (req, res) => {
         case_objectives,
         client_questions,
         case_status,
+        case_file,
         lawyer_id
     })
 

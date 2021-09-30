@@ -13,6 +13,9 @@ const isLawyer = require('./auth').isLawyer
 const isAdmin = require('./auth').isAdmin;
 const { ObjectId } = require('bson');
 
+// Multer Middleware
+const upload = require('../middleware/upload')
+
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 
@@ -20,7 +23,7 @@ router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
 
 // Register POST
-router.post('/register', (req, res) => {
+router.post('/register', upload.single('lawyer_credential'), (req, res) => {
     const {
         username,
         email,
@@ -37,6 +40,8 @@ router.post('/register', (req, res) => {
         is_available,
         affiliation,
     } = req.body;
+
+
 
     let errors = [];
 
@@ -100,6 +105,7 @@ router.post('/register', (req, res) => {
                         user_type
                     });
                 } else if (user_type == "lawyer") {
+                    const lawyer_credential = req.file.filename
                     newUser = new User({
                         username,
                         email,
@@ -113,6 +119,7 @@ router.post('/register', (req, res) => {
                         zip,
                         user_type,
                         is_available,
+                        lawyer_credential,
                         affiliation
                     });
                 }
