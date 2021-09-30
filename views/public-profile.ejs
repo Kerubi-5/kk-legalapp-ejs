@@ -2,25 +2,48 @@
     <div class="row">
         <div class="card">
             <div class="card-body">
-                <%- include ("./partials/messages"); %>
-                    <div class="col">
-                        <% if (result) { %>
-                            <img src="/uploads/1.png"
-                                class="img-thumbnail" alt="..." width="256" height="128"/>
-                            <span>
-                                <h3>
-                                    <%- result.username %>'s profile
-                                </h3>
-                            </span>
-                            <% } %>
-                    </div>
+                <div class="col">
+                    <% if (result) { %>
+                        <img src="/uploads/avatar/<%- result.avatar %>" class="img-thumbnail" alt="..." width="300"
+                            height="128" />
+                        <span style="position: absolute; left: 350px; top: 50px">
+                            <h1>
+                                <%- result.username %>'s profile
+                            </h1>
+                        </span>
+
+                        <!-- FORM FOR UPLOADING PICTURE -->
+                        <!-- <form action="/users/edit/pic/<%- //result._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
+                                <div class="input-group" style="width: 300px;">
+                                    <input name="avatar" type="file" class="form-control" id="profile_picture" aria-describedby="profile_picture" aria-label="Upload" accept="image/png, image/jpeg" required>
+                                    <button class="btn btn-outline-secondary" type="submit" id="profile_picture">Upload</button>
+                                  </div>                               
+                            </form> -->
+                    <% } %>
+                </div>
             </div>
         </div>
         <div class="card">
+            <div class="mt-2">
+                <%- include ("./partials/messages"); %>
+
+            </div>
+
             <div class="card-body">
                 <div class="col">
                     <table class="table table-borderless">
-                        <h4>Personal Information</h4>
+                        <div class="row">
+                            <div class="col">
+                                <h4>Personal Information</h4>
+                            </div>
+                            <div class="col">
+                                <% if (isAuthenticated && param_id==user_id) { %>
+                                    <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Personal Information</a>
+                                <% } %>
+                            </div>
+
+
+                        </div>
                         <hr>
                         <tr>
                             <td> First Name </td>
@@ -37,7 +60,7 @@
                         <tr>
                             <td> Birthdate </td>
                             <td>
-                                <%- result.birthdate %>
+                                <%- result.birthdate.toLocaleDateString() %>
                             </td>
                         </tr>
                         <tr>
@@ -54,7 +77,7 @@
                         </tr>
                     </table>
 
-                    <% if (result.user_type == "lawyer") { %>
+                    <% if (result.user_type=="lawyer" ) { %>
                         <table class="table table-borderless">
                             <h4>Credentials</h4>
                             <hr>
@@ -65,11 +88,8 @@
                                 </td>
                             </tr>
                         </table>
-                    <% } %>
-
-                    <% if (isAuthenticated && param_id==user_id) { %>
-                        <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Profile</a>
                         <% } %>
+
                 </div>
             </div>
         </div>
