@@ -13,8 +13,6 @@ const isAdmin = require('./auth').isAdmin;
 const isAuth = require('./auth').isAuth
 const { ObjectId } = require('bson');
 
-// Multer Middleware
-const upload = require('../middleware/upload')
 
 // COMPLAINT PENDING VIEW LAWYER SIDE
 router.get('/complaints/pending/:id', isLawyer, (req, res) => {
@@ -91,7 +89,7 @@ router.patch('/complaints/:id', isLawyer, async (req, res) => {
 })
 
 // COMPLAINT POST SUBMIT
-router.post('/consultation', isClient, upload.single('case_file'), (req, res) => {
+router.post('/consultation', isClient, (req, res) => {
     const client_id = ObjectId(req.user._id)
     const lawyer_id = ObjectId(req.body.lawyer_id)
     const {
@@ -103,38 +101,54 @@ router.post('/consultation', isClient, upload.single('case_file'), (req, res) =>
         case_status
     } = req.body
 
-    const case_file = req.file.filename
+    let errors = []
 
-    const newComplaint = new Complaint({
-        client_id,
-        legal_title,
-        case_facts,
-        adverse_party,
-        case_objectives,
-        client_questions,
-        case_status,
-        case_file,
-        lawyer_id
-    })
+    // SETTING UP FILE UPLOAD
+    let fileObj
+    let case_file
+    if (req.files) {
+        case_file = req.files.case_file.name
+        fileObj = req.files.case_file
+    }
 
-    newComplaint.save()
+    if (!legal_title || !case_facts || !adverse_party || !case_objectives || !case_status || !lawyer_id || !req.files || !req.body.lawyer_id || !client_id) errors.push("Fill are the required fields")
 
-    // Find User Client
-    User.findOne({ _id: client_id, user_type: 'client' }, (err, result) => {
-        if (err) throw err
-        result.complaints.push(newComplaint)
-        result.save()
-    })
+    if (errors.length > 0) {
+        req.flash('error_msg', 'Fill all the required fields')
+        res.redirect('/dashboard')
+    } else {
+        const newComplaint = new Complaint({
+            client_id,
+            legal_title,
+            case_facts,
+            adverse_party,
+            case_objectives,
+            client_questions,
+            case_status,
+            case_file,
+            lawyer_id
+        })
 
-    // Find User Lawyer
-    User.findOne({ _id: lawyer_id, user_type: 'lawyer' }, (err, result) => {
-        if (err) throw err
-        result.complaints.push(newComplaint)
-        result.save()
-    })
+        newComplaint.save()
 
-    req.flash('sucess_msg', 'Complaint Successfully Submitted')
-    res.redirect('/dashboard')
+        // Find User Client
+        User.findOne({ _id: client_id, user_type: 'client' }, (err, result) => {
+            if (err) throw err
+            result.complaints.push(newComplaint)
+            result.save()
+        })
+
+        // Find User Lawyer
+        User.findOne({ _id: lawyer_id, user_type: 'lawyer' }, (err, result) => {
+            if (err) throw err
+            result.complaints.push(newComplaint)
+            result.save()
+        })
+
+        fileObj.mv('./public/uploads/evidences/' + case_file)
+        req.flash('sucess_msg', 'Complaint Successfully Submitted')
+        res.redirect('/dashboard')
+    }
 })
 
 module.exports = router

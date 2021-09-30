@@ -9,6 +9,7 @@ const session = require('express-session')
 const flash = require('express-flash')
 const dbConnection = require('./config/db')
 const methodOverride = require('method-override')
+const fileUpload = require('express-fileupload');
 
 /**
  * -------------- DATABASE CONNECTION ----------------
@@ -44,6 +45,16 @@ app.set('view engine', 'ejs')
 
 // Method Override
 app.use(methodOverride('_method'))
+
+/**
+ * -------------- FILE EXPRESS ----------------
+ */
+
+app.use(fileUpload({
+    createParentPath: true,
+    limits: { fileSize: 1024 * 1024 * 3 },
+
+}));
 
 /**
  * -------------- SESSION SETUP ----------------

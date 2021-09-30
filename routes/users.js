@@ -13,8 +13,6 @@ const isLawyer = require('./auth').isLawyer
 const isAdmin = require('./auth').isAdmin;
 const { ObjectId } = require('bson');
 
-// Multer Middleware
-const upload = require('../middleware/upload')
 
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
@@ -23,7 +21,7 @@ router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
 
 // Register POST
-router.post('/register', upload.single('lawyer_credential'), (req, res) => {
+router.post('/register', (req, res) => {
     const {
         username,
         email,
@@ -41,7 +39,13 @@ router.post('/register', upload.single('lawyer_credential'), (req, res) => {
         affiliation,
     } = req.body;
 
-
+    // SETTING UP FILE UPLOAD
+    let lawyer_credential
+    let fileObj
+    if (req.files) {
+        fileObj = req.files.lawyer_credential
+        lawyer_credential = fileObj.name
+    }
 
     let errors = [];
 
@@ -105,7 +109,6 @@ router.post('/register', upload.single('lawyer_credential'), (req, res) => {
                         user_type
                     });
                 } else if (user_type == "lawyer") {
-                    const lawyer_credential = req.file.filename
                     newUser = new User({
                         username,
                         email,
@@ -122,10 +125,14 @@ router.post('/register', upload.single('lawyer_credential'), (req, res) => {
                         lawyer_credential,
                         affiliation
                     });
+
+                    fileObj.mv('./public/uploads/credentials/' + lawyer_credential)
                 }
 
                 newUser.password = authUtils.hashPassword(password);
                 newUser.save()
+
+
                 req.flash('sucess_msg', 'You are now registered please log in to continue')
                 res.redirect('/users/login')
             }
