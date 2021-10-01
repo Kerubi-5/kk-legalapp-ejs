@@ -200,13 +200,27 @@ router.delete('/edit/:id', async (req, res) => {
 })
 
 // UPDATE with 500 Status
-router.patch('/edit/:id', isAuth, async (req, res, next) => {
+router.patch('/edit/:id', isAuth, async (req, res) => {
     try {
         const filter = req.params.id
         const update = req.body
-        const result = await User.findOneAndUpdate({ _id: filter }, update)
+        await User.findOneAndUpdate({ _id: filter }, update)
 
         req.flash('sucess_msg', 'Profile Succesfully Updated')
+        res.redirect('/users/' + filter)
+    } catch {
+        res.status(500).send({ error: "There was an error in updating the user" })
+    }
+})
+
+router.patch('/edit/public/:id', isAuth, async (req, res) => {
+    try {
+        const filter = req.params.id
+        const update = await User.findOne({ filter })
+        await User.findOneAndUpdate({ _id: filter }, { is_public: !update.is_public })
+        const message = !update.is_public ? "public" : "private"
+
+        req.flash('sucess_msg', `Profile is now ${message}`)
         res.redirect('/users/' + filter)
     } catch {
         res.status(500).send({ error: "There was an error in updating the user" })

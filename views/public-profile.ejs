@@ -10,6 +10,13 @@
                             <h1>
                                 <%- result.username %>'s profile
                             </h1>
+                            <h6>This profile is <%- result.is_public ? "Public" : "Private" %></h6>
+
+                            <% if (param_id == user_id) { %>
+                                <form action="/users/edit/public/<%- user_id %>?_method=PATCH" method="POST">
+                                    <button type="submit" class="btn btn-light"><%- result.is_public ? "Public" : "Private" %></button>
+                                </form>
+                            <% } %>
                         </span>
 
                         <!-- FORM FOR UPLOADING PICTURE -->
@@ -31,18 +38,18 @@
 
             <div class="card-body">
                 <div class="col">
-                    <table class="table table-borderless">
-                        <div class="row">
-                            <div class="col">
-                                <h4>Personal Information</h4>
-                            </div>
+                        <% if (result.is_public || param_id == user_id) { %>
+                            <table class="table table-borderless">
+                                <div class="row">
+                                    <div class="col">
+                                        <h4>Personal Information</h4>
+                                    </div>
                             <div class="col">
                                 <% if (isAuthenticated && param_id==user_id) { %>
                                     <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Personal Information</a>
                                 <% } %>
                             </div>
-
-
+                            
                         </div>
                         <hr>
                         <tr>
@@ -81,6 +88,8 @@
                         <!--PUT CREDENTIALS HERE -->
                         <% } %>
 
+                        <% } %>
+                        
                 </div>
             </div>
         </div>

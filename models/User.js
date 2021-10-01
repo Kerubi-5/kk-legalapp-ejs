@@ -55,6 +55,7 @@ const UserSchema = new mongoose.Schema({
     // Hide information
     is_public: {
         type: Boolean,
+        default: false
     },
     complaints: [{
         type: mongoose.SchemaTypes.ObjectId,
