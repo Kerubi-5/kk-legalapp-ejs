@@ -56,8 +56,12 @@ router.get('/advice/:id', isLawyer, (req, res) => {
 router.patch('/complaints/pending/:id', isLawyer, async (req, res) => {
     try {
         const filter = req.params.id
-        const update = req.body.case_status
-        await Complaint.findOneAndUpdate({ _id: filter }, { case_status: update })
+        const {
+            case_status,
+            appointment_date
+        } = req.body
+
+        const result = await Complaint.findOneAndUpdate({ _id: filter }, { case_status: case_status, appointment_date: appointment_date })
 
         req.flash('sucess_msg', `Succesfully accepted case with id: ${filter}`)
         res.redirect('/dashboard')

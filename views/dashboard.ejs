@@ -61,7 +61,36 @@
             <div class="col-md-8">
                 <div class="m-3 border rounded bg-white shadow">
                     <div class="tab-content" id="v-pills-tabContent">
-                        <div class="tab-pane fade show active" id="v-pills-advice" role="tabpanel"
+                        <div class="tab-pane fade show active" id="v-pills-consult" role="tabpanel"
+                        aria-labelledby="v-pills-consult-tab">
+                        <div>
+                            <!-- Consult Req TABLE -->
+                            <div style="overflow: auto">
+                                <table class="table table-striped" overflow: auto>
+                                    <thead>
+                                        <thead>
+                                            <th scope="col" width="10%">#Case ID</th>
+                                            <th scope="col">Legal Title</th>
+                                            <th scope="col">Status</th>
+                                            <th></th>
+                                        </thead>
+                                        <% for( let index = 0; index < user_doc.complaints.length; index++ ) { %>
+                                            <% if (user_doc.complaints[index].case_status == "pending") { %>
+                                                <tr>
+                                                    <td><%- user_doc.complaints[index]._id %> </td>
+                                                    <td><%- user_doc.complaints[index].legal_title %> </td>
+                                                    <td><%- user_doc.complaints[index].case_status %> </td>
+                                                    <td><a href="/form/complaints/<%- user_doc.complaints[index]._id %>" class="btn btn-primary"><i class="far fa-eye"></i> View</a></td>
+                                                </tr>
+                                            <% } %>
+                                        <% } %>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                        <div class="tab-pane fade" id="v-pills-advice" role="tabpanel"
                             aria-labelledby="v-pills-advice-tab">
                             <div>
                                 <!-- Advice Req TABLE -->
@@ -82,35 +111,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="v-pills-consult" role="tabpanel"
-                            aria-labelledby="v-pills-consult-tab">
-                            <div>
-                                <!-- Consult Req TABLE -->
-                                <div style="overflow: auto">
-                                    <table class="table table-striped" overflow: auto>
-                                        <thead>
-                                            <thead>
-                                                <th scope="col" width="10%">#Case ID</th>
-                                                <th scope="col">Legal Title</th>
-                                                <th scope="col">Status</th>
-                                                <th></th>
-                                            </thead>
-                                            <% for( let index = 0; index < user_doc.complaints.length; index++ ) { %>
-                                                <% if (user_doc.complaints[index].case_status == "pending") { %>
-                                                    <tr>
-                                                        <td><%- user_doc.complaints[index]._id %> </td>
-                                                        <td><%- user_doc.complaints[index].legal_title %> </td>
-                                                        <td><%- user_doc.complaints[index].case_status %> </td>
-                                                        <td><a href="/form/complaints/<%- user_doc.complaints[index]._id %>" class="btn btn-primary"><i class="far fa-eye"></i> View</a></td>
-                                                    </tr>
-                                                <% } %>
-                                            <% } %>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
 
-                        </div>
                         <div class="tab-pane fade" id="v-pills-transaction" role="tabpanel"
                             aria-labelledby="v-pills-transaction-tab">
                             <div>

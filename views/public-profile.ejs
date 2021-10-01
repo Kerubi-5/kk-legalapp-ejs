@@ -14,7 +14,7 @@
 
                             <% if (param_id == user_id) { %>
                                 <form action="/users/edit/public/<%- user_id %>?_method=PATCH" method="POST">
-                                    <button type="submit" class="btn btn-light"><%- result.is_public ? "Public" : "Private" %></button>
+                                    <button type="submit" class="btn btn-success"><%- result.is_public ? "Public" : "Private" %></button>
                                 </form>
                             <% } %>
                         </span>

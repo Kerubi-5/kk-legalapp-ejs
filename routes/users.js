@@ -216,8 +216,9 @@ router.patch('/edit/:id', isAuth, async (req, res) => {
 router.patch('/edit/public/:id', isAuth, async (req, res) => {
     try {
         const filter = req.params.id
-        const update = await User.findOne({ filter })
-        await User.findOneAndUpdate({ _id: filter }, { is_public: !update.is_public })
+        const update = await User.findOne({ _id: filter })
+        is_public = !update.is_public
+        const success = await User.findOneAndUpdate({ _id: filter }, { is_public })
         const message = !update.is_public ? "public" : "private"
 
         req.flash('sucess_msg', `Profile is now ${message}`)
