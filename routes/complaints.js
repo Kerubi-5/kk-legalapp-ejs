@@ -3,7 +3,6 @@ const router = express.Router()
 
 // Load User model
 const User = require('../models/User');
-const Service = require('../models/Service')
 const Complaint = require('../models/Complaint')
 
 // Auth types

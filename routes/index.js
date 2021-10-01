@@ -20,9 +20,10 @@ router.get('/', isNotAuth, (req, res) => res.render('index'))
 router.get('/dashboard', isAuth, (req, res) => {
     const id = ObjectId(req.user._id)
 
-    User.find({}).populate('complaints').exec(async (err, data) => {
+    User.find({ user_type: "lawyer", is_available: true }).populate('complaints').exec(async (err, data) => {
         if (err) throw err
 
+        console.log(data)
         let user_doc = await User.findOne({ _id: id })
 
         const user_type = user_doc.user_type
@@ -34,5 +35,9 @@ router.get('/dashboard', isAuth, (req, res) => {
         });
     })
 });
+
+router.get('/advice', isAuth, (req, res) => {
+
+})
 
 module.exports = router;
