@@ -15,3 +15,9 @@ td {
   width: 3em;
   height: 3em;
 }
+
+input[type="radio"] {
+  -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
+  -moz-appearance: checkbox; /* Firefox */
+  -ms-appearance: checkbox; /* not currently supported */
+}
