@@ -26,8 +26,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const port = process.env.PORT || 3000
 
-
-
 /**
  * -------------- STATIC FILES ----------------
  */
@@ -53,7 +51,9 @@ app.use(methodOverride('_method'))
 app.use(fileUpload({
     createParentPath: true,
     limits: { fileSize: 1024 * 1024 * 3 },
-
+    uriDecodeFileNames: true,
+    safeFileNames: true,
+    preserveExtension: true
 }));
 
 /**

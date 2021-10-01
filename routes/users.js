@@ -14,7 +14,6 @@ const isAdmin = require('./auth').isAdmin;
 const { ObjectId } = require('bson');
 const { isAuth } = require('./auth');
 
-
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 
@@ -43,10 +42,6 @@ router.post('/register', (req, res) => {
     // SETTING UP FILE UPLOAD
     let lawyer_credential
     let fileObj
-    if (req.files) {
-        fileObj = req.files.lawyer_credential
-        lawyer_credential = fileObj.name
-    }
 
     let errors = [];
 
@@ -110,6 +105,11 @@ router.post('/register', (req, res) => {
                         user_type
                     });
                 } else if (user_type == "lawyer") {
+                    if (req.files) {
+                        fileObj = req.files.lawyer_credential
+                        lawyer_credential = Date.now() + '-' + Math.round(Math.random() * 1E9) + fileObj.name
+                    }
+
                     newUser = new User({
                         username,
                         email,

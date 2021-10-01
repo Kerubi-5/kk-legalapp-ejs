@@ -13,8 +13,6 @@ const isAdmin = require('./auth').isAdmin;
 const isAuth = require('./auth').isAuth
 const { ObjectId } = require('bson');
 
-
-
 // COMPLAINT VIEW TRANSACTION ONGOING
 router.get('/complaints/:id', isAuth, (req, res) => {
     const user_id = ObjectId(req.user._id)
@@ -84,13 +82,9 @@ router.post('/consultation', isClient, (req, res) => {
 
     let errors = []
 
-    // SETTING UP FILE UPLOAD
+    // SETTING UP FILE UPLOAD VARIABLES
     let fileObj
     let case_file
-    if (req.files) {
-        case_file = req.files.case_file.name
-        fileObj = req.files.case_file
-    }
 
     if (!legal_title || !case_facts || !adverse_party || !case_objectives || !case_status || !lawyer_id || !req.files || !req.body.lawyer_id || !client_id) errors.push("Fill are the required fields")
 
@@ -98,6 +92,14 @@ router.post('/consultation', isClient, (req, res) => {
         req.flash('error_msg', 'Fill all the required fields')
         res.redirect('/dashboard')
     } else {
+
+        if (req.files) {
+            fileObj = req.files.case_file
+            case_file = Date.now() + '-' + Math.round(Math.random() * 1E9) + fileObj.name
+        }
+
+        fileObj.mv('./public/uploads/evidences/' + case_file)
+
         const newComplaint = new Complaint({
             client_id,
             legal_title,
@@ -126,8 +128,7 @@ router.post('/consultation', isClient, (req, res) => {
             result.save()
         })
 
-        fileObj.mv('./public/uploads/evidences/' + case_file)
-        req.flash('sucess_msg', 'Complaint Successfully Submitted')
+        req.flash('sucess_msg', 'Complaint Successfully Processed')
         res.redirect('/dashboard')
     }
 })
