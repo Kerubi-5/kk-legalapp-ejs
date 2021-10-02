@@ -61,10 +61,21 @@ router.patch('/complaints/pending/:id', isLawyer, async (req, res) => {
             appointment_date
         } = req.body
 
-        const result = await Complaint.findOneAndUpdate({ _id: filter }, { case_status: case_status, appointment_date: appointment_date })
+        // DATE VARIABLES FOR COMPARISON
+        let myDate = new Date(appointment_date)
+        let todayDate = new Date()
 
-        req.flash('sucess_msg', `Succesfully accepted case with id: ${filter}`)
-        res.redirect('/dashboard')
+
+        if (myDate >= todayDate) {
+            const result = await Complaint.findOneAndUpdate({ _id: filter }, { case_status: case_status, appointment_date: appointment_date })
+
+            req.flash('sucess_msg', `Succesfully accepted case with id: ${filter}`)
+            res.redirect('/dashboard')
+        } else {
+            res.status(500).send({ error: "There was an error in date format" })
+        }
+
+
     } catch (err) {
         res.status(500).send({ error: "There was an error in updating the complaint" })
     }
