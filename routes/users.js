@@ -14,7 +14,6 @@ const isAdmin = require('./auth').isAdmin;
 const { ObjectId } = require('bson');
 const { isAuth } = require('./auth');
 
-
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 
@@ -43,10 +42,6 @@ router.post('/register', (req, res) => {
     // SETTING UP FILE UPLOAD
     let lawyer_credential
     let fileObj
-    if (req.files) {
-        fileObj = req.files.lawyer_credential
-        lawyer_credential = fileObj.name
-    }
 
     let errors = [];
 
@@ -110,6 +105,11 @@ router.post('/register', (req, res) => {
                         user_type
                     });
                 } else if (user_type == "lawyer") {
+                    if (req.files) {
+                        fileObj = req.files.lawyer_credential
+                        lawyer_credential = Date.now() + '-' + Math.round(Math.random() * 1E9) + fileObj.name
+                    }
+
                     newUser = new User({
                         username,
                         email,
@@ -200,13 +200,28 @@ router.delete('/edit/:id', async (req, res) => {
 })
 
 // UPDATE with 500 Status
-router.patch('/edit/:id', isAuth, async (req, res, next) => {
+router.patch('/edit/:id', isAuth, async (req, res) => {
     try {
         const filter = req.params.id
         const update = req.body
-        const result = await User.findOneAndUpdate({ _id: filter }, update)
+        await User.findOneAndUpdate({ _id: filter }, update)
 
         req.flash('sucess_msg', 'Profile Succesfully Updated')
+        res.redirect('/users/' + filter)
+    } catch {
+        res.status(500).send({ error: "There was an error in updating the user" })
+    }
+})
+
+router.patch('/edit/public/:id', isAuth, async (req, res) => {
+    try {
+        const filter = req.params.id
+        const update = await User.findOne({ _id: filter })
+        is_public = !update.is_public
+        const success = await User.findOneAndUpdate({ _id: filter }, { is_public })
+        const message = !update.is_public ? "public" : "private"
+
+        req.flash('sucess_msg', `Profile is now ${message}`)
         res.redirect('/users/' + filter)
     } catch {
         res.status(500).send({ error: "There was an error in updating the user" })
