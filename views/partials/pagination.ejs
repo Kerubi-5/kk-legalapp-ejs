@@ -1,0 +1,23 @@
+<div class="d-flex justify-content-center" aria-label="Table navigation">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link <%- page == 1 ? "disabled" : "" %>" href="/dashboard?page=<%- page - 1 %>"
+                aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <% for( let index=0; index < endingLink; index++ ) { %>
+        <li class="page-item"><a class="page-link"
+                href="/dashboard?page=<%- index + 1 %>">
+                <%- index + 1 %>
+            </a></li>
+        <% } %>
+
+        <li class="page-item">
+            <a class="page-link <%- page >= endingLink ? "disabled" : "" %>" href="/dashboard?page=<%- page + 1 %>"
+                aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</div>
