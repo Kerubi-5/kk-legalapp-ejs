@@ -7,6 +7,10 @@ const NotificationSchema = new mongoose.Schema({
     actor: {
         type: String
     },
+    target: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "User"
+    },
     date: {
         type: Date,
         default: Date.now()

@@ -78,3 +78,8 @@ img {
   background-color: grey;
   pointer-events: none;
 }
+
+.notification {
+  overflow-x: auto;
+  max-height: 500px;
+}

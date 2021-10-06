@@ -5,6 +5,7 @@ const passport = require('passport');
 
 // Load User model
 const User = require('../models/User');
+const Notification = require('../models/Notification')
 
 // Auth types
 const forwardAuthenticated = require('./auth').isNotAuth;
@@ -164,10 +165,12 @@ router.get('/logout', (req, res) => {
 router.get('/:id', isAuth, (req, res) => {
     const id = ObjectId(req.user._id)
     const _id = req.params.id
-    User.findOne({ _id }, (err, result) => {
+    User.findOne({ _id }, async (err, result) => {
         if (err) throw err
 
-        res.render('public-profile', { result, user_id: id, param_id: _id })
+        const notifications = await Notification.find({ target: id })
+
+        res.render('public-profile', { result, user_id: id, param_id: _id, notifications })
     })
 })
 
@@ -176,10 +179,12 @@ router.get('/edit/:id', isAuth, (req, res) => {
     const id = ObjectId(req.user._id)
 
     if (id == req.params.id) {
-        User.findOne({ _id: id }, (err, result) => {
+        User.findOne({ _id: id }, async (err, result) => {
             if (err) throw err
 
-            res.render('profile-edit', { result, user_id: id })
+            const notifications = await Notification.find({ target: id })
+
+            res.render('profile-edit', { result, user_id: id, notifications })
         })
     }
     else {

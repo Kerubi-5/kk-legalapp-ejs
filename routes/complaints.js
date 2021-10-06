@@ -4,6 +4,7 @@ const router = express.Router();
 // Load User model
 const User = require("../models/User");
 const Complaint = require("../models/Complaint");
+const Notification = require("../models/Notification")
 
 // Auth types
 const isClient = require("./auth").isClient;
@@ -25,6 +26,7 @@ router.get("/complaints/:id", isAuth, (req, res) => {
 
       let user_doc = await User.findOne({ _id: user_id });
 
+      const notifications = await Notification.find({ target: user_id })
       const user_type = user_doc.user_type;
 
       // Only users involved in this complaint will be able to see the content of the complaint
@@ -37,6 +39,7 @@ router.get("/complaints/:id", isAuth, (req, res) => {
           result,
           user_type: user_type,
           a_type: result.case_status,
+          notifications
         });
       else
         res
@@ -58,6 +61,7 @@ router.get("/advice/:id", isLawyer, (req, res) => {
 
       let user_doc = await User.findOne({ _id: user_id });
 
+      const notifications = await Notification.find({ target: id })
       const user_type = user_doc.user_type;
 
       // Only users involved in this complaint will be able to see the content of the complaint
@@ -70,6 +74,7 @@ router.get("/advice/:id", isLawyer, (req, res) => {
           result,
           user_type: user_type,
           a_type: "ongoing",
+          notifications
         });
       else
         res
@@ -87,18 +92,29 @@ router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
     // DATE VARIABLES FOR COMPARISON
     let myDate = new Date(appointment_date);
     let todayDate = new Date();
+    let complaintResult
 
     if (myDate >= todayDate) {
-      await Complaint.findOneAndUpdate(
+      complaintResult = await Complaint.findOneAndUpdate(
         { _id: filter },
         { case_status: case_status, appointment_date: appointment_date }
       );
     } else {
-      await Complaint.findOneAndUpdate(
+      complaintResult = await Complaint.findOneAndUpdate(
         { _id: filter },
         { case_status: case_status }
       );
     }
+
+    const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id })
+
+    const pushNotify = new Notification({
+      message: "has accepted your consultation request",
+      actor: lawyerDeets.username,
+      target: complaintResult.client_id,
+    })
+
+    await pushNotify.save()
 
     req.flash("sucess_msg", `Succesfully accepted case with id: ${filter}`);
     res.redirect("/dashboard");

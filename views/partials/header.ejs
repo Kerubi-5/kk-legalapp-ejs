@@ -18,17 +18,22 @@
         <% if (isAuthenticated) { %>
         <li class="nav-item dropdown">
           <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-bell"></i><span class="badge badge-primary">4</span>
+            <i class="fas fa-bell"></i><span class="badge badge-primary"><%- notifications.length == "0" ? "" : notifications.length %></span>
           </a>
-          <ul class="dropdown-menu dropdown-menu-lg-end notification" aria-labelledby="navbarDropdown">
-            <li class="dropdown-item" style="position: relative;">
-              <h6 class="me-auto">Thor has approved consultation</h6>
-              <small>MEETING: September 5, 2021</small><a class="link-danger" href="/notification"><i
-                  class="far fa-window-close" style="position: absolute; right: 20px; top: 35px;"></i></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+          <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-dark notification" aria-labelledby="navbarDropdown">
+            <% if (typeof notifications != undefined) { %>
+              <% for( let index = 0; index < notifications.length; index++ ) { %>
+                <li class="dropdown-item" style="position: relative;">
+                  <h6 class="me-auto"><%- notifications[index].actor %> <%- notifications[index].message %></h6>
+                  <small><%- notifications[index].date %></small>
+                  <!-- <a class="link-danger" href="/notification"><i
+                      class="far fa-window-close" style="position: absolute; right: 20px; top: 35px;"></i></a> -->
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+              <% } %>
+            <% } %>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -36,7 +41,7 @@
             aria-expanded="false">
             <i class="fa fa-user" aria-hidden="true"></i>
           </a>
-          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+          <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-dark" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="/users/<%- user_id %>">Profile</a></li>
             <li>
               <hr class="dropdown-divider">
