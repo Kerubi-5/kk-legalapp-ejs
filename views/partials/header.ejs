@@ -9,29 +9,46 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <% if (isAuthenticated) { %>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/dashboard">Dashboard</a>
-          </li>
-          <% } %>
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/dashboard">Dashboard</a>
+        </li>
+        <% } %>
       </ul>
       <ul class="navbar-nav">
-      <% if (isAuthenticated) { %>
+        <% if (isAuthenticated) { %>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-bell"></i><span class="badge badge-primary">4</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-lg-end notification" aria-labelledby="navbarDropdown">
+            <li class="dropdown-item" style="position: relative;">
+              <h6 class="me-auto">Thor has approved consultation</h6>
+              <small>MEETING: September 5, 2021</small><a class="link-danger" href="/notification"><i
+                  class="far fa-window-close" style="position: absolute; right: 20px; top: 35px;"></i></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
             <i class="fa fa-user" aria-hidden="true"></i>
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="/users/<%- user_id %>">Profile</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
             <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
           </ul>
         </li>
         <% } else { %>
-            <li class="nav-item"><a class="nav-link" href="/users/login">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="/users/register">Register</a></li>
-
-          <% } %>
-        </ul>
+        <li class="nav-item"><a class="nav-link" href="/users/login">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="/users/register">Register</a></li>
+        <% } %>
+      </ul>
     </div>
   </div>
 </nav>
