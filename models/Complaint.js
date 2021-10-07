@@ -37,9 +37,6 @@ const ComplaintSchema = new mongoose.Schema({
     },
     appointment_date: {
         type: Date
-    },
-    date_completed: {
-        type: Date
     }
 })
 

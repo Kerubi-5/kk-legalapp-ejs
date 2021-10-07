@@ -24,10 +24,10 @@
             <% if (notifications.length) { %>
               <% for( let index = 0; index < notifications.length; index++ ) { %>
                 <li class="dropdown-item" style="position: relative;">
-                  <h6 class="me-auto"><%- notifications[index].actor %> <%- notifications[index].message %></h6>
+                  <h6 class="me-auto"><%- notifications[index].actor %> <a href="/form/complaints/<%- notifications[index].complaint_id %>"><%- notifications[index].message %></a></h6>
                   <small><%- notifications[index].date %></small>
-                  <!-- <a class="link-danger" href="/notification"><i
-                      class="far fa-window-close" style="position: absolute; right: 20px; top: 35px;"></i></a> -->
+                  <a class="link-danger" href="/form/notification/<%- notifications[index]._id %>"><i
+                      class="far fa-window-close" style="position: absolute; right: 20px; top: 5px;"></i></a>
                 </li>
                 <li>
                   <hr class="dropdown-divider">

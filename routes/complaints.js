@@ -109,6 +109,7 @@ router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
     const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id })
 
     const pushNotify = new Notification({
+      complaint_id: complaintResult._id,
       message: "has accepted your consultation request",
       actor: lawyerDeets.username,
       target: complaintResult.client_id,
@@ -199,5 +200,12 @@ router.post("/consultation", isClient, (req, res) => {
     res.redirect("/dashboard");
   }
 });
+
+router.get("/notification/:id", isAuth, async (req, res) => {
+  const id = ObjectId(req.params.id)
+  await Notification.findByIdAndDelete({ _id: id })
+
+  res.redirect("/dashboard")
+})
 
 module.exports = router;

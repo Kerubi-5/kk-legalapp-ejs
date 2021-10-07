@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const NotificationSchema = new mongoose.Schema({
+    complaint_id: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Complaint"
+    },
     message: {
         type: String
     },
