@@ -21,7 +21,7 @@
             <i class="fas fa-bell"></i><span class="badge badge-primary"><%- notifications.length == "0" ? "" : notifications.length %></span>
           </a>
           <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-dark notification" aria-labelledby="navbarDropdown">
-            <% if (typeof notifications != undefined) { %>
+            <% if (notifications.length) { %>
               <% for( let index = 0; index < notifications.length; index++ ) { %>
                 <li class="dropdown-item" style="position: relative;">
                   <h6 class="me-auto"><%- notifications[index].actor %> <%- notifications[index].message %></h6>
@@ -33,7 +33,11 @@
                   <hr class="dropdown-divider">
                 </li>
               <% } %>
-            <% } %>
+            <% } else { %>
+              <li class="dropdown-item">
+                It seems there are no notifications at the moment
+              </li>
+            <% } %> 
           </ul>
         </li>
         <li class="nav-item dropdown">
