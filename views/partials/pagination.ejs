@@ -1,23 +1,36 @@
-<div class="d-flex justify-content-center" aria-label="Table navigation">
-    <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link <%- page == 1 ? "disabled" : "" %>" href="/dashboard?page=<%- page - 1 %>"
-                aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        <% for( let index=0; index < endingLink; index++ ) { %>
-        <li class="page-item"><a class="page-link"
-                href="/dashboard?page=<%- index + 1 %>">
-                <%- index + 1 %>
-            </a></li>
-        <% } %>
+<div class="d-flex" aria-label="Table navigation">
 
-        <li class="page-item">
-            <a class="page-link <%- page >= endingLink ? "disabled" : "" %>" href="/dashboard?page=<%- page + 1 %>"
-                aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-    </ul>
+        <ul class="pagination ms-3">
+            <li class="page-item">
+                <a class="page-link <%- page == 1 ? "disabled" : "" %>" href="/dashboard?page=<%- page - 1 %>"
+                    aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <% for( let index=0; index < endingLink; index++ ) { %>
+            <li class="page-item"><a class="page-link"
+                    href="/dashboard?page=<%- index + 1 %>">
+                    <%- index + 1 %>
+                </a></li>
+            <% } %>
+    
+            <li class="page-item">
+                <a class="page-link <%- page >= endingLink ? "disabled" : "" %>" href="/dashboard?page=<%- page + 1 %>"
+                    aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+
+    <div class="ms-3">
+        <div class="input-group">
+            <select onchange="val()" class="form-select" id="select_id" aria-label="Options to filter">
+              <option selected>Choose...</option>
+              <option value="/dashboard?filter=ongoing">Ongoing</option>
+              <option value="/dashboard?filter=pending">Pending</option>
+              <option value="/dashboard?filter=denied">Denied</option>
+            </select>
+            <a id="a_tag" href="" class="btn btn-outline-secondary" type="button">Filter</a>
+          </div>
+    </div>
 </div>

@@ -21,8 +21,10 @@ router.get("/dashboard", isAuth, (req, res) => {
   const id = ObjectId(req.user._id);
   let page = parseInt(req.query.page);
   let size = parseInt(req.query.size);
+  let filter = req.query.filter
   if (!page) page = 1;
   if (!size) size = 10;
+  if (!filter) filter = "ongoing"
 
   const startIndex = (page - 1) * size;
   const endIndex = page * size;
@@ -33,6 +35,10 @@ router.get("/dashboard", isAuth, (req, res) => {
 
       let user_doc = await User.findOne({ _id: id }).populate("complaints");
       let complaints = user_doc.complaints;
+      complaints = complaints.filter(complaint => {
+        if (complaint.case_status == filter)
+          return complaint
+      })
 
       const notifications = await Notification.find({ target: id })
       const complaintResults = complaints.slice(startIndex, endIndex);
