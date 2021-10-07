@@ -30,7 +30,7 @@ const AdviceSchema = new mongoose.Schema({
         answer: {
             type: String
         },
-        is_answered: {
+        is_right: {
             type: Boolean
         }
     }]
