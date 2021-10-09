@@ -4,7 +4,7 @@ const router = express.Router();
 // Load User model
 const User = require("../models/User");
 const Complaint = require("../models/Complaint");
-const Notification = require("../models/Notification")
+const Notification = require("../models/Notification");
 
 // Auth types
 const isClient = require("./auth").isClient;
@@ -26,7 +26,7 @@ router.get("/complaints/:id", isAuth, (req, res) => {
 
       let user_doc = await User.findOne({ _id: user_id });
 
-      const notifications = await Notification.find({ target: user_id })
+      const notifications = await Notification.find({ target: user_id });
       const user_type = user_doc.user_type;
 
       // Only users involved in this complaint will be able to see the content of the complaint
@@ -39,7 +39,7 @@ router.get("/complaints/:id", isAuth, (req, res) => {
           result,
           user_type: user_type,
           a_type: result.case_status,
-          notifications
+          notifications,
         });
       else
         res
@@ -61,7 +61,7 @@ router.get("/advice/:id", isLawyer, (req, res) => {
 
       let user_doc = await User.findOne({ _id: user_id });
 
-      const notifications = await Notification.find({ target: id })
+      const notifications = await Notification.find({ target: id });
       const user_type = user_doc.user_type;
 
       // Only users involved in this complaint will be able to see the content of the complaint
@@ -74,7 +74,7 @@ router.get("/advice/:id", isLawyer, (req, res) => {
           result,
           user_type: user_type,
           a_type: "ongoing",
-          notifications
+          notifications,
         });
       else
         res
@@ -92,7 +92,7 @@ router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
     // DATE VARIABLES FOR COMPARISON
     let myDate = new Date(appointment_date);
     let todayDate = new Date();
-    let complaintResult
+    let complaintResult;
 
     if (myDate >= todayDate) {
       complaintResult = await Complaint.findOneAndUpdate(
@@ -106,16 +106,16 @@ router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
       );
     }
 
-    const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id })
+    const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
 
     const pushNotify = new Notification({
       complaint_id: complaintResult._id,
       message: "has accepted your consultation request",
       actor: lawyerDeets.username,
       target: complaintResult.client_id,
-    })
+    });
 
-    await pushNotify.save()
+    await pushNotify.save();
 
     req.flash("sucess_msg", `Succesfully accepted case with id: ${filter}`);
     res.redirect("/dashboard");
@@ -202,10 +202,10 @@ router.post("/consultation", isClient, (req, res) => {
 });
 
 router.get("/notification/:id", isAuth, async (req, res) => {
-  const id = ObjectId(req.params.id)
-  await Notification.findByIdAndDelete({ _id: id })
+  const id = ObjectId(req.params.id);
+  await Notification.findByIdAndDelete({ _id: id });
 
-  res.redirect("/dashboard")
-})
+  res.redirect("/dashboard");
+});
 
 module.exports = router;
