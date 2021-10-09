@@ -57,6 +57,10 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    is_verified: {
+        type: Boolean,
+        default: false
+    },
     complaints: [{
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Complaint"

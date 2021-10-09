@@ -4,20 +4,29 @@
             <div class="card-body">
                 <div class="col">
                     <% if (result) { %>
-                        <img src="/uploads/avatar/<%- result.avatar %>" class="img-thumbnail" alt="..." width="300"
-                            height="128" />
-                        <span style="position: absolute; left: 350px; top: 50px">
-                            <h1>
-                                <%- result.username %>'s profile
-                            </h1>
-                            <h6>This profile is <%- result.is_public ? "Public" : "Private" %></h6>
+                    <img src="/uploads/avatar/<%- result.avatar %>" class="img-thumbnail" alt="..." width="300"
+                        height="128" />
+                    <span style="position: absolute; left: 350px; top: 50px">
+                        <h1>
+                            <%- result.username %>'s profile
+                        </h1>
+                        <h6>This profile is <%- result.is_public ? "Public" : "Private" %></h6>
 
-                            <% if (param_id == user_id) { %>
-                                <form action="/users/edit/public/<%- user_id %>?_method=PATCH" method="POST">
-                                    <button type="submit" class="btn btn-success"><%- result.is_public ? "Public" : "Private" %></button>
-                                </form>
-                            <% } %>
-                        </span>
+                        <% if (param_id == user_id) { %>
+                        <form action="/users/edit/public/<%- user_id %>?_method=PATCH" method="POST">
+                            <button type="submit"
+                                class="btn btn-success"><%- result.is_public ? "Public" : "Private" %></button><small style="color: red;">  Sets the visibility from other users</small>
+                        </form>
+                        <% if (result.user_type == "lawyer") { %>
+                            <hr>
+                            <form action="/users/edit/is_available/<%- user_id %>?_method=PATCH" method="POST">
+                                <button type="submit"
+                                    class="btn btn-success"><%- result.is_available ? "Active" : "Inactive" %></button><small style="color: red;">  This will let you appear in the clientelle</small>
+                            </form>
+
+                        <% } %>
+                        <% } %>
+                    </span>
                     <% } %>
                 </div>
             </div>
@@ -30,18 +39,19 @@
 
             <div class="card-body">
                 <div class="col">
-                        <% if (result.is_public || param_id == user_id) { %>
-                            <table class="table table-borderless">
-                                <div class="row">
-                                    <div class="col">
-                                        <h4>Personal Information</h4>
-                                    </div>
+                    <% if (result.is_public || param_id == user_id) { %>
+                    <table class="table table-borderless">
+                        <div class="row">
+                            <div class="col">
+                                <h4>Personal Information</h4>
+                            </div>
                             <div class="col">
                                 <% if (isAuthenticated && param_id==user_id) { %>
-                                    <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Personal Information</a>
+                                <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Personal
+                                    Information</a>
                                 <% } %>
                             </div>
-                            
+
                         </div>
                         <hr>
                         <tr>
@@ -77,11 +87,55 @@
                     </table>
 
                     <% if (result.user_type=="lawyer" ) { %>
-                        <!--PUT CREDENTIALS HERE -->
-                        <% } %>
+                    <!--PUT CREDENTIALS HERE -->
+                    <% } %>
+                    <table class="table table-borderless">
+                        <div class="row">
+                            <div class="col">
+                                <h4>Credentials</h4>
+                            </div>
+                            <div class="col">
+                                <% if (isAuthenticated && param_id==user_id) { %>
+                                <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Personal
+                                    Information</a>
+                                <% } %>
+                            </div>
 
-                        <% } %>
-                        
+                        </div>
+                        <hr>
+                        <tr>
+                            <td> First Name </td>
+                            <td>
+                                <%- result.user_fname %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Last Name </td>
+                            <td>
+                                <%- result.user_lname %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Birthdate </td>
+                            <td>
+                                <%- result.birthdate.toLocaleDateString() %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Full Address </td>
+                            <td>
+                                <%- result.permanent_address %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Contact Number </td>
+                            <td>
+                                <%- result.contact_number %>
+                            </td>
+                        </tr>
+                    </table>
+                    <% } %>
+
                 </div>
             </div>
         </div>

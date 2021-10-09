@@ -233,4 +233,19 @@ router.patch('/edit/public/:id', isAuth, async (req, res) => {
     }
 })
 
+router.patch('/edit/is_available/:id', isAuth, async (req, res) => {
+    try {
+        const filter = req.params.id
+        const update = await User.findOne({ _id: filter })
+        is_available = !update.is_available
+        const success = await User.findOneAndUpdate({ _id: filter }, { is_available })
+        const message = !update.is_available ? "available" : "unavailable"
+
+        req.flash('sucess_msg', `You are now ${message} for service`)
+        res.redirect('/users/' + filter)
+    } catch {
+        res.status(500).send({ error: "There was an error in updating the user" })
+    }
+})
+
 module.exports = router;
