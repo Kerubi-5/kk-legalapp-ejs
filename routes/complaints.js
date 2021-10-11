@@ -125,7 +125,7 @@ router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
 });
 
 // COMPLAINT POST SUBMIT
-router.post("/consultation", isClient, (req, res) => {
+router.post("/consultation", isClient, async (req, res) => {
   const client_id = ObjectId(req.user._id);
   const lawyer_id = ObjectId(req.body.lawyer_id);
   const {
@@ -182,20 +182,37 @@ router.post("/consultation", isClient, (req, res) => {
 
     newComplaint.save();
 
-    // Find User Client
-    User.findOne({ _id: client_id, user_type: "client" }, (err, result) => {
-      if (err) throw err;
-      result.complaints.push(newComplaint);
-      result.save();
+
+    // User.findOne({ _id: client_id, user_type: "client" }, (err, result) => {
+    //   if (err) throw err;
+    //   result.complaints.push(newComplaint);
+    //   result.save();
+    //   actor = result.username
+    // });
+    // Find User Client and push Complaint
+    const client_result = await User.findOne({ _id: client_id, user_type: "client" })
+    client_result.complaints.push(newComplaint)
+    await client_result.save()
+
+    // User.findOne({ _id: lawyer_id, user_type: "lawyer" }, (err, result) => {
+    //   if (err) throw err;
+    //   result.complaints.push(newComplaint);
+    //   result.save();
+    //   target = result._id
+    // });
+    // Find User Lawyer and push Complaint
+    const lawyer_result = await User.findOne({ _id: lawyer_id, user_type: "lawyer" })
+    lawyer_result.complaints.push(newComplaint)
+    await lawyer_result.save()
+
+    const pushNotify = new Notification({
+      complaint_id: newComplaint._id,
+      message: "has requested a consultation request",
+      actor: client_result.username,
+      target: lawyer_result._id,
     });
 
-    // Find User Lawyer
-    User.findOne({ _id: lawyer_id, user_type: "lawyer" }, (err, result) => {
-      if (err) throw err;
-      result.complaints.push(newComplaint);
-      result.save();
-    });
-
+    await pushNotify.save();
     req.flash("sucess_msg", "Complaint Successfully Processed");
     res.redirect("/dashboard");
   }
