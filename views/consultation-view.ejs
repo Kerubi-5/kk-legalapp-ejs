@@ -1,119 +1,172 @@
 <!-- CONSULTATION DETAILS -->
 <div class="container">
     <%- include ("./partials/messages"); %>
-        <div class="m-3 border rounded bg-white shadow" style="padding-left: 20px; padding-right: 20px;">
-            <!-- Info for merit test -->
-            <section class="consult-view container mt-3">
-                <h1>Impormasyon tungkol sa Kaso</h1>
-                <hr>
-                <div class="mb-3">
-                    <label name="case_id" for="case_no" class="form-label">#Case ID:</label>
-                    <span class="badge bg-dark rounded-pill">
-                        <%- result._id %>
-                    </span>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Pangalan ng Kliyente</label>
-                    <input type="text" class="form-control" id="client_name" value="<%- result.client_id.user_fname %>"
-                        readonly>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Perang kinikita sa isang taon</label>
-                    <input type="text" class="form-control" id="client_name" value="50,000-70,000" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="case_facts" class="form-label">Kwento/Detalye
-                        ng Legal na Problema</label>
-                    <textarea class="form-control" class="form-control" id="case_facts" rows="3"
-                        readonly><%- result.case_facts %></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="adverse_party" class="form-label">Kalabang Partido</label>
-                    <input type="text" class="form-control" id="adverse_party" readonly
-                        value="<%- result.adverse_party %>">
-                </div>
-                <div class="mb-3">
-                    <label for="case_objectives" class="form-label">Mga layunin na
-                        gustong makamit sa legal na problema</label>
-                    <textarea class="form-control" class="form-control" id="case_objectives" rows="3"
-                        readonly><%- result.case_objectives %></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
-                    <input type="text" class="form-control" id="lawyer_details" readonly
-                        value="<%- result.lawyer_id.user_fname %>">
-                </div>
-                <div class="mb-5">
-                    <label for="client_questions" class="form-label">Mga
-                        katanungan sa abogado</label>
-                    <textarea class="form-control" class="form-control" id="client_questions" rows="3"
-                        readonly><%- result.client_questions %></textarea>
-                </div>
-                <div class="mb-3 text-center">
-                    <caption>Mga dokumentong makakatulong sa kaso</caption>
+    <div class="m-3 border rounded bg-white shadow" style="padding-left: 20px; padding-right: 20px;">
+        <!-- Info for merit test -->
+        <section class="consult-view container mt-3">
+            <h1>Impormasyon tungkol sa Kaso</h1>
+            <hr>
+            <div class="mb-3">
+                <label name="case_id" for="case_no" class="form-label">#Case ID:</label>
+                <span class="badge bg-dark rounded-pill">
+                    <%- result._id %>
+                </span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Maikling deskripsyon ng legal na problema</label>
+                <input type="text" class="form-control" id="client_name" value="<%- result.legal_title %>" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Pangalan ng Kliyente</label>
+                <input type="text" class="form-control" id="client_name" value="<%- result.client_id.user_fname %>"
+                    readonly>
+            </div>
+            <div class="mb-3">
+                <label for="case_facts" class="form-label">Kwento/Detalye
+                    ng Legal na Problema</label>
+                <textarea class="form-control" class="form-control" id="case_facts" rows="3"
+                    readonly><%- result.case_facts %></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="adverse_party" class="form-label">Kalabang Partido</label>
+                <input type="text" class="form-control" id="adverse_party" readonly value="<%- result.adverse_party %>">
+            </div>
+            <div class="mb-3">
+                <label for="case_objectives" class="form-label">Mga layunin na
+                    gustong makamit sa legal na problema</label>
+                <textarea class="form-control" class="form-control" id="case_objectives" rows="3"
+                    readonly><%- result.case_objectives %></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
+                <input type="text" class="form-control" id="lawyer_details" readonly
+                    value="<%- result.lawyer_id.user_fname %>">
+            </div>
+            <div class="mb-5">
+                <label for="client_questions" class="form-label">Mga
+                    katanungan sa abogado</label>
+                <textarea class="form-control" class="form-control" id="client_questions" rows="3"
+                    readonly><%- result.client_questions %></textarea>
+            </div>
+            <div class="mb-3 text-center">
+                <caption>Mga dokumentong makakatulong sa kaso</caption>
 
-                    <embed src="/uploads/evidences/<%- result.case_file %>" type="application/pdf" width="100%"
-                        height="600px" />
-                </div>
+                <embed src="/uploads/evidences/<%- result.case_file %>" type="application/pdf" width="100%"
+                    height="600px" />
+            </div>
 
 
-                <% if (user_type=="lawyer" && a_type=="pending" ) { %>
-                    <hr>
-                    <label for="buttons" class="form-label" style="font-size:x-large"><b>Tanggapin ang
-                            request?</b></label>
-                    <div class="mb-3 mt-2 d-flex">
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop">
-                            Accept
-                        </button>
-                        <form action="/form/complaints/pending/<%- result._id %>?_method=PATCH" method="POST">
-                            <input name="case_status" type="text" value="denied" hidden>
-                            <button type="submit" class="btn btn-danger btn-lg">Reject</button>
-                        </form>
-                    </div>
+            <% if (user_type=="lawyer" && a_type=="pending" ) { %>
+            <hr>
+            <label for="buttons" class="form-label" style="font-size:x-large"><b>Tanggapin ang
+                    request?</b></label>
+            <div class="mb-3 mt-2 d-flex">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">
+                    Accept
+                </button>
+                <form action="/form/complaints/pending/<%- result._id %>?_method=PATCH" method="POST">
+                    <input name="case_status" type="text" value="denied" hidden>
+                    <button type="submit" class="btn btn-danger btn-lg">Reject</button>
+                </form>
+            </div>
 
-                    <!-- Modal -->
-                    <form action="/form/complaints/pending/<%- result._id %>?_method=PATCH" method="POST">
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Confirm Accept</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <input name="case_status" type="text" value="ongoing" hidden>
-                                        <label for="appointment_date">Set appointment date</label>
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="appointment_date"><i class="fas fa-calendar"></i></span>
-                                            <input name="appointment_date" type="date" class="form-control" aria-label="Appointment Date" aria-describedby="Appointment Date">
-                                          </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Accept</button>
-                                    </div>
+            <!-- Modal -->
+            <form action="/form/complaints/pending/<%- result._id %>?_method=PATCH" method="POST">
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Confirm Accept</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input name="case_status" type="text" value="ongoing" hidden>
+                                <label for="appointment_date">Set appointment date</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="appointment_date"><i
+                                            class="fas fa-calendar"></i></span>
+                                    <input name="appointment_date" type="date" class="form-control"
+                                        aria-label="Appointment Date" aria-describedby="Appointment Date">
                                 </div>
                             </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Accept</button>
+                            </div>
                         </div>
-                    </form>
-                <% } else if (user_type=="lawyer" && a_type=="ongoing" ){ %>
-                        <div class="mb-3">
-                            <label for="case_objectives" class="form-label"><b>Buod ng mga Napagusapan</b></label>
-                            <textarea class="form-control" class="form-control" id="case_objectives"
-                                rows="10"></textarea>
+                    </div>
+                </div>
+            </form>
+            <% } else if (a_type=="ongoing" ){ %>
+
+            <% if (user_type == "lawyer") { %>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-lg mb-3" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
+                Complete Transaction
+            </button>
+
+            <!-- Modal -->
+            <form action="/form/complaints/pending/<%- result._id %>?_method=PATCH" method="POST">
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Confirm Accept</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Buod ng mga napagusapan</label>
+                                    <textarea name="summary" type="text" class="form-control"
+                                    id="summary"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mga rekomendasyon para sa kliyente</label>
+                                    <textarea name="recommendations" type="text" class="form-control"
+                                    id="recommendations"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Video link ng meeting</label>
+                                    <textarea name="video_link" type="text" class="form-control"
+                                        id="video_link"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Accept</button>
+                            </div>
                         </div>
-                        <div class="mb-3 mt-3">
-                            <button class="btn btn-primary btn-lg">Tapusin ang Transaksyon </button>
-                        </div>
-                <% } else if (a_type == "complete") { %>
-                        <hr>
-                        <h1>Mga napagusapan</h1>
-                <% } %>
-            </section>
-        </div>
+                    </div>
+                </div>
+            </form>
+            <% } %>
+
+            <% } else if (a_type == "complete") { %>
+                <h1>Detalye ng napagmeetingan</h1>
+                <hr>
+                <div class="mb-3">
+                    <label class="form-label">Video Link:</label>
+                    <a href="hh">ASD</a>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Buod ng mga napagusapan</label>
+                    <input name="summary" type="text" class="form-control" id="summary" readonly>
+                </div>
+
+                <label>Date Completed</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i>
+                    </span>
+                    <input type="date" id="date_completed" name="date_completed" class="form-control" value="" readonly />
+                </div>
+            <% } %>
+        </section>
+    </div>
 </div>

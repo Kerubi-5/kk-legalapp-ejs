@@ -11,6 +11,9 @@ const SolutionSchema = new mongoose.Schema({
     summary: {
         type: String
     },
+    recommendations: {
+        type: String
+    },
     date_completed: {
         type: Date,
         default: Date.now()
