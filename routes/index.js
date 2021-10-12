@@ -33,8 +33,15 @@ router.get("/dashboard", isAuth, (req, res) => {
     async (err, data) => {
       if (err) throw err;
 
+
       let user_doc = await User.findOne({ _id: id }).populate("complaints");
-      let complaints = user_doc.complaints;
+      let complaints = user_doc.complaints
+      // SORT COMPLAINTS
+      complaints.sort((a, b) => {
+        if (a['case_status'] < b['case_status']) return -1
+        if (a['case_status'] > b['case_status']) return 1
+        return 0
+      })
 
       if (filter != "") {
         complaints = complaints.filter((complaint) => {
