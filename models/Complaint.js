@@ -37,6 +37,10 @@ const ComplaintSchema = new mongoose.Schema({
     },
     appointment_date: {
         type: Date
+    },
+    solutions_id: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Solution"
     }
 })
 

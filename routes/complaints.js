@@ -5,6 +5,7 @@ const router = express.Router();
 const User = require("../models/User");
 const Complaint = require("../models/Complaint");
 const Notification = require("../models/Notification");
+const Solution = require("../models/Solution")
 
 // Auth types
 const isClient = require("./auth").isClient;
@@ -28,6 +29,7 @@ router.get("/complaints/:id", isAuth, (req, res) => {
 
       const notifications = await Notification.find({ target: user_id });
       const user_type = user_doc.user_type;
+      const solution = await Solution.findOne({ complaint_id: complaint_id })
 
       // Only users involved in this complaint will be able to see the content of the complaint
       if (
@@ -40,6 +42,7 @@ router.get("/complaints/:id", isAuth, (req, res) => {
           user_type: user_type,
           a_type: result.case_status,
           notifications,
+          solution
         });
       else
         res
@@ -224,5 +227,38 @@ router.get("/notification/:id", isAuth, async (req, res) => {
 
   res.redirect("/dashboard");
 });
+
+router.post("/complaints/ongoing/:id", isAuth, async (req, res) => {
+  try {
+    const id = ObjectId(req.params.id);
+    const { summary, recommendations, video_link } = req.body
+
+    const newSolution = new Solution({
+      complaint_id: id,
+      summary: summary,
+      recommendations: recommendations,
+      video_link: video_link
+    })
+
+    const complaintResult = await Complaint.findOneAndUpdate({ _id: id }, { case_status: "completed" })
+
+    const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
+
+    const pushNotify = new Notification({
+      complaint_id: complaintResult._id,
+      message: "has completed your consultation request",
+      actor: lawyerDeets.username,
+      target: complaintResult.client_id,
+    });
+
+    await newSolution.save()
+    await pushNotify.save()
+
+    req.flash("sucess_msg", `Succesfully completed case with id: ${newSolution._id}`);
+    res.redirect("/dashboard");
+  } catch (err) {
+    res.status(500).send("Error in completing transaction");
+  }
+})
 
 module.exports = router;

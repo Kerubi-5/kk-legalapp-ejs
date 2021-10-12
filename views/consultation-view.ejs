@@ -90,7 +90,7 @@
                                     <span class="input-group-text" id="appointment_date"><i
                                             class="fas fa-calendar"></i></span>
                                     <input name="appointment_date" type="date" class="form-control"
-                                        aria-label="Appointment Date" aria-describedby="Appointment Date">
+                                        aria-label="Appointment Date" aria-describedby="Appointment Date" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -111,7 +111,7 @@
             </button>
 
             <!-- Modal -->
-            <form action="/form/complaints/pending/<%- result._id %>?_method=PATCH" method="POST">
+            <form action="/form/complaints/ongoing/<%- result._id %>" method="POST">
                 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -125,17 +125,17 @@
                                 <div class="mb-3">
                                     <label class="form-label">Buod ng mga napagusapan</label>
                                     <textarea name="summary" type="text" class="form-control"
-                                    id="summary"></textarea>
+                                    id="summary" required></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Mga rekomendasyon para sa kliyente</label>
                                     <textarea name="recommendations" type="text" class="form-control"
-                                    id="recommendations"></textarea>
+                                    id="recommendations" required></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Video link ng meeting</label>
                                     <textarea name="video_link" type="text" class="form-control"
-                                        id="video_link"></textarea>
+                                        id="video_link" required></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -148,23 +148,27 @@
             </form>
             <% } %>
 
-            <% } else if (a_type == "complete") { %>
+            <% } else if (a_type == "completed") { %>
+                <% console.log(solution) %> 
                 <h1>Detalye ng napagmeetingan</h1>
                 <hr>
                 <div class="mb-3">
-                    <label class="form-label">Video Link:</label>
-                    <a href="hh">ASD</a>
+                    <label class="form-label">Video Link: </label>
+                    <a href="<%- solution.video_link %>"><%- solution.video_link %></a>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Buod ng mga napagusapan</label>
-                    <input name="summary" type="text" class="form-control" id="summary" readonly>
+                    <textarea name="summary" type="text" class="form-control" id="summary" readonly><%- solution.summary %></textarea>
                 </div>
-
+                <div class="mb-3">
+                    <label class="form-label">Mga rekomendasyon ng abogado</label>
+                    <textarea name="recommendations" type="text" class="form-control" id="recommendations" readonly><%- solution.recommendations %></textarea>
+                </div>
                 <label>Date Completed</label>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i>
                     </span>
-                    <input type="date" id="date_completed" name="date_completed" class="form-control" value="" readonly />
+                    <input type="date" id="date_completed" name="date_completed" class="form-control" value="<%- solution.date_completed.toISOString().split('T')[0] %>" readonly />
                 </div>
             <% } %>
         </section>
