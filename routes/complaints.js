@@ -97,16 +97,13 @@ router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
     let todayDate = new Date();
     let complaintResult;
 
-    if (myDate >= todayDate) {
+    if (todayDate >= myDate) {
       complaintResult = await Complaint.findOneAndUpdate(
         { _id: filter },
         { case_status: case_status, appointment_date: appointment_date }
       );
     } else {
-      complaintResult = await Complaint.findOneAndUpdate(
-        { _id: filter },
-        { case_status: case_status }
-      );
+      throw new Error("Must be today or later date")
     }
 
     const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
