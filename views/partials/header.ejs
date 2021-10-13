@@ -21,7 +21,7 @@
         <% if (isAuthenticated) { %>
         <li class="nav-item dropdown">
           <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-bell"></i><span class="badge badge-primary"><%- notifications.length == "0" ? "" : notifications.length %></span>
+            <i class="fas fa-bell"></i><span class="notif-counter badge badge-primary"><%- notifications.length == "0" ? "" : notifications.length %></span>
           </a>
           <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-dark notification" aria-labelledby="navbarDropdown">
             <% if (notifications.length) { %>
@@ -29,11 +29,8 @@
                 <li class="dropdown-item" style="position: relative;">
                   <h6 class="me-auto"><%- notifications[index].actor %> <a href="/form/complaints/<%- notifications[index].complaint_id %>"><%- notifications[index].message %></a></h6>
                   <small><%- notifications[index].date %></small>
-                  <a class="link-danger" href="/form/notification/<%- notifications[index]._id %>"><i
-                      class="far fa-window-close" style="position: absolute; right: 20px; top: 5px;"></i></a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
+                  <button class="link-danger close-notification btn" value="<%- notifications[index]._id %>"><i
+                      class="far fa-window-close" style="position: absolute; right: 20px; top: 5px;"></i></button>
                 </li>
               <% } %>
             <% } else { %>
@@ -64,3 +61,23 @@
     </div>
   </div>
 </nav>
+
+<script>
+  $(".close-notification").click(function() {
+    var value = $(this).val()
+    $(this).closest(".dropdown-item").remove()   
+    var counter = parseInt($(".notif-counter").text())
+  counter = counter - 1
+  if (counter == 0)
+  $(".notif-counter").remove()
+  
+  $(".notif-counter").text(counter)
+
+    
+    $.ajax({
+      method: "GET",
+      url: "/form/notification/" + value
+  })
+  })
+</script>
+
