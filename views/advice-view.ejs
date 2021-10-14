@@ -1,44 +1,68 @@
-<!-- Advice Form -->
-<div class="container-fluid">
-    <div class="m-3 border rounded bg-white shadow">
-        <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade show active" id="v-pills-advice" role="tabpanel"
-                aria-labelledby="v-pills-advice-tab">
-                <div>
-                    <!-- Advice Form -->
-                    <section class="consult-form container mt-3">
-                        <h1>Advice</h1>
-                        <hr>
-                        <div class="mb-3">
-                            <label for="adverse_party" class="form-label">Pangalan ng Kliyente</label>
-                            <input type="text" class="form-control" id="adverse_party" value="Pedro" readonly>
+
+        <div class="row m-3">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="flex-wrap w-100 align-items-center">
+                            <div class="ml-3"> <a href="javascript:void(0)"><%- userDoc.username %></a>'s post
+                                <div class="text-muted small">DATE POSTED <%- adviceDoc.date_submitted %></div>
+                            </div>
+                            <div class="text-muted small ml-3">
+                                <div>Member since <strong><%- userDoc.date_created.toLocaleDateString() %></strong></div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="adverse_party" class="form-label">Title ng legal na problema</label>
-                            <input type="text" class="form-control" id="adverse_party" value="Physical abuse" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="case_objectives" class="form-label">Description ng legal na
-                                problema</label>
-                            <textarea class="form-control" class="form-control" id="case_objectives" rows="3"
-                                readonly>Minamaltrato ng tatay ko ang nanay ko.</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="client_questions" class="form-label">Mga katanungan</label>
-                            <textarea class="form-control" class="form-control" id="client_questions" rows="3"
-                                readonly>Ano ang maaari isampang kaso sa tatay ko?</textarea>
-                        </div>
-                        <br> <br> <br> <br>
-                        <div class="mb-3">
-                            <label for="case_objectives" class="form-label"><b>LEGAL NA ADVICE PARA SA
-                                    KASO</b></label>
-                            <textarea class="form-control" class="form-control" id="case_objectives"
-                                rows="3"></textarea>
-                        </div>
-                        <a><button class="btn btn-primary" style="margin-left: 765px;">Post</button></a>
-                    </section>
+                    </div>
+                    <div class="card-body">
+                        <h4><%- adviceDoc.legal_title %> </h4>
+                        <p><%- adviceDoc.legal_description %> </p>
+                    </div>
+                    <div class="card-footer d-flex align-items-center px-0 pt-0 pb-3">
+                        <div class="px-4 pt-3"><span class="text-muted d-inline-flex align-items-center align-middle ml-4"> <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">14532</span> </span> </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
+        <% if (lawyersDoc.length != 0) { %>
+
+            <% for (let index = 0; index < lawyersDoc.length; index++) { %>
+            <div class="row m-3">
+                <div class="col-md-12">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <div class="flex-wrap w-100 align-items-center">
+                                <div class="flex-wrap align-items-center">
+                                    <div class="ml-3"> <a href=""><%- lawyersDoc[index]._id.username %></a>
+                                        <div class="text-muted small"><%- lawyersDoc[index].date_submitted %></div>
+                                    </div>
+                                    <div class="text-muted small ml-3">
+                                        <div>Member since <strong><%- lawyersDoc[index]._id.date_created.toLocaleDateString() %></strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %> 
+
+        <% } else { %>
+            <div class="text-center text-muted">
+                It seems there are no comments yet in this post
+
+            </div>
+        <% } %> 
+
+        <form action="/advice/comment/<%- adviceDoc._id %>?_method=PATCH" method="POST">
+        <div class="border m-3">
+            <div class="m-3">
+                <h3>Comment</h3>
+                <textarea class="comment-box" name="answer" rows="15" id="comment" style="width: 100%;"></textarea>
+                <div>
+                    <button type="submit" class=" btn btn-primary">Comment</button>
+                </div>
+            </div>
+        </div>
+        </form>

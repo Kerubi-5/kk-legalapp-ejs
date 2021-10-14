@@ -65,6 +65,4 @@ router.get("/dashboard", isAuth, (req, res) => {
   );
 });
 
-router.get("/advice", isAuth, (req, res) => { });
-
 module.exports = router;

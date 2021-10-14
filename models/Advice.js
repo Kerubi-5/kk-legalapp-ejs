@@ -15,14 +15,11 @@ const AdviceSchema = new mongoose.Schema({
     legal_description: {
         type: String
     },
-    client_questions: {
-        type: String
-    },
-    case_status: {
+    advice_status: {
         type: String,
-        default: "pending"
+        default: "unresolved"
     },
-    lawyer: [{
+    lawyers: [{
         _id: {
             type: mongoose.SchemaTypes.ObjectId,
             ref: "User"
@@ -30,8 +27,12 @@ const AdviceSchema = new mongoose.Schema({
         answer: {
             type: String
         },
-        is_right: {
+        is_resolved: {
             type: Boolean
+        },
+        date_submitted: {
+            type: Date,
+            default: Date.now()
         }
     }]
 })

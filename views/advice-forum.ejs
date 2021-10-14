@@ -1,0 +1,79 @@
+<div class="container bg-white">
+    <div class="row">
+        <div class="col-md-2 text-center  border">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                data-bs-target="#newDiscussion">
+                New Discussion
+            </button>
+
+            <!-- Modal -->
+            <form action="/advice" method="POST">
+                <div class="modal fade" id="newDiscussion" tabindex="-1" aria-labelledby="newDiscussionLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="newDiscussionLabel">New Discussion</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-floating mb-3">
+                                <input name="legal_title" type="text" class="form-control" id="legal_title" placeholder="Legal Title">
+                                <label for="legal_title">Legal Title</label>
+                              </div>
+                              <div class="form-floating">
+                                <textarea name="legal_description" class="form-control" rows="20" placeholder="Leave a comment here" id="legal_description" style="height: 200px;"></textarea>
+                                <label for="legal_description">Comments</label>
+                              </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div class="col-md-10 reset-parent">
+            <!-- FORUM HEADER -->
+            <div class="d-flex justify-content-between align-items-center border">
+                <h5 class="ms-3" style="font-family:Arial, Helvetica, sans-serif;">
+                    Advicing Forum
+                </h5>
+                <div class="d-flex mt-3 mb-3 me-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="searchBar" placeholder="search input here...">
+                        <label for="searchBar">Searchbar</label>
+                    </div>
+                    <button class="btn btn-secondary">Search</button>
+                </div>
+
+            </div>
+            <!-- FORUM BODY -->
+            <div class="bg-light forum-body border">
+                <div class="m-3" style="max-height: 100%;">
+                    <h5>Discussion</h5>
+                    <hr>
+                        <% advices.forEach(advice => { %>
+                            <a href="/advice/<%- advice._id %>">
+                                <div class="card m-3">
+                                    <div class="card-body">
+                                      <%- advice.legal_title %>  <span class="text-muted d-inline-flex align-items-center align-middle ml-4 float-end"> <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">14532</span></span>
+                                    </div>
+                                  </div>
+                            </a>
+                        <% }) %> 
+                </div>
+
+
+            </div>
+            <!-- PAGINATION -->
+            <div class="m-3">
+                <%- include ("./partials/pagination") %> 
+            </div>
+        </div>
+    </div>
+</div>

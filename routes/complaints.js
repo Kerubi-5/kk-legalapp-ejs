@@ -97,7 +97,7 @@ router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
     let todayDate = new Date();
     let complaintResult;
 
-    if (todayDate >= myDate) {
+    if (myDate >= todayDate) {
       complaintResult = await Complaint.findOneAndUpdate(
         { _id: filter },
         { case_status: case_status, appointment_date: appointment_date }
@@ -120,7 +120,7 @@ router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
     req.flash("sucess_msg", `Succesfully accepted case with id: ${filter}`);
     res.redirect("/dashboard");
   } catch (err) {
-    res.status(500).send({ error: err });
+    res.status(500).send({ error: "Error in accepting a case" });
   }
 });
 

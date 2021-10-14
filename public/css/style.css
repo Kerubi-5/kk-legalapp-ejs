@@ -36,6 +36,7 @@ img {
   width: 100%;
 }
 
+/* HOMEPAGE */
 .home-banner {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url("../assets/images/homepage_law.jpg");
@@ -82,4 +83,21 @@ img {
 .notification {
   overflow-x: auto;
   max-height: 500px;
+}
+
+/* ADVICE FORUM */
+.forum-body {
+  max-height: 90vh;
+  height: 90vh;
+  overflow: auto;
+}
+
+.reset-parent {
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.comment-box {
+  width: 100%;
 }
