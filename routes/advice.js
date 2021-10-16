@@ -62,11 +62,12 @@ router.get("/:id", isAuth, async (req, res) => {
     try {
         const id = ObjectId(req.user._id)
         const advice_id = ObjectId(req.params.id)
-        const notifications = await Notification.find({ target: id });
 
+        const notifications = await Notification.find({ target: id });
         const adviceDoc = await Advice.findOne({ _id: advice_id }).populate("lawyers._id")
         const userDoc = await User.findOne({ _id: adviceDoc.client_id })
         const lawyersDoc = adviceDoc.lawyers
+        const loginDoc = await User.findOne({ _id: id })
 
         if (typeof adviceDocs == undefined) adviceDocs = null
 
@@ -75,7 +76,8 @@ router.get("/:id", isAuth, async (req, res) => {
             notifications,
             adviceDoc,
             userDoc,
-            lawyersDoc
+            lawyersDoc,
+            loginDoc,
         })
     } catch {
 
@@ -95,7 +97,17 @@ router.patch("/comment/:id", isLawyer, async (req, res) => {
 
         const adviceDoc = await Advice.findByIdAndUpdate({ _id: advice_id }, { $push: { lawyers: lawyer } })
 
-        res.redirect('/advice')
+        res.redirect('/advice/' + advice_id)
+    } catch {
+
+    }
+})
+
+router.get("/vote/:id", isAuth, async (req, res) => {
+    try {
+        const vote_id = ObjectId(req.params.id)
+
+        const voteResult = await Advice.findByIdAndUpdate({})
     } catch {
 
     }
