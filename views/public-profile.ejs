@@ -85,56 +85,9 @@
                             </td>
                         </tr>
                     </table>
-
-                    <% if (result.user_type=="lawyer" ) { %>
-                    <!--PUT CREDENTIALS HERE -->
-                    <% } %>
-                    <table class="table table-borderless">
-                        <div class="row">
-                            <div class="col">
-                                <h4>Credentials</h4>
-                            </div>
-                            <div class="col">
-                                <% if (isAuthenticated && param_id==user_id) { %>
-                                <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Personal
-                                    Information</a>
-                                <% } %>
-                            </div>
-
-                        </div>
-                        <hr>
-                        <tr>
-                            <td> First Name </td>
-                            <td>
-                                <%- result.user_fname %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> Last Name </td>
-                            <td>
-                                <%- result.user_lname %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> Birthdate </td>
-                            <td>
-                                <%- result.birthdate.toLocaleDateString() %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> Full Address </td>
-                            <td>
-                                <%- result.permanent_address %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> Contact Number </td>
-                            <td>
-                                <%- result.contact_number %>
-                            </td>
-                        </tr>
-                    </table>
-                    <% } %>
+                    <% } else { %>
+                        This profile's information is private
+                    <% } %> 
 
                 </div>
             </div>

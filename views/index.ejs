@@ -103,33 +103,3 @@
 
     </div>
 </div>
-
-<!--Script for scroll-->
-<script>
-    function changebg() {
-        var navi = document.getElementById('navi');
-        var scrollValue = window.scrollY;
-
-        if (scrollValue < 100) {
-            navi.classList.remove('scrolling-active');
-        } else {
-            navi.classList.add('scrolling-active');
-        }
-
-
-    }
-
-    window.addEventListener('scroll', changebg);
-</script>
-
-<!--Togle script-->
-<script>
-    function tugol() {
-
-        var navi = document.getElementById('navi');
-
-
-        navi.classList.add('scrolling-active');
-
-    }
-</script>

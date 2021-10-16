@@ -15,9 +15,9 @@ const AdviceSchema = new mongoose.Schema({
     legal_description: {
         type: String
     },
-    advice_status: {
-        type: String,
-        default: "unresolved"
+    is_resolved: {
+        type: Boolean,
+        default: false
     },
     lawyers: [{
         _id: {
@@ -28,7 +28,8 @@ const AdviceSchema = new mongoose.Schema({
             type: String
         },
         is_resolved: {
-            type: Boolean
+            type: Boolean,
+            default: false
         },
         date_submitted: {
             type: Date,

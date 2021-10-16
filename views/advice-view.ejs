@@ -1,68 +1,83 @@
+<div class="container bg-white border shadow">
+    <div class="text-center mt-5">
+        <h4>Topic</h4>
+    </div>
+    <div class="row m-3">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="flex-wrap w-100 align-items-center">
+                        <div class="ml-3"> <a href="/users/<%- userDoc._id %>"><%- userDoc.username %></a>'s post <% if(userDoc.is_resolved) { %>  <h6 class="float-end">RESOLVED <i class="fas fa-check"></i></h6> <% } %> 
+                            <div class="text-muted small">DATE POSTED <%- adviceDoc.date_submitted %></div>
+                        </div>
+                        <div class="text-muted small ml-3">
+                            <div>Member since <strong><%- userDoc.date_created.toLocaleDateString() %></strong></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h4><%- adviceDoc.legal_title %> </h4>
+                    <p><%- adviceDoc.legal_description %> </p>
+                </div>
+                <!-- <div class="card-footer d-flex align-items-center px-0 pt-0 pb-3">
+                    <div class="px-4 pt-3"><span class="text-muted d-inline-flex align-items-center align-middle ml-4"> <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">14532</span> </span> </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
 
+    <div class="text-center">
+        <h4>Comments</h4>
+    </div>
+    <% if (lawyersDoc.length != 0) { %>
+        <% for (let index = 0; index < lawyersDoc.length; index++) { %>
         <div class="row m-3">
             <div class="col-md-12">
                 <div class="card mb-4">
                     <div class="card-header">
                         <div class="flex-wrap w-100 align-items-center">
-                            <div class="ml-3"> <a href="javascript:void(0)"><%- userDoc.username %></a>'s post
-                                <div class="text-muted small">DATE POSTED <%- adviceDoc.date_submitted %></div>
-                            </div>
-                            <div class="text-muted small ml-3">
-                                <div>Member since <strong><%- userDoc.date_created.toLocaleDateString() %></strong></div>
+                            <div class="flex-wrap align-items-center">
+                                <% console.log(typeof loginDoc._id) %> 
+                                <div class="ml-3"> <a href=""><%- lawyersDoc[index]._id.username %> </a>
+                                    <% if (user_id.equals(loginDoc._id) && !lawyersDoc[index].is_resolved) { %> 
+                                        <button value="" class="float-end pointer">VOTE AS SOLUTION <i class="fas fa-thumbs-up fa-lg"></i></button>ASDASD
+                                    <% } else if (lawyersDoc[index].is_resolved) { %>
+                                    </a> <h6 class="float-end">SOLUTION <i class="fas fa-check"></i></h6>
+                                    <% } %> 
+                                    <div class="text-muted small"><%- lawyersDoc[index].date_submitted %></div>
+                                </div>
+                                <div class="text-muted small ml-3">
+                                    <div>Member since <strong><%- lawyersDoc[index]._id.date_created.toLocaleDateString() %></strong></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <h4><%- adviceDoc.legal_title %> </h4>
-                        <p><%- adviceDoc.legal_description %> </p>
-                    </div>
-                    <div class="card-footer d-flex align-items-center px-0 pt-0 pb-3">
-                        <div class="px-4 pt-3"><span class="text-muted d-inline-flex align-items-center align-middle ml-4"> <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">14532</span> </span> </div>
+                        <p><%- lawyersDoc[index].answer %></p>
                     </div>
                 </div>
             </div>
         </div>
-
-        <% if (lawyersDoc.length != 0) { %>
-
-            <% for (let index = 0; index < lawyersDoc.length; index++) { %>
-            <div class="row m-3">
-                <div class="col-md-12">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <div class="flex-wrap w-100 align-items-center">
-                                <div class="flex-wrap align-items-center">
-                                    <div class="ml-3"> <a href=""><%- lawyersDoc[index]._id.username %></a>
-                                        <div class="text-muted small"><%- lawyersDoc[index].date_submitted %></div>
-                                    </div>
-                                    <div class="text-muted small ml-3">
-                                        <div>Member since <strong><%- lawyersDoc[index]._id.date_created.toLocaleDateString() %></strong></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <% } %> 
-
-        <% } else { %>
-            <div class="text-center text-muted">
-                It seems there are no comments yet in this post
-
-            </div>
         <% } %> 
 
+    <% } else { %>
+        <div class="text-center text-muted m-3">
+            It seems there are no comments yet in this post
+
+        </div>
+    <% } %> 
+
+    <% if (loginDoc.user_type == "lawyer") { %>
         <form action="/advice/comment/<%- adviceDoc._id %>?_method=PATCH" method="POST">
-        <div class="border m-3">
-            <div class="m-3">
-                <h3>Comment</h3>
-                <textarea class="comment-box" name="answer" rows="15" id="comment" style="width: 100%;"></textarea>
-                <div>
-                    <button type="submit" class=" btn btn-primary">Comment</button>
+            <div class="border m-3">
+                <div class="m-3">
+                    <h3>Comment</h3>
+                    <textarea class="comment-box" name="answer" rows="15" id="comment" style="width: 100%;"></textarea>
+                    <div>
+                        <button type="submit" class=" btn btn-primary">Comment</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        </form>
+            </form>
+    <% } %>
+</div>

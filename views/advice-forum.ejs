@@ -55,13 +55,14 @@
             <!-- FORUM BODY -->
             <div class="bg-light forum-body border">
                 <div class="m-3" style="max-height: 100%;">
-                    <h5>Discussion</h5>
+                    <h5>Discussions</h5>
                     <hr>
                         <% advices.forEach(advice => { %>
                             <a href="/advice/<%- advice._id %>">
                                 <div class="card m-3">
                                     <div class="card-body">
-                                      <%- advice.legal_title %>  <span class="text-muted d-inline-flex align-items-center align-middle ml-4 float-end"> <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">14532</span></span>
+                                      <%- advice.legal_title %>
+                                      <!-- <span class="text-muted d-inline-flex align-items-center align-middle ml-4 float-end"> <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">14532</span></span> -->
                                     </div>
                                   </div>
                             </a>

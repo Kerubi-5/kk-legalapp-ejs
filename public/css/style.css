@@ -32,10 +32,6 @@ input[type="radio"] {
   transition: 0.5s;
 }
 
-img {
-  width: 100%;
-}
-
 /* HOMEPAGE */
 .home-banner {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
@@ -100,4 +96,10 @@ img {
 
 .comment-box {
   width: 100%;
+}
+
+.pointer {
+  color: green;
+  cursor: pointer;
+  text-decoration: none;
 }
