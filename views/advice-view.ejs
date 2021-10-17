@@ -8,13 +8,10 @@
                 <div class="card-header">
                     <div class="flex-wrap w-100 align-items-center">
                         <div class="ml-3"> <a href="/users/<%- userDoc._id %>"><%- userDoc.username %></a>'s post
-                            <% if(userDoc.is_resolved) { %> <h6 class="float-end">RESOLVED <i class="fas fa-check"></i>
-                            </h6> <% } %>
-                            <% if (user_id.equals(userDoc._id) && !lawyersDoc.is_resolved) { %>
-                            <a href="/advice/vote/<%- lawyersDoc %> " class="float-end pointer">MARK AS RESOLVED <i
+                            <% if (user_id.equals(userDoc._id) && !(adviceDoc.is_resolved)) { %>
+                            <a href="/advice/vote/<%- adviceDoc._id %> " class="float-end pointer">MARK AS RESOLVED <i
                                     class="fas fa-thumbs-up fa-lg"></i></a>
-                            <% } else if (lawyersDoc.is_resolved) { %>
-                            </a>
+                            <% } else if (adviceDoc.is_resolved) { %>
                             <h6 class="float-end">RESOLVED <i class="fas fa-check"></i></h6>
                             <% } %>
                             <div class="text-muted small">DATE POSTED <%- adviceDoc.date_submitted %></div>
@@ -78,9 +75,9 @@
         <div class="border m-3">
             <div class="m-3">
                 <h3>Comment</h3>
-                <textarea class="comment-box" name="answer" rows="15" id="comment" style="width: 100%;"></textarea>
+                <textarea class="comment-box <%- adviceDoc.is_resolved ? "disabled" : ""%>" name="answer" rows="15" id="comment" style="width: 100%;" ></textarea>
                 <div>
-                    <button type="submit" class="btn btn-primary <%- lawyersDoc.is_resolved ? "disabled" : ""%>">Comment</button>
+                    <button type="submit" class="btn btn-primary <%- adviceDoc.is_resolved ? "disabled" : ""%>">Comment</button>
                 </div>
             </div>
         </div>

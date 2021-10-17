@@ -20,19 +20,22 @@ router.get("/", isAuth, async (req, res) => {
         const id = ObjectId(req.user._id);
         let page = parseInt(req.query.page);
         let size = parseInt(req.query.size);
-        let filter = req.query.filter;
         if (!page) page = 1;
         if (!size) size = 10;
-        if (!filter) filter = "";
+
+        const startIndex = (page - 1) * size;
+        const endIndex = page * size;
 
         const notifications = await Notification.find({ target: id });
-        const advicesDoc = await Advice.find({})
+        const advicesDoc = await Advice.find({},).sort({ 'date_submitted': 'desc' })
+        const adviceResult = advicesDoc.slice(startIndex, endIndex)
+
         res.render("advice-forum", {
             user_id: id,
             notifications,
+            advices: adviceResult,
+            endingLink: Math.ceil(advicesDoc.length / 10),
             page,
-            advices: advicesDoc,
-            endingLink: Math.ceil(advicesDoc.length / 10)
         })
     } catch {
 
@@ -107,7 +110,9 @@ router.get("/vote/:id", isAuth, async (req, res) => {
     try {
         const vote_id = ObjectId(req.params.id)
 
-        const voteResult = await Advice.findByIdAndUpdate({})
+        await Advice.findByIdAndUpdate({ _id: vote_id }, { is_resolved: true })
+
+        res.redirect('/advice/' + vote_id)
     } catch {
 
     }

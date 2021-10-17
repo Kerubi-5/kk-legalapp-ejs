@@ -102,5 +102,5 @@ app.use('/advice', adviceRoutes)
 
 // Listening to port
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`Legal counsel webapp is listening at http://localhost:${port}`)
 })

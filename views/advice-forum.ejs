@@ -1,32 +1,27 @@
 <div class="container bg-white">
     <div class="row">
-        <div class="col-md-2 text-center  border">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                data-bs-target="#newDiscussion">
-                New Discussion
-            </button>
-
-            <!-- Modal -->
-            <form action="/advice" method="POST">
-                <div class="modal fade" id="newDiscussion" tabindex="-1" aria-labelledby="newDiscussionLabel"
+        <!-- Modal -->
+        <form action="/advice" method="POST">
+            <div class="modal fade" id="newDiscussion" tabindex="-1" aria-labelledby="newDiscussionLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="newDiscussionLabel">New Discussion</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="form-floating mb-3">
-                                <input name="legal_title" type="text" class="form-control" id="legal_title" placeholder="Legal Title">
+                                <input name="legal_title" type="text" class="form-control" id="legal_title"
+                                    placeholder="Legal Title">
                                 <label for="legal_title">Legal Title</label>
-                              </div>
-                              <div class="form-floating">
-                                <textarea name="legal_description" class="form-control" rows="20" placeholder="Leave a comment here" id="legal_description" style="height: 200px;"></textarea>
+                            </div>
+                            <div class="form-floating">
+                                <textarea name="legal_description" class="form-control" rows="20"
+                                    placeholder="Leave a comment here" id="legal_description"
+                                    style="height: 200px;"></textarea>
                                 <label for="legal_description">Comments</label>
-                              </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -35,37 +30,65 @@
                     </div>
                 </div>
             </div>
-            </form>
-        </div>
-        <div class="col-md-10 reset-parent">
+        </form>
+
+        <div class="reset-parent">
             <!-- FORUM HEADER -->
-            <div class="d-flex justify-content-center align-items-center border">
+            <div class="d-flex justify-content-between align-items-center border">
                 <h5 class="m-3" style="font-family:Arial, Helvetica, sans-serif;">
                     Advicing Forum
                 </h5>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary me-3" data-bs-toggle="modal"
+                    data-bs-target="#newDiscussion">
+                    New Discussion
+                </button>
             </div>
             <!-- FORUM BODY -->
             <div class="bg-light forum-body border">
                 <div class="m-3" style="max-height: 100%;">
                     <h5>Discussions</h5>
                     <hr>
-                        <% advices.forEach(advice => { %>
-                            <a href="/advice/<%- advice._id %>">
-                                <div class="card m-3">
-                                    <div class="card-body">
-                                      <%- advice.legal_title %>
-                                      <!-- <span class="text-muted d-inline-flex align-items-center align-middle ml-4 float-end"> <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">14532</span></span> -->
-                                    </div>
-                                  </div>
-                            </a>
-                        <% }) %> 
+                    <% advices.forEach(advice => { %>
+                    <a href="/advice/<%- advice._id %>">
+                        <div class="card m-3">
+                            <div class="card-body">
+                                <%- advice.legal_title %>
+                                <span
+                                    class="text-muted d-inline-flex align-items-center align-middle ml-4 float-end"><span
+                                        class="align-middle"><%- advice.date_submitted.toLocaleString('en-US') %></span></span>
+                            </div>
+                        </div>
+                    </a>
+                    <% }) %>
                 </div>
 
 
             </div>
+            
             <!-- PAGINATION -->
-            <div class="m-3">
-                <%- include ("./partials/pagination") %> 
+            <div class="m-3 d-flex justify-content-center" aria-label="Table navigation">
+
+                <ul class="pagination ms-3">
+                    <li class="page-item">
+                        <a class="page-link <%- page == 1 ? "disabled" : "" %>" href="/advice?page=<%- page - 1 %>"
+                            aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <% for( let index=0; index < endingLink; index++ ) { %>
+                    <li class="page-item"><a class="page-link" href="/advice?page=<%- index + 1 %>">
+                            <%- index + 1 %>
+                        </a></li>
+                    <% } %>
+
+                    <li class="page-item">
+                        <a class="page-link <%- page >= endingLink ? "disabled" : "" %>"
+                            href="/advice?page=<%- page + 1 %>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
