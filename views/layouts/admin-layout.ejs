@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- BOOTSTRAP CSS-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+  <link rel="icon" href="3jbg.png">
+  <title>admin/Dashboard</title>
+
+  <style>
+    :root {
+      --offcanvas-width: 270px;
+      --topNavbarHeight: 56px;
+    }
+
+    .sidebar-nav {
+      width: var(--offcanvas-width);
+    }
+
+    .siderbar-link {
+      display: flex;
+      align-items: center;
+    }
+
+    .siderbar-link [aria-expanded="true"] .right-icon {
+      transform: rotate(180deg);
+    }
+
+    @media (min-width:992px) {
+      #dboard-content {
+        margin-left: var(--offcanvas-width);
+      }
+
+      #account-authentication-content {
+        margin-left: var(--offcanvas-width);
+      }
+
+      body {
+        overflow: auto !important;
+      }
+
+      .sidebar-nav {
+        transform: none;
+        visibility: visible !important;
+        top: var(--topNavbarHeight);
+        height: calc(100% - var(--topNavbarHeight));
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <!--NavBar-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <!--end of NavBar-->
+      <!--Offcanvas trigger-->
+      <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+        aria-controls="offcanvasExample">
+        <span class="navbar-toggler-icon" data-bs-target="#offcanvasExample"></span>
+      </button>
+      <!--end of offcanvas trigger-->
+      <a class="navbar-brand fw-bold" href="#">3JGB</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="d-flex ms-auto">
+          <div class="input-group my-3 my-lg-0">
+            <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
+              aria-describedby="button-addon2">
+            <button class="btn btn-outline-primary" type="button" id="button-addon2"><i
+                class="fas fa-search"></i></button>
+          </div>
+        </form>
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="far fa-user"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Hello, Juan Smith</a></li>
+              <li><a class="dropdown-item" href="#">Edit Account</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!--offcanvas-->
+
+  <div class="offcanvas offcanvas-start bg-dark text-white sidebar-nav" tabindex="-1" id="offcanvasExample"
+    aria-labelledby="offcanvasExampleLabel">
+
+    <div class="offcanvas-body p-0">
+      <nav class="navbar-dark">
+        <ul class="navbar-nav">
+          <li>
+            <div class="text-muted small fw-bold px-3">
+              CORE
+            </div>
+          </li>
+          <li>
+            <a href="/admin" class="nav-link px-3 active" role="tab" aria-controls="dboard-content">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <br>
+            <hr class="dropdown-divider" />
+          </li>
+          <li>
+            <div class="text-muted small fw-bold px-3">
+              USERS
+            </div>
+          </li>
+          <li>
+            <a href="/admin/accounts" class="nav-link px-3" role="tab"
+              aria-controls="account-authentication-content">
+              <i class="fas fa-portrait me-2"></i>
+              <span>Account Authentication</span>
+            </a>
+          </li>
+          <li>
+
+            <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#collapseExample" role="button"
+              aria-expanded="false" aria-controls="collapseExample">
+              <i class="fas fa-users me-2"></i>
+              <span>View Users</span>
+              <span class="right-icon">&emsp; &emsp; &emsp; &emsp; &emsp; &nbsp;<i
+                  class="fas fa-chevron-down"></i></span>
+
+            </a>
+            <div class="collapse" id="collapseExample">
+              <div>
+                <ul class="navbar-nav ps-3">
+                  <li>
+                    <a href="/admin/accounts/lawyer" class="nav-link px-3">
+                      <i class="fas fa-gavel me-2"></i>
+                      <span>Lawyer</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/admin/accounts/client" class="nav-link px-3">
+                      <i class="fas fa-mug-hot me-2"></i>
+                      <span>Client</span>
+                    </a>
+                  </li>
+
+                </ul>
+
+
+              </div>
+            </div>
+          <li>
+            <br>
+            <hr class="dropdown-divider" />
+          </li>
+
+          <li>
+            <a href="/admin/pending" class="nav-link px-3">
+              <i class="fas fa-hands-helping me-2"></i>
+              <span>Pending Assistance Request</span>
+            </a>
+          </li>
+
+
+          </li>
+
+        </ul>
+
+      </nav>
+
+
+    </div>
+  </div>
+
+  <!--End of offcanvas-->
+
+  <!--Dashboard Content-->
+  <%- body %> 
+  <!--End of Dashboard Content-->
+
+
+  <!-- BOOTSTRAP JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+    crossorigin="anonymous"></script>
+
+</body>
+</html>
