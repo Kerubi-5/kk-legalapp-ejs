@@ -1,69 +1,70 @@
 <div id="dboard-content" class="mt-5 pt-3 tab-content" role="tabpanel">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12 fw-bold fs-3">
-          Dashboard
-        </div>
-      </div>
-      <br>
-      <!--Cards for number of users-->
-      <div class="row">
-        <div class="col-md-3">
-          <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-            <div class="card-header">Total number of registrerd clients:</div>
-            <div class="card-body">
-              <h5 class="card-title">5</h5>
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-            <div class="card-header">Total number of registered lawyers:</div>
-            <div class="card-body">
-              <h5 class="card-title">7</h5>
-
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--Graph of Monthly registration-->
-      <div id="chartContainer" style="height: 300px; width: 100%;">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 fw-bold fs-3">
+        Dashboard
       </div>
     </div>
-    <!--Script for graph-->
-    <script type="text/javascript">
-      window.onload = function () {
-        var chart = new CanvasJS.Chart("chartContainer",
-          {
+    <br>
+    <!--Cards for number of users-->
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+          <div class="card-header">Total number of registrerd clients:</div>
+          <div class="card-body">
+            <h5 class="card-title">5</h5>
 
-            title: {
-              text: "Total Monthly Registration"
-            },
-            data: [
-              {
-                type: "line",
+          </div>
+        </div>
+      </div>
 
-                dataPoints: [
-                  { x: new Date(2021, 00, 1), y: 1 },
-                  { x: new Date(2021, 01, 1), y: 1 },
-                  { x: new Date(2021, 02, 1), y: 1 },
-                  { x: new Date(2021, 03, 1), y: 1 },
-                  { x: new Date(2021, 04, 1), y: 1 },
-                  { x: new Date(2021, 05, 1), y: 1 },
-                  { x: new Date(2021, 06, 1), y: 1 },
-                  { x: new Date(2021, 07, 1), y: 1 },
-                  { x: new Date(2021, 08, 1), y: 2 },
-                  { x: new Date(2021, 09, 1), y: 2 }
-                ]
-              }
-            ]
-          });
+      <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+          <div class="card-header">Total number of registered lawyers:</div>
+          <div class="card-body">
+            <h5 class="card-title">7</h5>
 
-        chart.render();
-      }
-    </script>
-    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    <!--End of script for graph-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Graph of Monthly registration-->
+    <div id="chartContainer" style="height: 300px; width: 100%;">
+    </div>
   </div>
+  <!--Script for graph-->
+  <script type="text/javascript">
+    window.onload = function () {
+      var chart = new CanvasJS.Chart("chartContainer",
+        {
+
+          title: {
+            text: "Total Monthly Registration"
+          },
+          data: [
+            {
+              type: "line",
+
+              dataPoints: [
+                { x: new Date(2021, 00, 1), y: 1 },
+                { x: new Date(2021, 01, 1), y: 1 },
+                { x: new Date(2021, 02, 1), y: 1 },
+                { x: new Date(2021, 03, 1), y: 1 },
+                { x: new Date(2021, 04, 1), y: 1 },
+                { x: new Date(2021, 05, 1), y: 1 },
+                { x: new Date(2021, 06, 1), y: 1 },
+                { x: new Date(2021, 07, 1), y: 1 },
+                { x: new Date(2021, 08, 1), y: 2 },
+                { x: new Date(2021, 09, 1), y: 2 }
+              ]
+            }
+          ]
+        });
+
+      chart.render();
+    }
+  </script>
+
+  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+  <!--End of script for graph-->
+</div>
