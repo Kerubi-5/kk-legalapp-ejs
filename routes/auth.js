@@ -41,8 +41,10 @@ module.exports.isLawyer = (req, res, next) => {
 module.exports.isAdmin = (req, res, next) => {
     if (req.isAuthenticated() && req.user.user_type == 'admin') {
         return next()
-    }
-    else {
+    } else if (req.isAuthenticated) {
+        req.flash('error_msg', 'You must have admin privilleges to view this resource')
+        res.redirect('/users/login')
+    } else {
         req.flash('error_msg', 'You need to login to continue')
         res.redirect('/users/login')
     }
