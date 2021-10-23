@@ -9,6 +9,7 @@ const Notification = require("../models/Notification");
 const isClient = require("./auth").isClient;
 const isNotAuth = require("./auth").isNotAuth;
 const isAuth = require("./auth").isAuth;
+const isClientOrLawyer = require("./auth").isClientOrLawyer
 const { ObjectId } = require("bson");
 
 // Welcome Page
@@ -17,7 +18,7 @@ router.get("/", isNotAuth, (req, res) => res.render("index"));
 // Protected Routes
 
 // Dashboard
-router.get("/dashboard", isAuth, (req, res) => {
+router.get("/dashboard", isClientOrLawyer, (req, res) => {
   const id = ObjectId(req.user._id);
   let page = parseInt(req.query.page);
   let size = parseInt(req.query.size);

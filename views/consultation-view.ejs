@@ -182,7 +182,7 @@
                         <hr>
 
                         <% for( let index = 0; index < solutions.length; index++ ) { %>
-                        <h4><%- index+1 %> : Meeting</h4>
+                        <h4># <%- index+1 %></h4>
                         <div class="border p-3 m-2 shadow">
                             <div class="mb-3">
                                 <label class="form-label">Video Link: </label>
@@ -256,7 +256,9 @@
                                 </div>
                             </div>
                         </form>
-                        <% } %>
+                        <% } else { %>
+                            <h3 class="m-5">No data recorded yet</h3>
+                        <% } %> 
                     </div>
                 </div>
             </div>

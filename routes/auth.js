@@ -44,6 +44,14 @@ module.exports.isAdmin = (req, res, next) => {
     }
     else {
         req.flash('error_msg', 'You need to login to continue')
-        res.redirect('/admin/login')
+        res.redirect('/users/login')
+    }
+}
+
+module.exports.isClientOrLawyer = (req, res, next) => {
+    if (req.isAuthenticated() && (req.user.user_type == 'client' || req.user.user_type == 'lawyer')) {
+        return next()
+    } else {
+        res.redirect('/admin')
     }
 }
