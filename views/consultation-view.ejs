@@ -84,7 +84,7 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <input name="case_status" type="text" value="ongoing" hidden>
+                                <input name="case_status" type="text" value="prelim meeting" hidden>
                                 <label for="appointment_date">Set appointment date</label>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="appointment_date"><i
@@ -101,7 +101,7 @@
                     </div>
                 </div>
             </form>
-            <% } else if (a_type=="ongoing" ){ %>
+            <% } else if (a_type=="prelim meeting" ){ %>
 
             <% if (user_type == "lawyer") { %>
             <!-- Button trigger modal -->
@@ -124,18 +124,18 @@
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label class="form-label">Buod ng mga napagusapan</label>
-                                    <textarea name="summary" type="text" class="form-control"
-                                    id="summary" required></textarea>
+                                    <textarea name="summary" type="text" class="form-control" id="summary"
+                                        required></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Mga rekomendasyon para sa kliyente</label>
                                     <textarea name="recommendations" type="text" class="form-control"
-                                    id="recommendations" required></textarea>
+                                        id="recommendations" required></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Video link ng meeting</label>
-                                    <textarea name="video_link" type="text" class="form-control"
-                                        id="video_link" required></textarea>
+                                    <textarea name="video_link" type="text" class="form-control" id="video_link"
+                                        required></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -148,27 +148,80 @@
             </form>
             <% } %>
 
-            <% } else if (a_type == "completed") { %>
-                <h1>Detalye ng napagmeetingan</h1>
-                <hr>
+            <% } else if (a_type == "in progress" || a_type == "completed") { %>
+            <h1>Detalye ng napagmeetingan</h1>
+            <hr>
+
+            <% for( let index = 0; index < solutions.length; index++ ) { %>
+            <div class="border p-3 m-2">
                 <div class="mb-3">
                     <label class="form-label">Video Link: </label>
-                    <%- solution.video_link %>
+                    <%- solutions[index].video_link %>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Buod ng mga napagusapan</label>
-                    <textarea name="summary" type="text" class="form-control" id="summary" readonly><%- solution.summary %></textarea>
+                    <textarea name="summary" type="text" class="form-control" id="summary"
+                        readonly><%- solutions[index].summary %></textarea>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mga rekomendasyon ng abogado</label>
-                    <textarea name="recommendations" type="text" class="form-control" id="recommendations" readonly><%- solution.recommendations %></textarea>
+                    <textarea name="recommendations" type="text" class="form-control" id="recommendations"
+                        readonly><%- solutions[index].recommendations %></textarea>
                 </div>
                 <label>Date Completed</label>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i>
                     </span>
-                    <input type="date" id="date_completed" name="date_completed" class="form-control" value="<%- solution.date_completed.toISOString().split('T')[0] %>" readonly />
+                    <input type="date" id="date_completed" name="date_completed" class="form-control"
+                        value="<%- solutions[index].date_completed.toISOString().split('T')[0] %>" readonly />
                 </div>
+            </div>
+
+            <% } %>
+
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-lg mb-3" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop">
+                Update Transaction
+            </button>
+
+            <!-- Modal -->
+            <form action="/form/complaints/ongoing/<%- result._id %>" method="POST">
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Confirm Accept</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Buod ng mga napagusapan</label>
+                                    <textarea name="summary" type="text" class="form-control" id="summary"
+                                        required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mga rekomendasyon para sa kliyente</label>
+                                    <textarea name="recommendations" type="text" class="form-control"
+                                        id="recommendations" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Video link ng meeting</label>
+                                    <textarea name="video_link" type="text" class="form-control" id="video_link"
+                                        required></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Accept</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
             <% } %>
         </section>
     </div>

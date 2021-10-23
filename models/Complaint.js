@@ -38,10 +38,10 @@ const ComplaintSchema = new mongoose.Schema({
     appointment_date: {
         type: Date
     },
-    solutions_id: {
+    solutions: [{
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Solution"
-    }
+    }]
 })
 
 module.exports = mongoose.model('Complaint', ComplaintSchema)

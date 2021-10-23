@@ -14,116 +14,6 @@ const isAdmin = require("./auth").isAdmin;
 const isAuth = require("./auth").isAuth;
 const { ObjectId } = require("bson");
 
-// COMPLAINT VIEW TRANSACTION ONGOING
-router.get("/complaints/:id", isAuth, (req, res) => {
-  const user_id = ObjectId(req.user._id);
-  const complaint_id = ObjectId(req.params.id);
-
-  Complaint.findOne({ _id: complaint_id })
-    .populate("client_id")
-    .populate("lawyer_id")
-    .exec(async (err, result) => {
-      if (err) throw err;
-
-      let user_doc = await User.findOne({ _id: user_id });
-
-      const notifications = await Notification.find({ target: user_id });
-      const user_type = user_doc.user_type;
-      const solution = await Solution.findOne({ complaint_id: complaint_id })
-
-      // Only users involved in this complaint will be able to see the content of the complaint
-      if (
-        user_id.equals(result.client_id._id) ||
-        user_id.equals(result.lawyer_id._id)
-      )
-        res.render("consultation-view", {
-          user_id: user_id,
-          result,
-          user_type: user_type,
-          a_type: result.case_status,
-          notifications,
-          solution
-        });
-      else
-        res
-          .status(401)
-          .send("You do not have the authority to view this resource");
-    });
-});
-
-// ADVICE VIEW TRANSACTION PENDING
-router.get("/advice/:id", isLawyer, (req, res) => {
-  const user_id = ObjectId(req.user._id);
-  const complaint_id = ObjectId(req.params.id);
-
-  Complaint.findOne({ _id: complaint_id })
-    .populate("client_id")
-    .populate("lawyer_id")
-    .exec(async (err, result) => {
-      if (err) throw err;
-
-      let user_doc = await User.findOne({ _id: user_id });
-
-      const notifications = await Notification.find({ target: id });
-      const user_type = user_doc.user_type;
-
-      // Only users involved in this complaint will be able to see the content of the complaint
-      if (
-        user_id.equals(result.client_id._id) ||
-        user_id.equals(result.lawyer_id._id)
-      )
-        res.render("advice-view", {
-          user_id: user_id,
-          result,
-          user_type: user_type,
-          a_type: "ongoing",
-          notifications,
-        });
-      else
-        res
-          .status(401)
-          .send("You do not have the authority to view this resource");
-    });
-});
-
-// COMPLAINT ACCEPT UPDATED LAWYER SIDE
-router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
-  try {
-    const filter = req.params.id;
-    const { case_status, appointment_date } = req.body;
-
-    // DATE VARIABLES FOR COMPARISON
-    let myDate = new Date(appointment_date);
-    let todayDate = new Date();
-    let complaintResult;
-
-    if (myDate >= todayDate) {
-      complaintResult = await Complaint.findOneAndUpdate(
-        { _id: filter },
-        { case_status: case_status, appointment_date: appointment_date }
-      );
-    } else {
-      throw new Error("Must be today or later date")
-    }
-
-    const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
-
-    const pushNotify = new Notification({
-      complaint_id: complaintResult._id,
-      message: "has accepted your consultation request",
-      actor: lawyerDeets.username,
-      target: complaintResult.client_id,
-    });
-
-    await pushNotify.save();
-
-    req.flash("sucess_msg", `Succesfully accepted case with id: ${filter}`);
-    res.redirect("/dashboard");
-  } catch (err) {
-    res.status(500).send({ error: "Error in accepting a case" });
-  }
-});
-
 // COMPLAINT POST SUBMIT
 router.post("/consultation", isClient, async (req, res) => {
   const client_id = ObjectId(req.user._id);
@@ -182,24 +72,11 @@ router.post("/consultation", isClient, async (req, res) => {
 
     newComplaint.save();
 
-
-    // User.findOne({ _id: client_id, user_type: "client" }, (err, result) => {
-    //   if (err) throw err;
-    //   result.complaints.push(newComplaint);
-    //   result.save();
-    //   actor = result.username
-    // });
     // Find User Client and push Complaint
     const client_result = await User.findOne({ _id: client_id, user_type: "client" })
     client_result.complaints.push(newComplaint)
     await client_result.save()
 
-    // User.findOne({ _id: lawyer_id, user_type: "lawyer" }, (err, result) => {
-    //   if (err) throw err;
-    //   result.complaints.push(newComplaint);
-    //   result.save();
-    //   target = result._id
-    // });
     // Find User Lawyer and push Complaint
     const lawyer_result = await User.findOne({ _id: lawyer_id, user_type: "lawyer" })
     lawyer_result.complaints.push(newComplaint)
@@ -215,6 +92,81 @@ router.post("/consultation", isClient, async (req, res) => {
     await pushNotify.save();
     req.flash("sucess_msg", "Complaint Successfully Processed");
     res.redirect("/dashboard");
+  }
+});
+
+// COMPLAINT VIEW TRANSACTION ONGOING
+router.get("/complaints/:id", isAuth, (req, res) => {
+  const user_id = ObjectId(req.user._id);
+  const complaint_id = ObjectId(req.params.id);
+
+  Complaint.findOne({ _id: complaint_id })
+    .populate("client_id")
+    .populate("lawyer_id")
+    .populate("solutions")
+    .exec(async (err, result) => {
+      if (err) throw err;
+
+      let user_doc = await User.findOne({ _id: user_id });
+
+      const notifications = await Notification.find({ target: user_id });
+      const user_type = user_doc.user_type;
+
+      // Only users involved in this complaint will be able to see the content of the complaint
+      if (
+        user_id.equals(result.client_id._id) ||
+        user_id.equals(result.lawyer_id._id)
+      )
+        res.render("consultation-view", {
+          user_id: user_id,
+          result,
+          user_type: user_type,
+          a_type: result.case_status,
+          notifications,
+          solutions: result.solutions
+        });
+      else
+        res
+          .status(401)
+          .send("You do not have the authority to view this resource");
+    });
+});
+
+// COMPLAINT ACCEPT UPDATED LAWYER SIDE
+router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
+  try {
+    const filter = req.params.id;
+    const { case_status, appointment_date } = req.body;
+
+    // DATE VARIABLES FOR COMPARISON
+    let myDate = new Date(appointment_date);
+    let todayDate = new Date();
+    let complaintResult;
+
+    if (myDate >= todayDate) {
+      complaintResult = await Complaint.findOneAndUpdate(
+        { _id: filter },
+        { case_status: case_status, appointment_date: appointment_date }
+      );
+    } else {
+      throw new Error("Must be today or later date")
+    }
+
+    const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
+
+    const pushNotify = new Notification({
+      complaint_id: complaintResult._id,
+      message: "has accepted your consultation request",
+      actor: lawyerDeets.username,
+      target: complaintResult.client_id,
+    });
+
+    await pushNotify.save();
+
+    req.flash("sucess_msg", `Succesfully accepted case with id: ${filter}`);
+    res.redirect("/form/complaints/" + filter);
+  } catch (err) {
+    res.status(500).send({ error: "Error in accepting a case" });
   }
 });
 
@@ -237,13 +189,17 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res) => {
       video_link: video_link
     })
 
-    const complaintResult = await Complaint.findOneAndUpdate({ _id: id }, { case_status: "completed" })
+    // Updating Complaint and Inserting new Solution
+    const complaintResult = await Complaint.findOne({ _id: id })
+    complaintResult.case_status = "in progress"
+    complaintResult.solutions.push(newSolution)
+    await complaintResult.save()
 
     const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
 
     const pushNotify = new Notification({
       complaint_id: complaintResult._id,
-      message: "has completed your consultation request",
+      message: "has updated your consultation request",
       actor: lawyerDeets.username,
       target: complaintResult.client_id,
     });
@@ -251,8 +207,8 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res) => {
     await newSolution.save()
     await pushNotify.save()
 
-    req.flash("sucess_msg", `Succesfully completed case with id: ${newSolution._id}`);
-    res.redirect("/dashboard");
+    req.flash("sucess_msg", `Succesfully completed case with id: ${id}`);
+    res.redirect("/form/complaints/" + id);
   } catch (err) {
     res.status(500).send("Error in completing transaction");
   }
