@@ -208,11 +208,9 @@
                                     readonly />
                             </div>
                         </div>
-                        <hr>
                         <% } %>
-
-
-                        <!-- Button trigger modal -->
+                        <hr>
+                        <% if (user_type == "lawyer") { %>
                         <button type="button" class="btn btn-primary btn-lg mb-3" data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop">
                             Update Transaction
@@ -256,9 +254,15 @@
                                 </div>
                             </div>
                         </form>
+                        <% } else if (user_type == "client") {%>
+                        <button type="button" class="btn btn-primary btn-lg m-3">Complete Transaction</button>
+                        <% } %>
+
+                        <!-- Button trigger modal -->
+
                         <% } else { %>
-                            <h3 class="m-5">No data recorded yet</h3>
-                        <% } %> 
+                        <h3 class="m-5">No data recorded yet</h3>
+                        <% } %>
                     </div>
                 </div>
             </div>
