@@ -207,7 +207,7 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res) => {
     await newSolution.save()
     await pushNotify.save()
 
-    req.flash("sucess_msg", `Succesfully completed case with id: ${id}`);
+    req.flash("sucess_msg", `Succesfully updated case with id: ${id}`);
     res.redirect("/form/complaints/" + id);
   } catch (err) {
     res.status(500).send("Error in completing transaction");

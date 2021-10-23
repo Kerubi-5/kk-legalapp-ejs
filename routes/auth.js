@@ -44,6 +44,6 @@ module.exports.isAdmin = (req, res, next) => {
     }
     else {
         req.flash('error_msg', 'You need to login to continue')
-        res.redirect('/users/login')
+        res.redirect('/admin/login')
     }
 }
