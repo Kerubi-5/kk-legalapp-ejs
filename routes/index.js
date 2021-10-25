@@ -9,7 +9,7 @@ const Notification = require("../models/Notification");
 const isClient = require("./auth").isClient;
 const isNotAuth = require("./auth").isNotAuth;
 const isAuth = require("./auth").isAuth;
-const isClientOrLawyer = require("./auth").isClientOrLawyer
+const isClientOrLawyer = require("./auth").isClientOrLawyer;
 const { ObjectId } = require("bson");
 
 // Welcome Page
@@ -34,15 +34,14 @@ router.get("/dashboard", isClientOrLawyer, (req, res) => {
     async (err, data) => {
       if (err) throw err;
 
-
       let user_doc = await User.findOne({ _id: id }).populate("complaints");
-      let complaints = user_doc.complaints
+      let complaints = user_doc.complaints;
       // SORT COMPLAINTS
       complaints.sort((a, b) => {
-        if (a['case_status'] < b['case_status']) return -1
-        if (a['case_status'] > b['case_status']) return 1
-        return 0
-      })
+        if (a["case_status"] < b["case_status"]) return -1;
+        if (a["case_status"] > b["case_status"]) return 1;
+        return 0;
+      });
 
       if (filter != "") {
         complaints = complaints.filter((complaint) => {
@@ -66,4 +65,7 @@ router.get("/dashboard", isClientOrLawyer, (req, res) => {
   );
 });
 
+router.get("/unverified", (req, res) => {
+  res.render("./pages/not-verified", { layout: false });
+});
 module.exports = router;

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const passport = require('passport');
+const passport = require("passport");
 
 // Load User model
 const User = require("../models/User");
@@ -10,11 +10,18 @@ const Notification = require("../models/Notification");
 const isAdmin = require("./auth").isAdmin;
 const isNotAuth = require("./auth").isNotAuth;
 const isAuth = require("./auth").isAuth;
-const forwardAuthenticated = require("./auth").isNotAuth
+const forwardAuthenticated = require("./auth").isNotAuth;
 const { ObjectId } = require("bson");
 
 router.get("/", isAdmin, async (req, res) => {
-  res.render("./admin/dashboard", { layout: "./layouts/admin-layout" });
+  const clientCount = await User.count({ user_type: "client" });
+  const lawyerCount = await User.count({ user_type: "lawyer" });
+
+  res.render("./admin/dashboard", {
+    layout: "./layouts/admin-layout",
+    clientCount,
+    lawyerCount,
+  });
 });
 
 router.get("/accounts", isAdmin, async (req, res) => {
