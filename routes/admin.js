@@ -25,8 +25,11 @@ router.get("/", isAdmin, async (req, res) => {
 });
 
 router.get("/accounts", isAdmin, async (req, res) => {
+  const accountsDoc = await User.find({ is_verified: false })
+
   res.render("./admin/accounts-authentication", {
     layout: "./layouts/admin-layout",
+    accountsDoc
   });
 });
 
@@ -41,5 +44,17 @@ router.get("/accounts/client", isAdmin, async (req, res) => {
 router.get("/pending", isAdmin, async (req, res) => {
   res.render("./admin/pending", { layout: "./layouts/admin-layout" });
 });
+
+// VERIFY USER
+router.get("/verification/:id", isAdmin, async (req, res) => {
+  res.send("Hi there")
+})
+
+router.patch("/verification/:id", isAdmin, async (req, res) => {
+  const id = req.params.id
+
+  await User.findByIdAndUpdate({ id: id }, { is_verified: true })
+  res.redirect('/accounts')
+})
 
 module.exports = router;
