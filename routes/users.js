@@ -135,7 +135,7 @@ router.post('/register', (req, res) => {
                 newUser.save()
 
 
-                req.flash('sucess_msg', 'You are now registered please log in to continue')
+                req.flash('success_msg', 'You are now registered please log in to continue')
                 res.redirect('/users/login')
             }
         });
@@ -154,7 +154,7 @@ router.post('/login',
 // Logout
 router.get('/logout', (req, res) => {
     req.logout();
-    req.flash('sucess_msg', 'You are logged out');
+    req.flash('success_msg', 'You are logged out');
     res.redirect('/users/login');
 
 });
@@ -211,7 +211,7 @@ router.patch('/edit/:id', isAuth, async (req, res) => {
         const update = req.body
         await User.findOneAndUpdate({ _id: filter }, update)
 
-        req.flash('sucess_msg', 'Profile Succesfully Updated')
+        req.flash('success_msg', 'Profile Succesfully Updated')
         res.redirect('/users/' + filter)
     } catch {
         res.status(500).send({ error: "There was an error in updating the user" })
@@ -226,7 +226,7 @@ router.patch('/edit/public/:id', isAuth, async (req, res) => {
         const success = await User.findOneAndUpdate({ _id: filter }, { is_public })
         const message = !update.is_public ? "public" : "private"
 
-        req.flash('sucess_msg', `Profile is now ${message}`)
+        req.flash('success_msg', `Profile is now ${message}`)
         res.redirect('/users/' + filter)
     } catch {
         res.status(500).send({ error: "There was an error in updating the user" })
@@ -241,7 +241,7 @@ router.patch('/edit/is_available/:id', isAuth, async (req, res) => {
         const success = await User.findOneAndUpdate({ _id: filter }, { is_available })
         const message = !update.is_available ? "available" : "unavailable"
 
-        req.flash('sucess_msg', `You are now ${message} for service`)
+        req.flash('success_msg', `You are now ${message} for service`)
         res.redirect('/users/' + filter)
     } catch {
         res.status(500).send({ error: "There was an error in updating the user" })

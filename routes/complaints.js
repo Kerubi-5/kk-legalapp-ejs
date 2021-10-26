@@ -90,7 +90,7 @@ router.post("/consultation", isClient, async (req, res) => {
     });
 
     await pushNotify.save();
-    req.flash("sucess_msg", "Complaint Successfully Processed");
+    req.flash("success_msg", "Complaint Successfully Processed");
     res.redirect("/dashboard");
   }
 });
@@ -163,7 +163,7 @@ router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
 
     await pushNotify.save();
 
-    req.flash("sucess_msg", `Succesfully accepted case with id: ${filter}`);
+    req.flash("success_msg", `Succesfully accepted case with id: ${filter}`);
     res.redirect("/form/complaints/" + filter);
   } catch (err) {
     res.status(500).send({ error: "Error in accepting a case" });
@@ -207,7 +207,7 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res) => {
     await newSolution.save()
     await pushNotify.save()
 
-    req.flash("sucess_msg", `Succesfully updated case with id: ${id}`);
+    req.flash("success_msg", `Succesfully updated case with id: ${id}`);
     res.redirect("/form/complaints/" + id);
   } catch (err) {
     res.status(500).send("Error in completing transaction");

@@ -57,6 +57,7 @@ router.patch("/verification/:id", isAdmin, async (req, res) => {
   const id = ObjectId(req.params.id)
 
   await User.findByIdAndUpdate({ _id: id }, { is_verified: true })
+  req.flash("success_msg", "Successfully verified a user")
   res.redirect('/admin/accounts')
 })
 
