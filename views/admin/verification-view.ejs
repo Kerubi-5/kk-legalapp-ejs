@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- BOOTSTRAP CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <title>admin/Dashboard</title>
+</head>
+
+<body>
+    <div class="container card mt-5">
+        <div class="m-5">
+            <label for="fname">First name:</label><br>
+            <input type="text" class="form-control" id="fname" value="<%- user.user_fname %>" readonly><br>
+            <label for="lname">Last name:</label><br>
+            <input type="text" class="form-control" id="lname" value="<%- user.user_lname %>" readonly><br>
+            <label for="actype">Account Type:</label><br>
+            <input type="text" class="form-control" id="actype" value="<%- user.user_type %>" readonly><br>
+            <label for="bday">Birthdate:</label><br>
+            <input type="text" class="form-control" id="bday" value="<%- user.birthdate.toISOString().split('T')[0] %>"
+                readonly><br>
+            <label for="lname">Address:</label><br>
+            <input type="text" class="form-control" id="address" value="3269 Pasong Tamo Quezon City" readonly><br>
+
+            <% if (user.user_type == "lawyer") { %>
+            <label for="educ_attain">Highest Educational Attainment:</label><br>
+            <input type="text" class="form-control" id="educ_attain"
+                value="Highschool graduate - Pasong Tamo Highschool)" readonly><br>
+            <caption>Lawyer's Valid ID</caption>
+
+            <embed src="/uploads/credentials/<%- user.lawyer_credential %>" type="application/pdf" width="100%"
+                height="600px" />
+            <% } %>
+
+            <form action="/admin/verification/<%- user._id %>?_method=PATCH" method="POST">
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary btn-lg">Verify</button>
+                    <a href="/admin/accounts" class="btn btn-danger btn-lg ms-2">Go Back</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

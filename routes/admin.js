@@ -47,14 +47,17 @@ router.get("/pending", isAdmin, async (req, res) => {
 
 // VERIFY USER
 router.get("/verification/:id", isAdmin, async (req, res) => {
-  res.send("Hi there")
+  const id = req.params.id
+
+  const user = await User.findOne({ _id: id })
+  res.render("./admin/verification-view", { layout: false, user })
 })
 
 router.patch("/verification/:id", isAdmin, async (req, res) => {
-  const id = req.params.id
+  const id = ObjectId(req.params.id)
 
-  await User.findByIdAndUpdate({ id: id }, { is_verified: true })
-  res.redirect('/accounts')
+  await User.findByIdAndUpdate({ _id: id }, { is_verified: true })
+  res.redirect('/admin/accounts')
 })
 
 module.exports = router;
