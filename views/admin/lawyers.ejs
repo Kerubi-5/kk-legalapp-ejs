@@ -1,161 +1,63 @@
-
-    <!--Account Authentication Content-->
-    <div id="authenticate-content" class="mt-5 pt-3 tab-content" role="tabpanel">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12 fw-bold fs-3">
-                    Lawyers
-                </div>
+<!--Account Authentication Content-->
+<div id="authenticate-content" class="mt-5 pt-3 tab-content" role="tabpanel">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 fw-bold fs-3">
+                Lawyers
             </div>
-            <br>
-            <!--Table for Account Authentication-->
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">UID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">32</th>
-                        <td>Yedi</td>
-                        <td>Jonson</td>
-                        <td><button class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">Review </button></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">44</th>
-                        <td>Robert</td>
-                        <td>Jackson</td>
-                        <td><button class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal2">Review </button></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">35</th>
-                        <td>Dora</td>
-                        <td>Gale</td>
-                        <td><button class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal3">Review </button></td>
-                    </tr>
-                </tbody>
-            </table>
-
         </div>
+        <br>
+        <!--Table for Account Authentication-->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">UID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for( let index = 0; index < lawyerDocs.length; index++ ) { %>
+                <tr>
+                    <th scope="row"><%- index+1 %></th>
+                    <td><%- lawyerDocs[index].user_fname %> </td>
+                    <td><%- lawyerDocs[index].user_lname %> </td>
+                    <td><button type="button" class="btn btn-primary btn-sm"
+                            onclick="showModal('<%- lawyerDocs[index]._id %>')">Review </button></td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+
     </div>
-    <!--End of Account Authentication Content-->
-    <!--Modal content-->
-    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">ACCOUNT INFORMATION</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" style="text-align: justify;">
-                    <form>
-                        <label for="uid" class="form-label">UID:</label>
-                        <span class="badge bg-dark rounded-pill">44</span><br>
+</div>
+<!--End of Account Authentication Content-->
 
-                        <label for="fname">First name:</label><br>
-                        <input type="text" class="form-control" id="fname" value="Robert" readonly><br>
-
-                        <label for="lname">Last name:</label><br>
-                        <input type="text" class="form-control" id="lname" value="Jackson" readonly><br>
-
-                        <label for="bday">Birthdate:</label><br>
-                        <input type="text" class="form-control" id="bday" value="7/12/1977" readonly><br>
-
-                        <label for="lname">Address:</label><br>
-                        <input type="text" class="form-control" id="address" value="3269 Pasong Tamo Quezon City"
-                            readonly><br>
-
-                        <label for="educ_attain">Highest Educational Attainment:</label><br>
-                        <input type="text" class="form-control" id="educ_attain"
-                            value="College graduate(Polytechnic University of The Philippines - College of Law)"
-                            readonly><br>
-
-                        <label for="valid_id">Valid ID/ License (for lawyers):</label><br>
-                        <input type="image" class="form-control" id="valid_id" src="lawyer_idummy.png" readonly><br>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger"><b>Lock Account</b></button>
-                </div>
+<!--Modal content-->
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">ACCOUNT INFORMATION</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="text-align: justify;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"><b>Lock Account</b></button>
             </div>
         </div>
     </div>
+</div>
+<!--end of Modal Content-->
 
-    <!--end of Modal Content-->
-    <!--Modal content-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">ACCOUNT INFORMATION</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" style="text-align: justify;">
-                    <form>
-                        <label for="uid" class="form-label">UID:</label>
-                        <span class="badge bg-dark rounded-pill">32</span><br>
-                        <label for="fname">First name:</label><br>
-                        <input type="text" class="form-control" id="fname" value="Yedi" readonly><br>
-                        <label for="lname">Last name:</label><br>
-                        <input type="text" class="form-control" id="lname" value="Jonson" readonly><br>
-                        <label for="bday">Birthdate:</label><br>
-                        <input type="text" class="form-control" id="bday" value="7/11/1978" readonly><br>
-                        <label for="lname">Address:</label><br>
-                        <input type="text" class="form-control" id="address" value="Culiat Quezon City" readonly><br>
-                        <label for="educ_attain">Highest Educational Attainment:</label><br>
-                        <input type="text" class="form-control" id="educ_attain"
-                            value="College graduate(Polytechnic University of The Philippines - College of Law)"
-                            readonly><br>
-                        <label for="valid_id">Valid ID/ License (for lawyers):</label><br>
-                        <input type="image" class="form-control" id="valid_id" src="lawyer_idummy.png" readonly><br>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger"><b>Lock Account</b></button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--end of Modal Content-->
-    <!--Modal content-->
-    <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">ACCOUNT INFORMATION</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" style="text-align: justify;">
-                    <form>
-                        <label for="uid" class="form-label">UID:</label>
-                        <span class="badge bg-dark rounded-pill">35</span><br>
-                        <label for="fname">First name:</label><br>
-                        <input type="text" class="form-control" id="fname" value="Dora" readonly><br>
-                        <label for="lname">Last name:</label><br>
-                        <input type="text" class="form-control" id="lname" value="Gale" readonly><br>
-                        <label for="bday">Birthdate:</label><br>
-                        <input type="text" class="form-control" id="bday" value="1/23/1969" readonly><br>
-                        <label for="lname">Address:</label><br>
-                        <input type="text" class="form-control" id="address" value="Rosario Batangas" readonly><br>
-                        <label for="educ_attain">Highest Educational Attainment:</label><br>
-                        <input type="text" class="form-control" id="educ_attain"
-                            value="College graduate(Polytechnic University of The Philippines - College of Law)"
-                            readonly><br>
-                        <label for="valid_id">Valid ID/ License (for lawyers):</label><br>
-                        <input type="image" class="form-control" id="valid_id" src="lawyer_idummy.png" readonly><br>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger"><b>Lock Account</b></button>
-                </div>
-            </div>
-        </div>
-    </div>
+<script>
+    function showModal(data) {
+        $("#myModal .modal-body").load(`/admin/accounts/${data}`, () => {
+            $("#myModal").modal('show')
+        })
+        // $("#myModal .modal-title").html(data)
+        // $("#myModal").modal('show')
+    }
+</script>

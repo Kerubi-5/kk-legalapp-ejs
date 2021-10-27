@@ -33,13 +33,24 @@ router.get("/accounts", isAdmin, async (req, res) => {
   });
 });
 
+// Lawyer Account Routes
 router.get("/accounts/lawyer", isAdmin, async (req, res) => {
-  res.render("./admin/lawyers", { layout: "./layouts/admin-layout" });
+  const lawyerDocs = await User.find({ user_type: "lawyer" })
+  res.render("./admin/lawyers", { layout: "./layouts/admin-layout", lawyerDocs });
 });
 
+// Client Account Routes
 router.get("/accounts/client", isAdmin, async (req, res) => {
-  res.render("./admin/clients", { layout: "./layouts/admin-layout" });
+  const clientDocs = await User.find({ user_type: "client" })
+  res.render("./admin/clients", { layout: "./layouts/admin-layout", clientDocs });
 });
+
+router.get("/accounts/:id", isAdmin, async (req, res) => {
+  const id = ObjectId(req.params.id)
+  const user_client = await User.findById({ layout: false, _id: id })
+
+  res.render("./admin/user-view", { layout: false, user: user_client })
+})
 
 router.get("/pending", isAdmin, async (req, res) => {
   res.render("./admin/pending", { layout: "./layouts/admin-layout" });
@@ -48,8 +59,8 @@ router.get("/pending", isAdmin, async (req, res) => {
 // VERIFY USER
 router.get("/verification/:id", isAdmin, async (req, res) => {
   const id = req.params.id
-
   const user = await User.findOne({ _id: id })
+
   res.render("./admin/verification-view", { layout: false, user })
 })
 
@@ -60,5 +71,7 @@ router.patch("/verification/:id", isAdmin, async (req, res) => {
   req.flash("success_msg", "Successfully verified a user")
   res.redirect('/admin/accounts')
 })
+
+router.get("/")
 
 module.exports = router;

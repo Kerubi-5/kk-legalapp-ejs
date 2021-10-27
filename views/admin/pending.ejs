@@ -1,91 +1,89 @@
-
-    <!--Pending Content-->
-    <div id="authenticate-content" class="mt-5 pt-3 tab-content" role="tabpanel">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12 fw-bold fs-3">
-                    Pending Assistance Request
-                </div>
+<!--Pending Content-->
+<div id="authenticate-content" class="mt-5 pt-3 tab-content" role="tabpanel">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 fw-bold fs-3">
+                Pending Assistance Request
             </div>
-            <br>
-            <!--Table for Account Pending-->
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Case ID</th>
-                        <th scope="col">Client's Name</th>
-                        <th scope="col">Requested Lawyer</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">050</th>
-                        <td>Pedro Ibarra</td>
-                        <td>Yedi Jonson</td>
-                        <td><button class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">Review </button></td>
-
-                </tbody>
-            </table>
-
         </div>
+        <br>
+        <!--Table for Account Pending-->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Case ID</th>
+                    <th scope="col">Client's Name</th>
+                    <th scope="col">Requested Lawyer</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">050</th>
+                    <td>Pedro Ibarra</td>
+                    <td>Yedi Jonson</td>
+                    <td><button class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">Review </button></td>
+
+            </tbody>
+        </table>
+
     </div>
-    <!--End of Pending Content-->
-    <!--Modal content-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">CASE INFORMATION</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" style="text-align: justify;">
-                    <form>
-                        <label for="uid" class="form-label">Case ID:</label>
-                        <span class="badge bg-dark rounded-pill">050</span><br>
+</div>
+<!--End of Pending Content-->
+<!--Modal content-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">CASE INFORMATION</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="text-align: justify;">
+                <form>
+                    <label for="uid" class="form-label">Case ID:</label>
+                    <span class="badge bg-dark rounded-pill">050</span><br>
 
-                        <div class="mb-3">
-                            <label class="form-label">Clients Name:</label>
-                            <input type="text" class="form-control" id="client_name" value="Pedro Ibarra" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Requested Lawyer:</label>
-                            <input type="text" class="form-control" id="" value="Yedi Jonson" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Yearly income:</label>
-                            <input type="text" class="form-control" id="" value="50,000-70,000" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="facts_of_the_case" class="form-label">Details of the Problem:</label>
-                            <textarea class="form-control" class="form-control" id="facts_of_the_case" rows="3"
-                                readonly>Palaging binubogbog ng tatay ko ang nanay ko pag lasing siya.</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="adverse_party" class="form-label">Adverse Party:</label>
-                            <input type="text" class="form-control" id="adverse_party" readonly
-                                value="Crisostomo Ibarra">
-                        </div>
-                        <div class="mb-3">
-                            <label for="case_objectives" class="form-label">Goal of Legal Consultation:</label>
-                            <textarea class="form-control" class="form-control" id="case_objectives" rows="3"
-                                readonly>Nais ko po sana sampahan ng kaso ang aking tatay.</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="client_questions" class="form-label">Questions to be Addressed:</label>
-                            <textarea class="form-control" class="form-control" id="client_questions" rows="3"
-                                readonly>Ano ang maaari kong isampang kaso sa aking tatay? Ano-ano ang kaylangan ko para makapagsampa ng kaso?</textarea>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Clients Name:</label>
+                        <input type="text" class="form-control" id="client_name" value="Pedro Ibarra" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Requested Lawyer:</label>
+                        <input type="text" class="form-control" id="" value="Yedi Jonson" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Yearly income:</label>
+                        <input type="text" class="form-control" id="" value="50,000-70,000" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="facts_of_the_case" class="form-label">Details of the Problem:</label>
+                        <textarea class="form-control" class="form-control" id="facts_of_the_case" rows="3"
+                            readonly>Palaging binubogbog ng tatay ko ang nanay ko pag lasing siya.</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="adverse_party" class="form-label">Adverse Party:</label>
+                        <input type="text" class="form-control" id="adverse_party" readonly value="Crisostomo Ibarra">
+                    </div>
+                    <div class="mb-3">
+                        <label for="case_objectives" class="form-label">Goal of Legal Consultation:</label>
+                        <textarea class="form-control" class="form-control" id="case_objectives" rows="3"
+                            readonly>Nais ko po sana sampahan ng kaso ang aking tatay.</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="client_questions" class="form-label">Questions to be Addressed:</label>
+                        <textarea class="form-control" class="form-control" id="client_questions" rows="3"
+                            readonly>Ano ang maaari kong isampang kaso sa aking tatay? Ano-ano ang kaylangan ko para makapagsampa ng kaso?</textarea>
+                    </div>
 
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success"><b>Accept Request</b></button>
-                    <button type="button" class="btn btn-danger"><b>Deny Request</b></button>
-                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"><b>Accept Request</b></button>
+                <button type="button" class="btn btn-danger"><b>Deny Request</b></button>
             </div>
         </div>
     </div>
+</div>
 
-    <!--end of Modal Content-->
+<!--end of Modal Content-->
