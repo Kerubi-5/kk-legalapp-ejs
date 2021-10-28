@@ -4,7 +4,8 @@ const passport = require("passport");
 
 // Load User model
 const User = require("../models/User");
-const Notification = require("../models/Notification");
+const Advice = require("../models/Advice")
+const Complaint = require("../models/Complaint")
 
 // Auth types
 const isAdmin = require("./auth").isAdmin;
@@ -16,11 +17,19 @@ const { ObjectId } = require("bson");
 router.get("/", isAdmin, async (req, res) => {
   const clientCount = await User.count({ user_type: "client" });
   const lawyerCount = await User.count({ user_type: "lawyer" });
+  const advicesCount = await Advice.count({})
+  const resolvedAdvicesCount = await Advice.count({ is_resolved: true })
+  const complaintsCount = await Complaint.count({})
+  const complaintsCompletedCount = await Complaint.count({ case_status: "completed " })
 
   res.render("./admin/dashboard", {
     layout: "./layouts/admin-layout",
     clientCount,
     lawyerCount,
+    advicesCount,
+    resolvedAdvicesCount,
+    complaintsCount,
+    complaintsCompletedCount
   });
 });
 
@@ -69,6 +78,14 @@ router.patch("/verification/:id", isAdmin, async (req, res) => {
 
   await User.findByIdAndUpdate({ _id: id }, { is_verified: true })
   req.flash("success_msg", "Successfully verified a user")
+  res.redirect('/admin/accounts')
+})
+
+router.get("/accounts/lock/:id", isAdmin, async (req, res) => {
+  const id = ObjectId(req.params.id)
+
+  await User.findByIdAndUpdate({ _id: id }, { is_verified: false })
+  req.flash("success_msg", "Successfully locked account")
   res.redirect('/admin/accounts')
 })
 

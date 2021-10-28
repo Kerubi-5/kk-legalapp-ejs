@@ -45,7 +45,7 @@
             <div class="modal-body" style="text-align: justify;">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger"><b>Lock Account</b></button>
+                <a id="lock-btn" type="button" class="btn btn-danger"><b>Lock Account</b></a>
             </div>
         </div>
     </div>
@@ -56,8 +56,7 @@
     function showModal(data) {
         $("#myModal .modal-body").load(`/admin/accounts/${data}`, () => {
             $("#myModal").modal('show')
+            $("#lock-btn").attr("href", `/admin/accounts/lock/${data}`)
         })
-        // $("#myModal .modal-title").html(data)
-        // $("#myModal").modal('show')
     }
 </script>

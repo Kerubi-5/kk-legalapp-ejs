@@ -1,23 +1,20 @@
-<div>
-    <label for="fname">First name:</label><br>
-    <input type="text" class="form-control" id="fname" value="<%- user.user_fname %>" readonly><br>
-    <label for="lname">Last name:</label><br>
-    <input type="text" class="form-control" id="lname" value="<%- user.user_lname %>" readonly><br>
-    <label for="actype">Account Type:</label><br>
-    <input type="text" class="form-control" id="actype" value="<%- user.user_type %>" readonly><br>
-    <label for="bday">Birthdate:</label><br>
-    <input type="text" class="form-control" id="bday" value="<%- user.birthdate.toISOString().split('T')[0] %>"
-        readonly><br>
-    <label for="lname">Address:</label><br>
-    <input type="text" class="form-control" id="address" value="3269 Pasong Tamo Quezon City" readonly><br>
+<label for="fname">First name:</label><br>
+<input type="text" class="form-control" id="fname" value="<%- user.user_fname %>" readonly><br>
+<label for="lname">Last name:</label><br>
+<input type="text" class="form-control" id="lname" value="<%- user.user_lname %>" readonly><br>
+<label for="actype">Account Type:</label><br>
+<input type="text" class="form-control" id="actype" value="<%- user.user_type %>" readonly><br>
+<label for="bday">Birthdate:</label><br>
+<input type="text" class="form-control" id="bday" value="<%- user.birthdate.toISOString().split('T')[0] %>"
+    readonly><br>
+<label for="lname">Address:</label><br>
+<input type="text" class="form-control" id="address" value="3269 Pasong Tamo Quezon City" readonly><br>
 
-    <% if (user.user_type == "lawyer") { %>
-    <label for="educ_attain">Highest Educational Attainment:</label><br>
-    <input type="text" class="form-control" id="educ_attain" value="Highschool graduate - Pasong Tamo Highschool)"
-        readonly><br>
-    <caption>Lawyer's Valid ID</caption>
+<% if (user.user_type == "lawyer") { %>
+<label for="educ_attain">Highest Educational Attainment:</label><br>
+<input type="text" class="form-control" id="educ_attain" value="Highschool graduate - Pasong Tamo Highschool)"
+    readonly><br>
+<caption>Lawyer's Valid ID</caption>
 
-    <embed src="/uploads/credentials/<%- user.lawyer_credential %>" type="application/pdf" width="100%"
-        height="600px" />
-    <% } %>
-</div>
+<embed src="/uploads/credentials/<%- user.lawyer_credential %>" type="application/pdf" width="100%" height="600px" />
+<% } %>
