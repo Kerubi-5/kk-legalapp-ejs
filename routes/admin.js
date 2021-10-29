@@ -34,7 +34,7 @@ router.get("/", isAdmin, async (req, res) => {
 });
 
 router.get("/accounts", isAdmin, async (req, res) => {
-  const accountsDoc = await User.find({ is_verified: false })
+  const accountsDoc = await User.find({ user_type: "lawyer", is_verified: false })
 
   res.render("./admin/accounts-authentication", {
     layout: "./layouts/admin-layout",

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authUtils = require('../utils/crypto')
 const passport = require('passport');
-const transporter = require("../config/nodemailer")
+
 
 // Load User model
 const User = require('../models/User');
@@ -15,6 +15,9 @@ const isLawyer = require('./auth').isLawyer
 const isAdmin = require('./auth').isAdmin;
 const { ObjectId } = require('bson');
 const { isAuth } = require('./auth');
+
+// Node Mailer
+const sendMail = require("../utils/transporter")
 
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
@@ -72,7 +75,7 @@ router.post('/register', (req, res) => {
             user_type
         });
     } else {
-        User.findOne({ $or: [{ username: username }, { email: email }] }).then(user => {
+        User.findOne({ $or: [{ username: username }] }).then(user => {
             if (user) {
                 errors.push({ msg: 'Username or email already exist' });
                 res.render('register', {
@@ -139,22 +142,7 @@ router.post('/register', (req, res) => {
                 host = req.get('host');
                 link = "http://" + req.get('host') + "/verify?id=" + rand;
 
-                const options = {
-                    from: process.env.EMAIL,
-                    to: email,
-                    subject: "Registration confirmation with 3JBG Legal Web Application!",
-                    html: `<h1>Hello ${user_fname},</h1><br> Please Click on the link to verify your email.<br><a href=` + link + ">Click here to verify</a>"
-                }
-                transporter.sendMail(options, (err, data) => {
-                    try {
-                        if (err) throw Error(err)
-                        else console.log("Email sent")
-                    } catch (err) {
-                        console.log(err)
-                    }
-
-                })
-
+                sendMail(email, link, user_fname)
 
                 req.flash('success_msg', 'You are now registered please log in to continue')
                 res.redirect('/users/login')
@@ -162,6 +150,21 @@ router.post('/register', (req, res) => {
         });
     }
 });
+
+router.get('/resend-email', isAuth, async (req, res) => {
+    try {
+        rand = ObjectId(req.user._id)
+        const myUser = await User.findOne({ _id: rand })
+        host = req.get('host');
+        link = "http://" + req.get('host') + "/verify?id=" + rand;
+
+        sendMail(myUser.email, link, myUser.user_fname)
+
+        res.redirect('/unverified')
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 // Login
 router.post('/login',
