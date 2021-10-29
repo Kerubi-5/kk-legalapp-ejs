@@ -68,4 +68,20 @@ router.get("/dashboard", isClientOrLawyer, (req, res) => {
 router.get("/unverified", (req, res) => {
   res.render("./pages/not-verified", { layout: false });
 });
+
+// EMAIL VERIFY
+router.get('/verify', async (req, res) => {
+  try {
+    const id = req.query.id
+    if (!id) {
+      res.send("Invalid Link")
+    } else {
+      await User.findByIdAndUpdate({ _id: ObjectId(id) }, { is_verified: true })
+      res.render("./pages/verified", { layout: false })
+    }
+  } catch (err) {
+    console.log(err)
+  }
+})
+
 module.exports = router;

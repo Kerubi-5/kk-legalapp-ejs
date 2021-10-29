@@ -104,6 +104,7 @@ app.use("/form", complaintRoutes);
 app.use("/advice", adviceRoutes);
 app.use("/admin", adminRoutes);
 
+
 // Listening to port
 app.listen(port, () => {
   console.log(`Legal counsel webapp is listening at http://localhost:${port}`);
