@@ -104,6 +104,22 @@ app.use("/form", complaintRoutes);
 app.use("/advice", adviceRoutes);
 app.use("/admin", adminRoutes);
 
+/**
+ * -------------- ERROR ROUTE HANDLER ----------------
+ */
+
+// IF NO ROUTE IS FOUND
+app.use((req, res, next) => {
+  const err = new Error('The page you are looking for was not found.')
+  err.status = 404
+  next(err)
+})
+
+// HANDLE ALL ERRORS
+app.use((err, req, res, next) => {
+  res.status(err.status || 500)
+  res.render("../views/pages/error", { layout: false, err })
+})
 
 // Listening to port
 app.listen(port, () => {

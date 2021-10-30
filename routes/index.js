@@ -70,7 +70,7 @@ router.get("/unverified", (req, res) => {
 });
 
 // EMAIL VERIFY
-router.get('/verify', async (req, res) => {
+router.get('/verify', async (req, res, next) => {
   try {
     const id = req.query.id
     if (!id) {
@@ -79,8 +79,10 @@ router.get('/verify', async (req, res) => {
       await User.findByIdAndUpdate({ _id: ObjectId(id) }, { is_verified: true })
       res.render("./pages/verified", { layout: "./pages/layout-page" })
     }
-  } catch (err) {
-    console.log(err)
+  } catch {
+    const err = new Error('Problem in the user verification')
+    err.status = 500
+    next(err)
   }
 })
 
