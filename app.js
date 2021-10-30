@@ -10,6 +10,8 @@ const flash = require("express-flash");
 const dbConnection = require("./config/db");
 const methodOverride = require("method-override");
 const fileUpload = require("express-fileupload");
+const favicon = require('serve-favicon')
+const path = require('path')
 
 /**
  * -------------- DATABASE CONNECTION ----------------
@@ -32,6 +34,9 @@ const port = process.env.PORT || 3000;
 
 app.use(express.static("public"));
 app.use("./css", express.static(__dirname + "public/css"));
+
+//FAVICON
+app.use(favicon(path.join(__dirname, 'public/assets/icon', 'favicon.ico')))
 
 /**
  * -------------- TEMPLATING ENGINE ----------------
