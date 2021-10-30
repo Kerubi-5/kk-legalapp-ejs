@@ -3,19 +3,15 @@ const router = express.Router();
 
 // Load User model
 const User = require("../models/User");
-const Complaint = require("../models/Complaint");
 const Notification = require("../models/Notification");
-const Solution = require("../models/Solution")
 const Advice = require('../models/Advice')
 
 // Auth types
-const isClient = require("./auth").isClient;
 const isLawyer = require("./auth").isLawyer;
-const isAdmin = require("./auth").isAdmin;
 const isAuth = require("./auth").isAuth;
 const { ObjectId } = require("bson");
 
-router.get("/", isAuth, async (req, res) => {
+router.get("/", isAuth, async (req, res, next) => {
     try {
         const id = ObjectId(req.user._id);
         let page = parseInt(req.query.page);
@@ -37,12 +33,12 @@ router.get("/", isAuth, async (req, res) => {
             endingLink: Math.ceil(advicesDoc.length / 10),
             page,
         })
-    } catch {
-
+    } catch (err) {
+        next(err)
     }
 });
 
-router.post("/", isAuth, async (req, res) => {
+router.post("/", isAuth, async (req, res, next) => {
     try {
         const id = ObjectId(req.user._id)
         const { legal_title, legal_description } = req.body
@@ -56,12 +52,12 @@ router.post("/", isAuth, async (req, res) => {
         await newAdvice.save()
 
         res.redirect('/advice')
-    } catch {
-
+    } catch (err) {
+        next(err)
     }
 })
 
-router.get("/:id", isAuth, async (req, res) => {
+router.get("/:id", isAuth, async (req, res, next) => {
     try {
         const id = ObjectId(req.user._id)
         const advice_id = ObjectId(req.params.id)
@@ -82,12 +78,12 @@ router.get("/:id", isAuth, async (req, res) => {
             lawyersDoc,
             loginDoc,
         })
-    } catch {
-
+    } catch (err) {
+        next(err)
     }
 })
 
-router.patch("/comment/:id", isLawyer, async (req, res) => {
+router.patch("/comment/:id", isLawyer, async (req, res, next) => {
     try {
         const id = ObjectId(req.user._id)
         const advice_id = ObjectId(req.params.id)
@@ -101,20 +97,20 @@ router.patch("/comment/:id", isLawyer, async (req, res) => {
         const adviceDoc = await Advice.findByIdAndUpdate({ _id: advice_id }, { $push: { lawyers: lawyer } })
 
         res.redirect('/advice/' + advice_id)
-    } catch {
-
+    } catch (err) {
+        next(err)
     }
 })
 
-router.get("/vote/:id", isAuth, async (req, res) => {
+router.get("/vote/:id", isAuth, async (req, res, next) => {
     try {
         const vote_id = ObjectId(req.params.id)
 
         await Advice.findByIdAndUpdate({ _id: vote_id }, { is_resolved: true })
 
         res.redirect('/advice/' + vote_id)
-    } catch {
-
+    } catch (err) {
+        next(err)
     }
 })
 

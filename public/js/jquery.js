@@ -11,6 +11,6 @@ $(".close-notification").click(function () {
 
     $.ajax({
         method: "GET",
-        url: "/form/notification/" + value
+        url: "/notification/" + value
     })
 })

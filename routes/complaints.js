@@ -10,130 +10,135 @@ const Solution = require("../models/Solution")
 // Auth types
 const isClient = require("./auth").isClient;
 const isLawyer = require("./auth").isLawyer;
-const isAdmin = require("./auth").isAdmin;
 const isAuth = require("./auth").isAuth;
 const { ObjectId } = require("bson");
 
 // COMPLAINT POST SUBMIT
-router.post("/consultation", isClient, async (req, res) => {
-  const client_id = ObjectId(req.user._id);
-  const lawyer_id = ObjectId(req.body.lawyer_id);
-  const {
-    legal_title,
-    case_facts,
-    adverse_party,
-    case_objectives,
-    client_questions,
-    case_status,
-  } = req.body;
-
-  let errors = [];
-
-  // SETTING UP FILE UPLOAD VARIABLES
-  let fileObj;
-  let case_file;
-
-  if (
-    !legal_title ||
-    !case_facts ||
-    !adverse_party ||
-    !case_objectives ||
-    !case_status ||
-    !lawyer_id ||
-    !req.files ||
-    !req.body.lawyer_id ||
-    !client_id
-  )
-    errors.push("Fill are the required fields");
-
-  if (errors.length > 0) {
-    req.flash("error_msg", "Fill all the required fields");
-    res.redirect("/dashboard");
-  } else {
-    if (req.files) {
-      fileObj = req.files.case_file;
-      case_file =
-        Date.now() + "-" + Math.round(Math.random() * 1e9) + fileObj.name;
-    }
-
-    fileObj.mv("./public/uploads/evidences/" + case_file);
-
-    const newComplaint = new Complaint({
-      client_id,
+router.post("/consultation", isClient, async (req, res, next) => {
+  try {
+    const client_id = ObjectId(req.user._id);
+    const lawyer_id = ObjectId(req.body.lawyer_id);
+    const {
       legal_title,
       case_facts,
       adverse_party,
       case_objectives,
       client_questions,
       case_status,
-      case_file,
-      lawyer_id,
-    });
+    } = req.body;
 
-    newComplaint.save();
+    let errors = [];
 
-    // Find User Client and push Complaint
-    const client_result = await User.findOne({ _id: client_id, user_type: "client" })
-    client_result.complaints.push(newComplaint)
-    await client_result.save()
+    // SETTING UP FILE UPLOAD VARIABLES
+    let fileObj;
+    let case_file;
 
-    // Find User Lawyer and push Complaint
-    const lawyer_result = await User.findOne({ _id: lawyer_id, user_type: "lawyer" })
-    lawyer_result.complaints.push(newComplaint)
-    await lawyer_result.save()
+    if (
+      !legal_title ||
+      !case_facts ||
+      !adverse_party ||
+      !case_objectives ||
+      !case_status ||
+      !lawyer_id ||
+      !req.files ||
+      !req.body.lawyer_id ||
+      !client_id
+    )
+      errors.push("Fill are the required fields");
 
-    const pushNotify = new Notification({
-      complaint_id: newComplaint._id,
-      message: "has requested a consultation request",
-      actor: client_result.username,
-      target: lawyer_result._id,
-    });
+    if (errors.length > 0) {
+      req.flash("error_msg", "Fill all the required fields");
+      res.redirect("/dashboard");
+    } else {
+      if (req.files) {
+        fileObj = req.files.case_file;
+        case_file =
+          Date.now() + "-" + Math.round(Math.random() * 1e9) + fileObj.name;
+      }
 
-    await pushNotify.save();
-    req.flash("success_msg", "Complaint Successfully Processed");
-    res.redirect("/dashboard");
+      fileObj.mv("./public/uploads/evidences/" + case_file);
+
+      const newComplaint = new Complaint({
+        client_id,
+        legal_title,
+        case_facts,
+        adverse_party,
+        case_objectives,
+        client_questions,
+        case_status,
+        case_file,
+        lawyer_id,
+      });
+
+      newComplaint.save();
+
+      // Find User Client and push Complaint
+      const client_result = await User.findOne({ _id: client_id, user_type: "client" })
+      client_result.complaints.push(newComplaint)
+      await client_result.save()
+
+      // Find User Lawyer and push Complaint
+      const lawyer_result = await User.findOne({ _id: lawyer_id, user_type: "lawyer" })
+      lawyer_result.complaints.push(newComplaint)
+      await lawyer_result.save()
+
+      const pushNotify = new Notification({
+        complaint_id: newComplaint._id,
+        message: "has requested a consultation request",
+        actor: client_result.username,
+        target: lawyer_result._id,
+      });
+
+      await pushNotify.save();
+      req.flash("success_msg", "Complaint Successfully Processed");
+      res.redirect("/dashboard");
+    }
+  } catch (err) {
+    next(err)
   }
 });
 
 // COMPLAINT VIEW TRANSACTION ONGOING
-router.get("/complaints/:id", isAuth, (req, res) => {
-  const user_id = ObjectId(req.user._id);
-  const complaint_id = ObjectId(req.params.id);
+router.get("/complaints/:id", isAuth, (req, res, next) => {
+  try {
+    const user_id = ObjectId(req.user._id);
+    const complaint_id = ObjectId(req.params.id);
 
-  Complaint.findOne({ _id: complaint_id })
-    .populate("client_id")
-    .populate("lawyer_id")
-    .populate("solutions")
-    .exec(async (err, result) => {
-      if (err) throw err;
+    Complaint.findOne({ _id: complaint_id })
+      .populate("client_id")
+      .populate("lawyer_id")
+      .populate("solutions")
+      .exec(async (err, result) => {
+        if (err) next(err);
 
-      let user_doc = await User.findOne({ _id: user_id });
+        let user_doc = await User.findOne({ _id: user_id });
 
-      const notifications = await Notification.find({ target: user_id });
-      const user_type = user_doc.user_type;
+        const notifications = await Notification.find({ target: user_id });
+        const user_type = user_doc.user_type;
 
-      // Only users involved in this complaint will be able to see the content of the complaint
-      if (
-        user_id.equals(result.client_id._id) ||
-        user_id.equals(result.lawyer_id._id)
-      )
-        res.render("consultation-view", {
-          user_id: user_id,
-          result,
-          user_type: user_type,
-          a_type: result.case_status,
-          notifications,
-          solutions: result.solutions
-        });
-      else
-        res
-          .status(401)
-          .send("You do not have the authority to view this resource");
-    });
+        // Only users involved in this complaint will be able to see the content of the complaint
+        if (
+          user_id.equals(result.client_id._id) ||
+          user_id.equals(result.lawyer_id._id)
+        )
+          res.render("consultation-view", {
+            user_id: user_id,
+            result,
+            user_type: user_type,
+            a_type: result.case_status,
+            notifications,
+            solutions: result.solutions
+          });
+        else throw new Error('You do not have authority to view this complaint')
+      });
+  } catch (err) {
+    next(err)
+  }
+
 });
 
 // COMPLAINT ACCEPT UPDATED LAWYER SIDE
-router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
+router.patch("/complaints/pending/:id", isLawyer, async (req, res, next) => {
   try {
     const filter = req.params.id;
     const { case_status, appointment_date } = req.body;
@@ -166,18 +171,13 @@ router.patch("/complaints/pending/:id", isLawyer, async (req, res) => {
     req.flash("success_msg", `Succesfully accepted case with id: ${filter}`);
     res.redirect("/form/complaints/" + filter);
   } catch (err) {
-    console.log(err)
+    next(err)
   }
 });
 
-router.get("/notification/:id", isAuth, async (req, res) => {
-  const id = ObjectId(req.params.id);
-  await Notification.findByIdAndDelete({ _id: id });
 
-  res.redirect("/dashboard");
-});
 
-router.post("/complaints/ongoing/:id", isAuth, async (req, res) => {
+router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
   try {
     const id = ObjectId(req.params.id);
     const { summary, recommendations, video_link } = req.body
@@ -210,7 +210,7 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res) => {
     req.flash("success_msg", `Succesfully updated case with id: ${id}`);
     res.redirect("/form/complaints/" + id);
   } catch (err) {
-    res.status(500).send("Error in completing transaction");
+    next(err)
   }
 })
 

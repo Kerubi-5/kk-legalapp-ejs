@@ -10,9 +10,6 @@ const Notification = require('../models/Notification')
 
 // Auth types
 const forwardAuthenticated = require('./auth').isNotAuth;
-const isClient = require('./auth').isClient
-const isLawyer = require('./auth').isLawyer
-const isAdmin = require('./auth').isAdmin;
 const { ObjectId } = require('bson');
 const { isAuth } = require('./auth');
 
@@ -26,41 +23,9 @@ router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
 
 // Register POST
-router.post('/register', (req, res) => {
-    const {
-        username,
-        email,
-        password,
-        password2,
-        user_fname,
-        user_lname,
-        birthdate,
-        contact_number,
-        permanent_address,
-        city,
-        zip,
-        user_type,
-        is_available,
-        affiliation,
-    } = req.body;
-
-    // SETTING UP FILE UPLOAD
-    let lawyer_credential
-    let fileObj
-
-    let errors = [];
-
-    if (!username || !email || !password || !password2 || !user_fname || !user_lname || !birthdate || !contact_number || !permanent_address || !city || !zip) errors.push({ msg: 'Please enter all fields' });
-
-    if (username.length > 20) errors.push({ msg: 'Username cannot be longer than 20 characters' })
-
-    if (password != password2) errors.push({ msg: 'Passwords do not match' });
-
-    if (password.length < 6 || password.length > 20) errors.push({ msg: 'Password must be at least 6 characters, and not more than 20 characters long' });
-
-    if (errors.length > 0) {
-        res.render('register', {
-            errors,
+router.post('/register', (req, res, next) => {
+    try {
+        const {
             username,
             email,
             password,
@@ -72,34 +37,51 @@ router.post('/register', (req, res) => {
             permanent_address,
             city,
             zip,
-            user_type
-        });
-    } else {
-        User.findOne({ $or: [{ username: username }] }).then(user => {
-            if (user) {
-                errors.push({ msg: 'Username or email already exist' });
-                res.render('register', {
-                    errors,
-                    username,
-                    email,
-                    password,
-                    password2,
-                    user_fname,
-                    user_lname,
-                    birthdate,
-                    contact_number,
-                    permanent_address,
-                    city,
-                    zip,
-                    user_type
-                });
-            } else {
-                let newUser = new User()
-                if (user_type == "client") {
-                    newUser = new User({
+            user_type,
+            is_available,
+            affiliation,
+        } = req.body;
+
+        // SETTING UP FILE UPLOAD
+        let lawyer_credential
+        let fileObj
+
+        let errors = [];
+
+        if (!username || !email || !password || !password2 || !user_fname || !user_lname || !birthdate || !contact_number || !permanent_address || !city || !zip) errors.push({ msg: 'Please enter all fields' });
+
+        if (username.length > 20) errors.push({ msg: 'Username cannot be longer than 20 characters' })
+
+        if (password != password2) errors.push({ msg: 'Passwords do not match' });
+
+        if (password.length < 6 || password.length > 20) errors.push({ msg: 'Password must be at least 6 characters, and not more than 20 characters long' });
+
+        if (errors.length > 0) {
+            res.render('register', {
+                errors,
+                username,
+                email,
+                password,
+                password2,
+                user_fname,
+                user_lname,
+                birthdate,
+                contact_number,
+                permanent_address,
+                city,
+                zip,
+                user_type
+            });
+        } else {
+            User.findOne({ $or: [{ username: username }] }).then(user => {
+                if (user) {
+                    errors.push({ msg: 'Username or email already exist' });
+                    res.render('register', {
+                        errors,
                         username,
                         email,
                         password,
+                        password2,
                         user_fname,
                         user_lname,
                         birthdate,
@@ -109,49 +91,68 @@ router.post('/register', (req, res) => {
                         zip,
                         user_type
                     });
-                } else if (user_type == "lawyer") {
-                    if (req.files) {
-                        fileObj = req.files.lawyer_credential
-                        lawyer_credential = Date.now() + '-' + Math.round(Math.random() * 1E9) + fileObj.name
+                } else {
+                    let newUser = new User()
+                    if (user_type == "client") {
+                        newUser = new User({
+                            username,
+                            email,
+                            password,
+                            user_fname,
+                            user_lname,
+                            birthdate,
+                            contact_number,
+                            permanent_address,
+                            city,
+                            zip,
+                            user_type
+                        });
+                    } else if (user_type == "lawyer") {
+                        if (req.files) {
+                            fileObj = req.files.lawyer_credential
+                            lawyer_credential = Date.now() + '-' + Math.round(Math.random() * 1E9) + fileObj.name
+                        }
+
+                        newUser = new User({
+                            username,
+                            email,
+                            password,
+                            user_fname,
+                            user_lname,
+                            birthdate,
+                            contact_number,
+                            permanent_address,
+                            city,
+                            zip,
+                            user_type,
+                            is_available,
+                            lawyer_credential,
+                            affiliation
+                        });
+
+                        fileObj.mv('./public/uploads/credentials/' + lawyer_credential)
                     }
 
-                    newUser = new User({
-                        username,
-                        email,
-                        password,
-                        user_fname,
-                        user_lname,
-                        birthdate,
-                        contact_number,
-                        permanent_address,
-                        city,
-                        zip,
-                        user_type,
-                        is_available,
-                        lawyer_credential,
-                        affiliation
-                    });
+                    newUser.password = authUtils.hashPassword(password);
+                    newUser.save()
 
-                    fileObj.mv('./public/uploads/credentials/' + lawyer_credential)
+                    rand = newUser._id
+                    host = req.get('host');
+                    link = "http://" + req.get('host') + "/verify?id=" + rand;
+
+                    sendMail(email, link, user_fname)
+
+                    req.flash('success_msg', 'You are now registered please log in to continue')
+                    res.redirect('/users/login')
                 }
-
-                newUser.password = authUtils.hashPassword(password);
-                newUser.save()
-
-                rand = newUser._id
-                host = req.get('host');
-                link = "http://" + req.get('host') + "/verify?id=" + rand;
-
-                sendMail(email, link, user_fname)
-
-                req.flash('success_msg', 'You are now registered please log in to continue')
-                res.redirect('/users/login')
-            }
-        });
+            });
+        }
+    } catch (err) {
+        next(err)
     }
 });
 
-router.get('/resend-email', isAuth, async (req, res) => {
+router.get('/resend-email', isAuth, async (req, res, next) => {
     try {
         rand = ObjectId(req.user._id)
         const myUser = await User.findOne({ _id: rand })
@@ -162,7 +163,7 @@ router.get('/resend-email', isAuth, async (req, res) => {
 
         res.redirect('/unverified')
     } catch (err) {
-        console.log(err)
+        next(err)
     }
 })
 
@@ -183,14 +184,16 @@ router.get('/logout', (req, res) => {
 
 });
 
-// Protected Routes
+/**
+ * -------------- PROTECTED ROUTES ----------------
+ */
 
 // Public Profile View
-router.get('/:id', isAuth, (req, res) => {
+router.get('/:id', isAuth, (req, res, next) => {
     const id = ObjectId(req.user._id)
     const _id = req.params.id
     User.findOne({ _id }, async (err, result) => {
-        if (err) throw err
+        if (err) next(err)
 
         const notifications = await Notification.find({ target: id })
 
@@ -199,37 +202,41 @@ router.get('/:id', isAuth, (req, res) => {
 })
 
 // Profile Edit View
-router.get('/edit/:id', isAuth, (req, res) => {
+router.get('/edit/:id', isAuth, (req, res, next) => {
     const id = ObjectId(req.user._id)
 
-    if (id == req.params.id) {
-        User.findOne({ _id: id }, async (err, result) => {
-            if (err) throw err
+    try {
+        if (id == req.params.id) {
+            User.findOne({ _id: id }, async (err, result) => {
+                if (err) next(err)
 
-            const notifications = await Notification.find({ target: id })
+                const notifications = await Notification.find({ target: id })
 
-            res.render('profile-edit', { result, user_id: id, notifications })
-        })
+                res.render('profile-edit', { result, user_id: id, notifications })
+            })
+        }
+        else {
+            throw new Error("You do not have authority to view that profile's edit page")
+        }
+    } catch (err) {
+        next(err)
     }
-    else {
-        req.flash('error_msg', 'You do not have the authority to view that resource')
-        res.redirect('/users/' + id)
-    }
+
 })
 
-// DELETE with 404 Status
-router.delete('/edit/:id', async (req, res) => {
+// DELETE
+router.delete('/edit/:id', async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id)
         await user.remove()
         res.send({ data: true })
-    } catch {
-        res.status(404).send({ error: 'User is not found' })
+    } catch (err) {
+        next(err)
     }
 })
 
-// UPDATE with 500 Status
-router.patch('/edit/:id', isAuth, async (req, res) => {
+// UPDATE
+router.patch('/edit/:id', isAuth, async (req, res, next) => {
     try {
         const filter = req.params.id
         const update = req.body
@@ -237,38 +244,38 @@ router.patch('/edit/:id', isAuth, async (req, res) => {
 
         req.flash('success_msg', 'Profile Succesfully Updated')
         res.redirect('/users/' + filter)
-    } catch {
-        res.status(500).send({ error: "There was an error in updating the user" })
+    } catch (err) {
+        next(err)
     }
 })
 
-router.patch('/edit/public/:id', isAuth, async (req, res) => {
+router.patch('/edit/public/:id', isAuth, async (req, res, next) => {
     try {
         const filter = req.params.id
         const update = await User.findOne({ _id: filter })
         is_public = !update.is_public
-        const success = await User.findOneAndUpdate({ _id: filter }, { is_public })
+        await User.findOneAndUpdate({ _id: filter }, { is_public })
         const message = !update.is_public ? "public" : "private"
 
         req.flash('success_msg', `Profile is now ${message}`)
         res.redirect('/users/' + filter)
-    } catch {
-        res.status(500).send({ error: "There was an error in updating the user" })
+    } catch (err) {
+        next(err)
     }
 })
 
-router.patch('/edit/is_available/:id', isAuth, async (req, res) => {
+router.patch('/edit/is_available/:id', isAuth, async (req, res, next) => {
     try {
         const filter = req.params.id
         const update = await User.findOne({ _id: filter })
         is_available = !update.is_available
-        const success = await User.findOneAndUpdate({ _id: filter }, { is_available })
+        await User.findOneAndUpdate({ _id: filter }, { is_available })
         const message = !update.is_available ? "available" : "unavailable"
 
         req.flash('success_msg', `You are now ${message} for service`)
         res.redirect('/users/' + filter)
-    } catch {
-        res.status(500).send({ error: "There was an error in updating the user" })
+    } catch (err) {
+        next(err)
     }
 })
 
