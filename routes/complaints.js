@@ -13,7 +13,7 @@ const isLawyer = require("./auth").isLawyer;
 const isAuth = require("./auth").isAuth;
 const { ObjectId } = require("bson");
 
-// COMPLAINT POST SUBMIT
+// COMPLAINT POST SUBMIT CLIENT SIDE
 router.post("/consultation", isClient, async (req, res, next) => {
   try {
     const client_id = ObjectId(req.user._id);
@@ -137,46 +137,73 @@ router.get("/complaints/:id", isAuth, (req, res, next) => {
 
 });
 
-// COMPLAINT ACCEPT UPDATED LAWYER SIDE
-router.patch("/complaints/pending/:id", isLawyer, async (req, res, next) => {
+// COMPLAINT ACCEPT LAWYER SIDE
+router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
   try {
-    const filter = req.params.id;
+    const filter = req.body.id;
     const { case_status, appointment_date } = req.body;
 
     // DATE VARIABLES FOR COMPARISON
     let myDate = new Date(appointment_date);
     let todayDate = new Date();
     let complaintResult;
+    let error = false
 
-    if (myDate >= todayDate) {
+    if (myDate > todayDate) {
+
       complaintResult = await Complaint.findOneAndUpdate(
         { _id: filter },
         { case_status: case_status, appointment_date: appointment_date }
       );
+
+      const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
+
+      const pushNotify = new Notification({
+        complaint_id: complaintResult._id,
+        message: "has accepted your consultation request",
+        actor: lawyerDeets.username,
+        target: complaintResult.client_id,
+      });
+
+      await pushNotify.save();
     } else {
-      throw Error(err)
+      error = true
+      req.flash('error_msg', 'Date should be now or later')
     }
 
-    const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
-
-    const pushNotify = new Notification({
-      complaint_id: complaintResult._id,
-      message: "has accepted your consultation request",
-      actor: lawyerDeets.username,
-      target: complaintResult.client_id,
-    });
-
-    await pushNotify.save();
-
-    req.flash("success_msg", `Succesfully accepted case with id: ${filter}`);
+    if (!error) req.flash("success_msg", `Succesfully accepted case with id: ${filter}`);
     res.redirect("/form/complaints/" + filter);
   } catch (err) {
     next(err)
   }
 });
 
+router.patch("/complaint/reject", isLawyer, async (req, res, next) => {
+  try {
+    const filter = req.body.id
+    const case_status = req.body.case_status
+    complaintResult = await Complaint.findOneAndUpdate(
+      { _id: filter },
+      { case_status: case_status }
+    );
+  } catch (err) {
+    next(err)
+  }
+})
 
+// CLIENT SIDE COMPLETE A COMPLAINT
+router.patch("/complaints/complete", isAuth, async (req, res, next) => {
+  try {
+    const id = ObjectId(req.body.id)
+    await Complaint.findByIdAndUpdate({ _id: id }, { case_status: "completed" })
 
+    res.redirect('/form/complaints/' + req.body.id)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// LAWYER SIDE COMPLAINT UPDATE AND ADD NEW SOLUTION
 router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
   try {
     const id = ObjectId(req.params.id);
@@ -209,6 +236,19 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
 
     req.flash("success_msg", `Succesfully updated case with id: ${id}`);
     res.redirect("/form/complaints/" + id);
+  } catch (err) {
+    next(err)
+  }
+})
+
+
+
+// VIDEO LINK
+router.get("/video", async (req, res, next) => {
+  try {
+    const link = req.query.link
+    res.status(301).redirect(link)
+
   } catch (err) {
     next(err)
   }

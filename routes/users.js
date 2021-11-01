@@ -40,6 +40,7 @@ router.post('/register', (req, res, next) => {
             user_type,
             is_available,
             affiliation,
+            verified_lawyer
         } = req.body;
 
         // SETTING UP FILE UPLOAD
@@ -73,7 +74,7 @@ router.post('/register', (req, res, next) => {
                 user_type
             });
         } else {
-            User.findOne({ $or: [{ username: username }] }).then(user => {
+            User.findOne({ $or: [{ username: username }, { email: email }] }).then(user => {
                 if (user) {
                     errors.push({ msg: 'Username or email already exist' });
                     res.render('register', {
@@ -127,7 +128,8 @@ router.post('/register', (req, res, next) => {
                             user_type,
                             is_available,
                             lawyer_credential,
-                            affiliation
+                            affiliation,
+                            verified_lawyer
                         });
 
                         fileObj.mv('./public/uploads/credentials/' + lawyer_credential)

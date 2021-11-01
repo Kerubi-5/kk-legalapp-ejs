@@ -86,6 +86,14 @@ router.get("/unverified", (req, res, next) => {
   }
 });
 
+router.get("/unverified-lawyer", (req, res, next) => {
+  try {
+    res.render("./pages/unverified-lawyer", { layout: "./pages/layout-page" })
+  } catch (err) {
+    next(err)
+  }
+})
+
 // EMAIL VERIFY
 router.get('/verify', async (req, res, next) => {
   try {

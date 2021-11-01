@@ -37,7 +37,7 @@ module.exports.isLawyer = (req, res, next) => {
 module.exports.isAdmin = (req, res, next) => {
   if (req.isAuthenticated() && req.user.user_type == "admin") {
     return next();
-  } else if (req.user.user_type != "admin") {
+  } else if (req.isAuthenticated() && req.user.user_type != "admin") {
     req.flash(
       "error_msg",
       "You must have admin privilleges to view this resource"
@@ -54,11 +54,13 @@ module.exports.isClientOrLawyer = (req, res, next) => {
     req.isAuthenticated() &&
     (req.user.user_type == "client" || req.user.user_type == "lawyer")
   ) {
-    if (req.user.is_verified) return next();
-    else res.redirect("/unverified");
+    if (!req.user.is_verified) res.redirect('/unverified')
+    else if (req.user.user_type == "lawyer" && !req.user.verified_lawyer) res.redirect('/unverified-lawyer')
+    else next()
   } else if (req.isAuthenticated() && req.user.user_type == "admin") {
     res.redirect('/admin')
   } else {
+    req.flash("error_msg", "You need to login first")
     res.redirect("/users/login");
   }
 };

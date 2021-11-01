@@ -1,0 +1,30 @@
+<% for( let index = 0; index < solutions.length; index++ ) { %>
+    <h4># <%- index+1 %></h4>
+    <div class="border p-3 m-2 shadow">
+        <div class="mb-3">
+            <label class="form-label">Video Link: </label>
+            <a href="/form/video?link=<%- solutions[index].video_link %>"
+                target="_blank"><%- solutions[index].video_link %></a>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Buod ng mga napagusapan</label>
+            <textarea name="summary" type="text" class="form-control" id="summary"
+                readonly><%- solutions[index].summary %></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Mga rekomendasyon ng abogado</label>
+            <textarea name="recommendations" type="text" class="form-control" id="recommendations"
+                readonly><%- solutions[index].recommendations %></textarea>
+        </div>
+        <label>Date Completed</label>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar"
+                    aria-hidden="true"></i>
+            </span>
+            <input type="date" id="date_completed" name="date_completed" class="form-control"
+                value="<%- solutions[index].date_completed.toISOString().split('T')[0] %>"
+                readonly />
+        </div>
+    </div>
+    <hr>
+<% } %>

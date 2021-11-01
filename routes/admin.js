@@ -36,7 +36,7 @@ router.get("/", isAdmin, async (req, res, next) => {
 
 router.get("/accounts", isAdmin, async (req, res, next) => {
   try {
-    const accountsDoc = await User.find({ user_type: "lawyer", is_verified: false })
+    const accountsDoc = await User.find({ user_type: "lawyer", verified_lawyer: false })
 
     res.render("./admin/accounts-authentication", {
       layout: "./layouts/admin-layout",
@@ -99,7 +99,7 @@ router.patch("/verification/:id", isAdmin, async (req, res, next) => {
   try {
     const id = ObjectId(req.params.id)
 
-    await User.findByIdAndUpdate({ _id: id }, { is_verified: true })
+    await User.findByIdAndUpdate({ _id: id }, { verified_lawyer: true })
     req.flash("success_msg", "Successfully verified a user")
     res.redirect('/admin/accounts')
   } catch (err) {

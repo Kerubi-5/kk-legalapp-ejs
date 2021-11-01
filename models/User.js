@@ -61,6 +61,9 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    verified_lawyer: {
+        type: Boolean
+    },
     complaints: [{
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Complaint"
