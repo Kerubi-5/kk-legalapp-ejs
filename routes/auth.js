@@ -56,7 +56,10 @@ module.exports.isClientOrLawyer = (req, res, next) => {
   ) {
     if (req.user.is_verified) return next();
     else res.redirect("/unverified");
-  } else {
+  } else if (req.isAuthenticated() && req.user.user_type == "admin") {
     res.redirect("/admin");
+  } else {
+    req.flash("error_msg", "You need to login to continue");
+    res.redirect("/users/login");
   }
 };
