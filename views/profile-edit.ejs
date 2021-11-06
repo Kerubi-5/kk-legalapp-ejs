@@ -5,12 +5,14 @@
                 <form action="/users/edit/<%- result._id %>?_method=PATCH" method="POST">
                     <h1>Profile Edit</h1>
                     <!-- FIRST AND LAST NAME -->
-                    <div class="input-group mb-3">
+                    <small>First name</small>
+                    <div class="input-group">
                         <span class="input-group-text" id="basic-addon1"><i class="fa fa-user" aria-hidden="true"></i>
                         </span>
                         <input type="user_fname" id="user_fname" name="user_fname" class="form-control"
                             placeholder="First name" value="<%= result.user_fname %> " />
                     </div>
+                    <small>Surname</small>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1"><i class="fa fa-user" aria-hidden="true"></i>
                         </span>
