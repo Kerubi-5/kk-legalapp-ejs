@@ -148,8 +148,10 @@ router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
     let error = false
 
     // DATE VARIABLES FOR COMPARISON
+    const myDate = new Date(appointment_date)
+    const todayDate = new Date(Date.now())
 
-    if (appointment_date >= new Date().toISOString().slice(0, 10)) {
+    if (myDate.getTime() >= todayDate) {
 
       const complaintResult = await Complaint.findOneAndUpdate(
         { _id: filter },
