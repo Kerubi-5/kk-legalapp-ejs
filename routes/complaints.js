@@ -144,12 +144,8 @@ router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
     const { case_status, appointment_date } = req.body;
 
     // DATE VARIABLES FOR COMPARISON
-    let myDate = new Date(appointment_date);
-    let todayDate = new Date();
-    let complaintResult;
-    let error = false
 
-    if (myDate > todayDate) {
+    if (appointment_date >= new Date().toISOString().slice(0, 10)) {
 
       complaintResult = await Complaint.findOneAndUpdate(
         { _id: filter },
@@ -178,7 +174,7 @@ router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
   }
 });
 
-router.patch("/complaint/reject", isLawyer, async (req, res, next) => {
+router.patch("/complaints/reject", isLawyer, async (req, res, next) => {
   try {
     const filter = req.body.id
     const case_status = req.body.case_status
@@ -186,6 +182,8 @@ router.patch("/complaint/reject", isLawyer, async (req, res, next) => {
       { _id: filter },
       { case_status: case_status }
     );
+
+    res.redirect("/form/complaints/" + filter);
   } catch (err) {
     next(err)
   }

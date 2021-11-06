@@ -91,7 +91,7 @@
                                 data-bs-target="#staticBackdrop">
                                 Accept
                             </button>
-                            <form action="/form/complaints/pending?_method=PATCH" method="POST">
+                            <form action="/form/complaints/reject?_method=PATCH" method="POST">
                                 <input name="id" type="text" value="<%- result._id %>" hidden>
                                 <input name="case_status" type="text" value="denied" hidden>
                                 <button type="submit" class="btn btn-danger btn-lg">Reject</button>
