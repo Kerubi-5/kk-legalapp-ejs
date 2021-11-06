@@ -6,13 +6,12 @@ const User = require("../models/User");
 const Notification = require("../models/Notification");
 
 // Auth types
-const isNotAuth = require("./auth").isNotAuth;
 const isAuth = require("./auth").isAuth;
 const isClientOrLawyer = require("./auth").isClientOrLawyer;
 const { ObjectId } = require("bson");
 
 // Welcome Page
-router.get("/", isNotAuth, (req, res) => res.render("index"));
+router.get("/", (req, res) => res.render("index"));
 
 // Protected Routes
 
@@ -104,6 +103,14 @@ router.get('/verify', async (req, res, next) => {
       await User.findByIdAndUpdate({ _id: ObjectId(id) }, { is_verified: true })
       res.render("./pages/verified", { layout: "./pages/layout-page" })
     }
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/faq', async (req, res, next) => {
+  try {
+    res.render('faq')
   } catch (err) {
     next(err)
   }

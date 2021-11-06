@@ -17,16 +17,12 @@
                                 <table class="table table-striped" overflow: auto>
 
                                     <thead>
-                                        <th scope="col" width="10%">#Case ID</th>
                                         <th scope="col">Legal Title</th>
                                         <th scope="col">Status</th>
                                         <th></th>
                                     </thead>
                                     <% for( let index=0; index < complaintResults.length; index++ ) { %>
                                     <tr>
-                                        <td>
-                                            <%- complaintResults[index]._id %>
-                                        </td>
                                         <td>
                                             <%- complaintResults[index].legal_title %>
                                         </td>
@@ -73,7 +69,7 @@
                                 <table class="table table-striped" overflow: auto>
                                     <thead>
                                         <thead>
-                                            <th scope="col" width="10%">#Case ID</th>
+                                            <!-- <th scope="col" width="10%">#Case ID</th> -->
                                             <th scope="col">Legal Title</th>
                                             <th scope="col">Status</th>
                                             <th scope="col">Appointment Date</th>
@@ -82,9 +78,9 @@
                                         <% for( let index=0; index < complaintResults.length; index++ ) { %>
 
                                         <tr>
-                                            <td>
-                                                <%- complaintResults[index]._id %>
-                                            </td>
+                                            <!-- <td>
+                                                <%- // complaintResults[index]._id %>
+                                            </td> -->
                                             <td>
                                                 <%- complaintResults[index].legal_title %>
                                             </td>
