@@ -60,7 +60,7 @@ module.exports.isClientOrLawyer = (req, res, next) => {
   } else if (req.isAuthenticated() && req.user.user_type == "admin") {
     res.redirect('/admin')
   } else {
-    req.flash("error_msg", "You need to login first")
+    req.flash("error_msg", "You need to login to continue")
     res.redirect("/users/login");
   }
 };
