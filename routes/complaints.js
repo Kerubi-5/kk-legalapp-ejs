@@ -13,6 +13,9 @@ const isLawyer = require("./auth").isLawyer;
 const isAuth = require("./auth").isAuth;
 const { ObjectId } = require("bson");
 
+// Node Mailer
+const sendMail = require("../utils/transporter")
+
 // COMPLAINT POST SUBMIT CLIENT SIDE
 router.post("/consultation", isClient, async (req, res, next) => {
   try {
@@ -142,17 +145,24 @@ router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
   try {
     const filter = req.body.id;
     const { case_status, appointment_date } = req.body;
+    let error = false
 
     // DATE VARIABLES FOR COMPARISON
 
     if (appointment_date >= new Date().toISOString().slice(0, 10)) {
 
-      complaintResult = await Complaint.findOneAndUpdate(
+      const complaintResult = await Complaint.findOneAndUpdate(
         { _id: filter },
         { case_status: case_status, appointment_date: appointment_date }
       );
 
       const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
+      const clientDeets = await User.findOne({ _id: complaintResult.client_id });
+
+      const link = "http://" + req.get('host')
+      const title = `Your consultation request ${complaintResult.legal_title} has been approved!`
+      const msg = `<h1>Hello ${clientDeets.user_fname},</h1><br> Your consultation request with lawyer ${lawyerDeets.user_fname} has been approved.<br><a href=${link}>Click here to visit website</a>`
+      sendMail(clientDeets.email, title, msg)
 
       const pushNotify = new Notification({
         complaint_id: complaintResult._id,

@@ -8,12 +8,12 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-module.exports = function sendMail(email, link, user_fname) {
+module.exports = function sendMail(email, title, msg) {
     const options = {
         from: process.env.EMAIL,
         to: email,
-        subject: "Registration confirmation with 3JBG Legal Web Application!",
-        html: `<h1>Hello ${user_fname},</h1><br> Please Click on the link to verify your email.<br><a href=` + link + ">Click here to verify</a>"
+        subject: title,
+        html: msg
     }
 
     transporter.sendMail(options, (err, data) => {
@@ -23,6 +23,5 @@ module.exports = function sendMail(email, link, user_fname) {
         } catch (err) {
             console.log(err)
         }
-
     })
 }

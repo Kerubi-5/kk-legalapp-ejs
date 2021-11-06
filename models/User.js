@@ -33,14 +33,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    city: {
-        type: String,
-        required: true
-    },
-    zip: {
-        type: String,
-        required: true
-    },
     user_type: {
         type: String,
         required: true

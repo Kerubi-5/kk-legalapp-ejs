@@ -14,7 +14,7 @@
                             <% } else if (adviceDoc.is_resolved) { %>
                             <h6 class="float-end">RESOLVED <i class="fas fa-check"></i></h6>
                             <% } %>
-                            <div class="text-muted small">DATE POSTED <%- adviceDoc.date_submitted %></div>
+                            <div class="text-muted small"><%- adviceDoc.date_submitted %></div>
                         </div>
                         <div class="text-muted small ml-3">
                             <div>Member since <strong><%- userDoc.date_created.toLocaleDateString() %></strong></div>

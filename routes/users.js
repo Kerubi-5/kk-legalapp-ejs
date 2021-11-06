@@ -35,8 +35,6 @@ router.post('/register', (req, res, next) => {
             birthdate,
             contact_number,
             permanent_address,
-            city,
-            zip,
             user_type,
             is_available,
             affiliation,
@@ -49,7 +47,7 @@ router.post('/register', (req, res, next) => {
 
         let errors = [];
 
-        if (!username || !email || !password || !password2 || !user_fname || !user_lname || !birthdate || !contact_number || !permanent_address || !city || !zip) errors.push({ msg: 'Please enter all fields' });
+        if (!username || !email || !password || !password2 || !user_fname || !user_lname || !birthdate || !contact_number || !permanent_address) errors.push({ msg: 'Please enter all fields' });
 
         if (username.length > 20) errors.push({ msg: 'Username cannot be longer than 20 characters' })
 
@@ -69,8 +67,6 @@ router.post('/register', (req, res, next) => {
                 birthdate,
                 contact_number,
                 permanent_address,
-                city,
-                zip,
                 user_type
             });
         } else {
@@ -88,8 +84,6 @@ router.post('/register', (req, res, next) => {
                         birthdate,
                         contact_number,
                         permanent_address,
-                        city,
-                        zip,
                         user_type
                     });
                 } else {
@@ -104,8 +98,6 @@ router.post('/register', (req, res, next) => {
                             birthdate,
                             contact_number,
                             permanent_address,
-                            city,
-                            zip,
                             user_type
                         });
                     } else if (user_type == "lawyer") {
@@ -123,8 +115,6 @@ router.post('/register', (req, res, next) => {
                             birthdate,
                             contact_number,
                             permanent_address,
-                            city,
-                            zip,
                             user_type,
                             is_available,
                             lawyer_credential,
@@ -138,11 +128,11 @@ router.post('/register', (req, res, next) => {
                     newUser.password = authUtils.hashPassword(password);
                     newUser.save()
 
-                    rand = newUser._id
-                    host = req.get('host');
-                    link = "http://" + req.get('host') + "/verify?id=" + rand;
-
-                    sendMail(email, link, user_fname)
+                    const rand = newUser._id
+                    const title = "Registration confirmation with 3JBG Legal Web Application!"
+                    const link = "http://" + req.get('host') + "/verify?id=" + rand;
+                    const msg = `<h1>Hello ${user_fname},</h1><br> Please Click on the link to verify your email.<br><a href=${link}>Click here to verify</a>`
+                    sendMail(email, title, msg)
 
                     req.flash('success_msg', 'You are now registered please log in to continue')
                     res.redirect('/users/login')
@@ -156,12 +146,12 @@ router.post('/register', (req, res, next) => {
 
 router.get('/resend-email', isAuth, async (req, res, next) => {
     try {
-        rand = ObjectId(req.user._id)
+        const rand = ObjectId(req.user._id)
         const myUser = await User.findOne({ _id: rand })
-        host = req.get('host');
-        link = "http://" + req.get('host') + "/verify?id=" + rand;
-
-        sendMail(myUser.email, link, myUser.user_fname)
+        const title = "Registration confirmation with 3JBG Legal Web Application!"
+        const link = "http://" + req.get('host') + "/verify?id=" + rand;
+        const msg = `<h1>Hello ${myUser.user_fname},</h1><br> Please Click on the link to verify your email.<br><a href=${link}>Click here to verify</a>`
+        sendMail(myUser.email, title, msg)
 
         res.redirect('/unverified')
     } catch (err) {
