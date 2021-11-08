@@ -1,0 +1,38 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center mb-3">
+                    <i class="fas fa-user-plus"></i> Lawyer Registration
+                </h1>
+                <%- include ("./partials/messages"); %>
+                <!-- LAWYER REGISTRATION -->
+                <form action="/users/register" method="POST" enctype="multipart/form-data">
+                    <!-- USERNAME -->
+                    <%- include("./partials/registration-form") %>
+                    <div class="input-group">
+                        <input type="file" name="lawyer_credential" class="form-control" id="inputGroupFile02"
+                            accept="application/pdf" required>
+                        <label class="input-group-text" for="inputGroupFile02"><i class="fa fa-briefcase"
+                                aria-hidden="true"></i>
+                        </label>
+                    </div>
+                    <small class="mb-3">Upload only PDF for credentials</small>
+                    <!-- HIDDEN LAWYER INPUT -->
+                    <input name="user_type" value="lawyer" hidden>
+                    <input name="is_available" value="false" hidden>
+                    <input name="verified_lawyer" value="false" hidden>
+                    <div class="mb-3 text-center">
+                        <!--Dito sa button kung san magproprompt yung modal, dadagdagan lang netong data-bs-toggle="modal" and data-bs-target="id nung modal"-->
+                        <a class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                            data-bs-target="#lawyer_registerModal">Register</a>
+                    </div>
+                    <!-- Modal for Privacy Rights -->
+                    <%- include ("./partials/privacy-form-modal") %>
+                </form>
+
+                <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
+            </div>
+        </div>
+    </div>
+</div>

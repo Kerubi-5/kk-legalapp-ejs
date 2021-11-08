@@ -1,0 +1,28 @@
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="text-center mb-3">
+          <i class="fas fa-user-plus"></i> Client Registration
+        </h1>
+        <%- include ("./partials/messages"); %>
+
+        <!-- CLIENT REGISTRATION -->
+        <form action="/users/register" method="POST">
+          <!-- USERNAME -->
+          <%- include("./partials/registration-form") %>
+          <!-- HIDDEN CLIENT INPUT -->
+          <input name="user_type" value="client" hidden></input>
+          <div class="mb-3 text-center">
+            <!--Dito sa button kung san magproprompt yung modal, dadagdagan lang netong data-bs-toggle="modal" and data-bs-target="id nung modal"-->
+            <a class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#client_registerModal">Register</a>
+          </div>
+
+          <!-- Modal for Privacy Rights -->
+          <%- include ("./partials/privacy-form-modal") %>
+        </form>
+        <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
+      </div>
+    </div>
+  </div>
+</div>
