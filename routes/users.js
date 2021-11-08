@@ -19,7 +19,7 @@ const sendMail = require("../utils/transporter")
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 
-// Register Page
+// Register Page for Client and Lawyer
 router.get('/register/client', forwardAuthenticated, (req, res) => res.render('register-client'));
 router.get('/register/lawyer', forwardAuthenticated, (req, res) => res.render('register-lawyer'));
 
@@ -56,8 +56,8 @@ router.post('/register', (req, res, next) => {
 
         if (password.length < 6 || password.length > 20) errors.push({ msg: 'Password must be at least 6 characters, and not more than 20 characters long' });
 
-        if (errors.length > 0) {
-            res.render('register', {
+        function renderClient() {
+            res.render('register-client', {
                 errors,
                 username,
                 email,
@@ -70,23 +70,36 @@ router.post('/register', (req, res, next) => {
                 permanent_address,
                 user_type
             });
+        }
+
+        function renderLawyer() {
+            res.render('register-lawyer', {
+                errors,
+                username,
+                email,
+                password,
+                password2,
+                user_fname,
+                user_lname,
+                birthdate,
+                contact_number,
+                permanent_address,
+                user_type
+            });
+        }
+
+        if (errors.length > 0 && user_type == "client") {
+            renderClient()
+        } else if (errors.length > 0 && user_type == "lawyer") {
+            renderLawyer()
         } else {
             User.findOne({ $or: [{ username: username }, { email: email }] }).then(user => {
-                if (user) {
+                if (user && user_type == "client") {
                     errors.push({ msg: 'Username or email already exist' });
-                    res.render('register', {
-                        errors,
-                        username,
-                        email,
-                        password,
-                        password2,
-                        user_fname,
-                        user_lname,
-                        birthdate,
-                        contact_number,
-                        permanent_address,
-                        user_type
-                    });
+                    renderClient()
+                } else if (user && user_type == "lawyer") {
+                    errors.push({ msg: 'Username or email already exist' });
+                    renderLawyer()
                 } else {
                     let newUser = new User()
                     if (user_type == "client") {
