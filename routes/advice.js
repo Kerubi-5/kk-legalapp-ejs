@@ -14,24 +14,38 @@ const { ObjectId } = require("bson");
 router.get("/", isAuth, async (req, res, next) => {
     try {
         const id = ObjectId(req.user._id);
-        let page = parseInt(req.query.page);
-        let size = parseInt(req.query.size);
-        if (!page) page = 1;
-        if (!size) size = 10;
 
+        // DATA VARIABLE QUERIES
+        const page = req.query.page ? parseInt(req.query.page) : 1;
+        const size = req.query.size ? parseInt(req.query.size) : 10;
+        const filter = req.query.filter
+        let adviceResult
+        let advicesDoc
         const startIndex = (page - 1) * size;
         const endIndex = page * size;
 
         const notifications = await Notification.find({ target: id });
-        const advicesDoc = await Advice.find({},).sort({ 'date_submitted': 'desc' })
-        const adviceResult = advicesDoc.slice(startIndex, endIndex)
+
+        // APPLY SEARCH LOGIC HERE
+        if (filter) {
+            advicesDoc = await Advice.find({ legal_title: new RegExp(filter, 'i') }).sort({ 'date_submitted': 'desc' })
+            adviceResult = advicesDoc
+        } else {
+            advicesDoc = await Advice.find({},).sort({ 'date_submitted': 'desc' })
+            adviceResult = advicesDoc.slice(startIndex, endIndex)
+        }
+
+        const numberOfPages = Math.ceil(advicesDoc.length / size)
+        const iterator = (page - 5) < 1 ? 1 : page - 5;
+        let endingLink = (iterator + 9) <= numberOfPages ? (iterator + 9) : page + (numberOfPages - page);
 
         res.render("advice-forum", {
             user_id: id,
             notifications,
             advices: adviceResult,
-            endingLink: Math.ceil(advicesDoc.length / 10),
+            endingLink,
             page,
+            iterator,
         })
     } catch (err) {
         next(err)
