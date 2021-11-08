@@ -122,6 +122,7 @@ app.use((req, res, next) => {
 
 // HANDLE ALL ERRORS
 app.use((err, req, res, next) => {
+  console.log(err)
   res.status(err.status || 500)
   res.render("../views/pages/error", { layout: false, err })
 })
