@@ -3,7 +3,6 @@ const router = express.Router();
 const authUtils = require('../utils/crypto')
 const passport = require('passport');
 
-
 // Load User model
 const User = require('../models/User');
 const Notification = require('../models/Notification')
@@ -198,13 +197,19 @@ router.get('/logout', (req, res) => {
 router.get('/:id', isAuth, (req, res, next) => {
     const id = ObjectId(req.user._id)
     const _id = req.params.id
-    User.findOne({ _id }, async (err, result) => {
-        if (err) next(err)
 
-        const notifications = await Notification.find({ target: id })
+    if (_id.match(/^[0-9a-fA-F]{24}$/)) {
+        User.findOne({ _id }, async (err, result) => {
+            if (err) next(err)
 
-        res.render('public-profile', { result, user_id: id, param_id: _id, notifications })
-    })
+            const notifications = await Notification.find({ target: id })
+
+            res.render('public-profile', { result, user_id: id, param_id: _id, notifications })
+        })
+    } else {
+        throw new Error('There is no user with that kind of ID')
+
+    }
 })
 
 // Profile Edit View
