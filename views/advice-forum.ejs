@@ -52,18 +52,22 @@
                 <div class="m-3" style="max-height: 100%;">
                     <h5>Discussions</h5>
                     <hr>
-                    <% advices.forEach(advice => { %>
-                    <a href="/advice/<%- advice._id %>">
-                        <div class="card m-3">
-                            <div class="card-body">
-                                <%- advice.legal_title %> <%- advice.is_resolved ? "[CLOSED]" : "" %> 
-                                <span
-                                    class="text-muted d-inline-flex align-items-center align-middle ml-4 float-end"><span
-                                        class="align-middle"><%- advice.date_submitted.toLocaleString('en-US') %></span></span>
-                            </div>
-                        </div>
-                    </a>
-                    <% }) %>
+
+                    <div class="list-group m-3">
+                        <% advices.forEach(advice => { %>
+                            <a href="/advice/<%- advice._id %>" class="list-group-item list-group-item-action d-flex gap-3 py-3 mb-3" aria-current="true">
+                                <img src="/assets/images/company-logo2.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                                <div class="d-flex gap-2 w-100 justify-content-between">
+                                  <div>
+                                    <h6 class="mb-0"><%- advice.legal_title %> <%- advice.is_resolved ? "[CLOSED]" : "" %> </h6>
+                                    <p class="mb-0 opacity-75"><%- advice.legal_description.slice(0, 20)+"..." %> </p>
+                                  </div>
+                                  <small class="opacity-50 text-nowrap"><%- advice.date_submitted.toLocaleString('en-US') %></small>
+                                </div>
+                              </a>
+                        <% }) %>
+                    </div>
+
                 </div>
 
 
