@@ -18,15 +18,11 @@ router.get("/", (req, res) => res.render("index"));
 // Dashboard
 router.get("/dashboard", isClientOrLawyer, (req, res, next) => {
   const id = ObjectId(req.user._id);
-  let page = parseInt(req.query.page);
-  let size = parseInt(req.query.size);
-  let filter = req.query.filter;
-  if (!page) page = 1;
-  if (!size) size = 10;
-  if (!filter) filter = "";
-
+  let page = req.query.page ? parseInt(req.query.page) : 1;
+  let size = req.query.size ? parseInt(req.query.size) : 2;
   const startIndex = (page - 1) * size;
   const endIndex = page * size;
+
   try {
     User.find({ user_type: "lawyer", is_available: true }).exec(
       async (err, data) => {
@@ -34,29 +30,32 @@ router.get("/dashboard", isClientOrLawyer, (req, res, next) => {
 
         let user_doc = await User.findOne({ _id: id }).populate("complaints");
         let complaints = user_doc.complaints;
-        // SORT COMPLAINTS
-        complaints.sort((a, b) => {
-          if (a["case_status"] < b["case_status"]) return -1;
-          if (a["case_status"] > b["case_status"]) return 1;
-          return 0;
-        });
 
-        if (filter != "") {
-          complaints = complaints.filter((complaint) => {
-            if (complaint.case_status == filter) return complaint;
-          });
-        }
+        // if (filter != "") {
+        //   complaints = complaints.filter((complaint) => {
+        //     if (complaint.case_status == filter) return complaint;
+        //   });
+        // }
+
+        const numberOfPages = Math.ceil(complaints.length / size)
+
+        let iterator = (page - 5) < 1 ? 1 : page - 5;
+        let endingLink = (iterator + 5) <= numberOfPages ? (iterator + 5) : page + (numberOfPages - page);
 
         const notifications = await Notification.find({ target: id });
         const complaintResults = complaints.slice(startIndex, endIndex);
 
+        console.log(iterator)
+        console.log(endingLink)
         res.render("dashboard", {
           user_id: id,
           result: data,
           user_doc,
           complaintResults,
-          endingLink: Math.ceil(complaints.length / 10),
           page,
+          iterator,
+          endingLink,
+          size,
           notifications,
         });
       }
@@ -108,9 +107,17 @@ router.get('/verify', async (req, res, next) => {
   }
 })
 
-router.get('/faq', async (req, res, next) => {
+router.get('/faq/english', async (req, res, next) => {
   try {
-    res.render('faq')
+    res.render('faq-english')
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/faq/tagalog', async (req, res, next) => {
+  try {
+    res.render('faq-tagalog')
   } catch (err) {
     next(err)
   }

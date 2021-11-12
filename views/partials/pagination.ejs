@@ -1,4 +1,4 @@
-<div class="d-flex" aria-label="Table navigation">
+<div class="d-flex mt-3" aria-label="Table navigation">
 
         <ul class="pagination ms-3">
             <li class="page-item">
@@ -7,11 +7,17 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <% for( let index=0; index < endingLink; index++ ) { %>
-            <li class="page-item"><a class="page-link"
-                    href="/dashboard?page=<%- index + 1 %>">
-                    <%- index + 1 %>
-                </a></li>
+            <% for( let index=iterator; index < endingLink; index++ ) { %>
+            <li class="page-item">
+                <% if(index === page) { %>
+                    <a class="page-link active" href="/dashboard?page=<%=index%>"><%=index%></a>
+                    <% continue; %>
+                <% } %> 
+                <a class="page-link"
+                    href="/dashboard?page=<%- index %>">
+                    <%- index %>
+                </a>
+            </li>
             <% } %>
     
             <li class="page-item">
@@ -22,7 +28,7 @@
             </li>
         </ul>
 
-    <div class="ms-3">
+    <!-- <div class="ms-3">
         <div class="input-group">
             <select onchange="val()" class="form-select" id="select_id" aria-label="Options to filter">
               <option selected>Choose...</option>
@@ -33,5 +39,5 @@
             <a id="a_tag" href="" class="btn btn-outline-secondary" type="button">Filter</a>
             <a href="/dashboard" class="btn btn-outline-secondary" type="button">Clear</a>
           </div>
-    </div>
+    </div> -->
 </div>
