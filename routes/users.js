@@ -246,10 +246,61 @@ router.patch('/edit/:id', isAuth, async (req, res, next) => {
     try {
         const filter = req.params.id
         const update = req.body
-        await User.findOneAndUpdate({ _id: filter }, update)
+
+        const {
+            user_fname,
+            user_lname,
+            birth_date,
+            contact_number,
+            permanent_address,
+            organization,
+            description,
+            user_type
+        } = req.body
+
+        let background = []
+
+        if (user_type == "lawyer" && organization && description) {
+            if (Array.isArray(organization) && Array.isArray(description)) {
+                const mapArrays = (options, values) => {
+                    const res = [];
+                    for (let i = 0; i < options.length; i++) {
+                        res.push({
+                            organization: options[i],
+                            description: values[i]
+                        });
+                    };
+                    return res;
+                };
+                background = (mapArrays(organization, description));
+            } else {
+                background.push({
+                    organization,
+                    description
+                })
+            }
+        }
+
+        // This does not work, add a new patch for background
+        await User.findByIdAndUpdate({ _id: filter }, { user_fname, user_lname, birth_date, contact_number, permanent_address })
+
+        if (user_type == "lawyer" && organization && description) {
+            await User.findByIdAndUpdate({ _id: filter }, { $set: { background } })
+
+        } else if (user_type == "lawyer") {
+            await User.findByIdAndUpdate({ _id: filter }, { $unset: { background } })
+        }
 
         req.flash('success_msg', 'Profile Succesfully Updated')
         res.redirect('/users/' + filter)
+    } catch (err) {
+        next(err)
+    }
+})
+
+router.patch('/edit/background/:id', async (req, res, next) => {
+    try {
+
     } catch (err) {
         next(err)
     }

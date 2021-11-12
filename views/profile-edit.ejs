@@ -5,6 +5,9 @@
                 <form action="/users/edit/<%- result._id %>?_method=PATCH" method="POST">
                     <h1>Profile Edit</h1>
                     <!-- FIRST AND LAST NAME -->
+                    <h4 class="text-center">Personal Details
+                    </h4>
+
                     <small>First name</small>
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1"><i class="fa fa-user" aria-hidden="true"></i>
@@ -24,7 +27,8 @@
                         <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar"
                                 aria-hidden="true"></i>
                         </span>
-                        <input type="date" id="birthdate" name="birthdate" class="form-control" value="<%= result.birthdate.toISOString().split('T')[0] %>" />
+                        <input type="date" id="birthdate" name="birthdate" class="form-control"
+                            value="<%= result.birthdate.toISOString().split('T')[0] %>" />
                     </div>
                     <!-- CONTACT NUMBER -->
                     <div class="input-group mb-3">
@@ -41,6 +45,41 @@
                             class="form-control" placeholder="Enter permanent address"
                             value="<%= result.permanent_address %>" />
                     </div>
+                    <input name="user_type" value="<%- result.user_type %>" hidden>
+
+                    <% if (result.user_type == "lawyer") { %>  
+                    <% for( let index = 0; index < result.background.length; index++ ) { %>
+                        
+                    <% } %> 
+                    <h4 class="text-center mb-3">Background
+                    </h4>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="backgroundRow">
+                                <% for( let index = 0; index < result.background.length; index++ ) { %>
+                                    <div class="inputFormRow">
+                                        <hr>
+                                        <div class="col-12">
+                                            <label for="organization" class="form-label">Organization</label>
+                                            <input name="organization[]" type="text" class="form-control" id="organization"
+                                                placeholder="Polytechnic University of the Philippines" value="<%- result.background[index].organization %>" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="description" class="form-label">Description</label>
+                                            <input name="description[]" type="text" class="form-control" id="description"
+                                                placeholder="Bachelors of Degree" value="<%- result.background[index].description %>" required>
+                                        </div>
+                                            <button type="button" class="removeRow mt-3 mb-3 btn btn-danger">Remove</button>
+                                    </div>                            
+                                <% } %>
+                            </div>
+                            <button id="addRow" type="button" class="btn btn-info"><i class="fas fa-plus"></i> Add
+                                Row</button>
+                        </div>
+                    </div>
+                    <% } %>  
+
+
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <a href="/users/<%- result._id %> " class="btn btn-secondary">Cancel</a>
@@ -50,3 +89,32 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    // add row
+    $("#addRow").click(() => {
+        const html = `
+            <div class="inputFormRow">
+                <hr>
+                <div class="col-12">
+                    <label for="organization" class="form-label">Organization</label>
+                    <input name="organization[]" type="text" class="form-control" id="organization"
+                        placeholder="Polytechnic University of the Philippines" required>
+                </div>
+                <div class="col-12">
+                    <label for="description" class="form-label">Description</label>
+                    <input name="description[]" type="text" class="form-control" id="description"
+                        placeholder="Bachelors of Degree" required>
+                </div>
+                    <button type="button" class="removeRow mt-3 mb-3 btn btn-danger">Remove</button>
+            </div>
+        `;
+
+        $('#backgroundRow').append(html);
+    });
+
+    // remove row
+    $("#backgroundRow").on('click', '.removeRow', function() {
+        $(this).closest(".inputFormRow").remove()
+    })
+</script>
