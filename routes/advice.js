@@ -27,7 +27,7 @@ router.get("/", isAuth, async (req, res, next) => {
             advicesDoc = await Advice.find({},).sort({ 'date_submitted': 'desc' })
         }
 
-        res.render("advice-forum", {
+        res.render("./advice/index", {
             user_id: id,
             notifications,
             advices: advicesDoc,
@@ -69,7 +69,7 @@ router.get("/:id", isAuth, async (req, res, next) => {
 
         if (typeof adviceDocs == undefined) adviceDocs = null
 
-        res.render("advice-view", {
+        res.render("./advice/advice-view", {
             user_id: id,
             notifications,
             adviceDoc,
