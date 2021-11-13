@@ -1,8 +1,15 @@
 const mongoose = require("mongoose");
+const { customAlphabet } = require('nanoid');
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const nanoid = customAlphabet(alphabet, 12);
 
 const AdviceSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: () => nanoid()
+  },
   client_id: {
-    type: mongoose.SchemaTypes.ObjectId,
+    type: String,
     ref: "User",
   },
   date_submitted: {
@@ -22,7 +29,7 @@ const AdviceSchema = new mongoose.Schema({
   lawyers: [
     {
       _id: {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: String,
         ref: "User",
       },
       answer: {

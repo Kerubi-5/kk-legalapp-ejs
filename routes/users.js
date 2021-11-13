@@ -9,7 +9,6 @@ const Notification = require('../models/Notification')
 
 // Auth types
 const forwardAuthenticated = require('./auth').isNotAuth;
-const { ObjectId } = require('bson');
 const { isAuth } = require('./auth');
 
 // Node Mailer
@@ -159,7 +158,7 @@ router.post('/register', (req, res, next) => {
 
 router.get('/resend-email', isAuth, async (req, res, next) => {
     try {
-        const rand = ObjectId(req.user._id)
+        const rand = (req.user._id)
         const myUser = await User.findOne({ _id: rand })
         const title = "Registration confirmation with 3JBG Legal Web Application!"
         const link = "http://" + req.get('host') + "/verify?id=" + rand;
@@ -195,7 +194,7 @@ router.get('/logout', (req, res) => {
 
 // Public Profile View
 router.get('/:id', isAuth, (req, res, next) => {
-    const id = ObjectId(req.user._id)
+    const id = (req.user._id)
     const _id = req.params.id
 
     if (_id.match(/^[0-9a-fA-F]{24}$/)) {
@@ -214,7 +213,7 @@ router.get('/:id', isAuth, (req, res, next) => {
 
 // Profile Edit View
 router.get('/edit/:id', isAuth, (req, res, next) => {
-    const id = ObjectId(req.user._id)
+    const id = (req.user._id)
 
     try {
         if (id == req.params.id) {

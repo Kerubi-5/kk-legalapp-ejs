@@ -1,8 +1,16 @@
 const mongoose = require('mongoose')
+const { customAlphabet } = require('nanoid');
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const nanoid = customAlphabet(alphabet, 12);
+
 
 const SolutionSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        default: () => nanoid()
+    },
     complaint_id: {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: String,
         ref: "Complaint"
     },
     video_link: {

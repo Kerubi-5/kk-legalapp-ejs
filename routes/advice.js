@@ -9,11 +9,10 @@ const Advice = require('../models/Advice')
 // Auth types
 const isLawyer = require("./auth").isLawyer;
 const isAuth = require("./auth").isAuth;
-const { ObjectId } = require("bson");
 
 router.get("/", isAuth, async (req, res, next) => {
     try {
-        const id = ObjectId(req.user._id);
+        const id = (req.user._id);
 
         // DATA VARIABLE QUERIES
         const filter = req.query.filter
@@ -40,7 +39,7 @@ router.get("/", isAuth, async (req, res, next) => {
 
 router.post("/", isAuth, async (req, res, next) => {
     try {
-        const id = ObjectId(req.user._id)
+        const id = (req.user._id)
         const { legal_title, legal_description } = req.body
 
         const newAdvice = new Advice({
@@ -59,8 +58,8 @@ router.post("/", isAuth, async (req, res, next) => {
 
 router.get("/:id", isAuth, async (req, res, next) => {
     try {
-        const id = ObjectId(req.user._id)
-        const advice_id = ObjectId(req.params.id)
+        const id = (req.user._id)
+        const advice_id = (req.params.id)
 
         const notifications = await Notification.find({ target: id });
         const adviceDoc = await Advice.findOne({ _id: advice_id }).populate("lawyers._id")
@@ -85,8 +84,8 @@ router.get("/:id", isAuth, async (req, res, next) => {
 
 router.patch("/comment/:id", isLawyer, async (req, res, next) => {
     try {
-        const id = ObjectId(req.user._id)
-        const advice_id = ObjectId(req.params.id)
+        const id = (req.user._id)
+        const advice_id = (req.params.id)
         const { answer } = req.body
 
         const lawyer = {
@@ -104,7 +103,7 @@ router.patch("/comment/:id", isLawyer, async (req, res, next) => {
 
 router.get("/vote/:id", isAuth, async (req, res, next) => {
     try {
-        const vote_id = ObjectId(req.params.id)
+        const vote_id = (req.params.id)
 
         await Advice.findByIdAndUpdate({ _id: vote_id }, { is_resolved: true })
 

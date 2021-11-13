@@ -8,7 +8,7 @@ const Complaint = require("../models/Complaint")
 
 // Auth types
 const isAdmin = require("./auth").isAdmin;
-const { ObjectId } = require("bson");
+
 
 router.get("/", isAdmin, async (req, res, next) => {
   try {
@@ -70,7 +70,7 @@ router.get("/accounts/client", isAdmin, async (req, res, next) => {
 
 router.get("/accounts/:id", isAdmin, async (req, res, next) => {
   try {
-    const id = ObjectId(req.params.id)
+    const id = (req.params.id)
     const user_client = await User.findById({ layout: false, _id: id })
 
     res.render("./admin/user-view", { layout: false, user: user_client })
@@ -97,7 +97,7 @@ router.get("/verification/:id", isAdmin, async (req, res, next) => {
 
 router.patch("/verification/:id", isAdmin, async (req, res, next) => {
   try {
-    const id = ObjectId(req.params.id)
+    const id = (req.params.id)
 
     await User.findByIdAndUpdate({ _id: id }, { verified_lawyer: true })
     req.flash("success_msg", "Successfully verified a user")
@@ -109,7 +109,7 @@ router.patch("/verification/:id", isAdmin, async (req, res, next) => {
 
 router.get("/accounts/lock/:id", isAdmin, async (req, res, next) => {
   try {
-    const id = ObjectId(req.params.id)
+    const id = (req.params.id)
 
     await User.findByIdAndUpdate({ _id: id }, { is_verified: false })
     req.flash("success_msg", "Successfully locked account")

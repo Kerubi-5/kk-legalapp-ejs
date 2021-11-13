@@ -11,7 +11,6 @@ const Solution = require("../models/Solution")
 const isClient = require("./auth").isClient;
 const isLawyer = require("./auth").isLawyer;
 const isAuth = require("./auth").isAuth;
-const { ObjectId } = require("bson");
 
 // Node Mailer
 const sendMail = require("../utils/transporter")
@@ -19,8 +18,8 @@ const sendMail = require("../utils/transporter")
 // COMPLAINT POST SUBMIT CLIENT SIDE
 router.post("/consultation", isClient, async (req, res, next) => {
   try {
-    const client_id = ObjectId(req.user._id);
-    const lawyer_id = ObjectId(req.body.lawyer_id);
+    const client_id = (req.user._id);
+    const lawyer_id = (req.body.lawyer_id);
     const {
       legal_title,
       case_facts,
@@ -104,8 +103,8 @@ router.post("/consultation", isClient, async (req, res, next) => {
 // COMPLAINT VIEW TRANSACTION ONGOING
 router.get("/complaints/:id", isAuth, (req, res, next) => {
   try {
-    const user_id = ObjectId(req.user._id);
-    const complaint_id = ObjectId(req.params.id);
+    const user_id = (req.user._id);
+    const complaint_id = (req.params.id);
 
     Complaint.findOne({ _id: complaint_id })
       .populate("client_id")
@@ -204,7 +203,7 @@ router.patch("/complaints/reject", isLawyer, async (req, res, next) => {
 // CLIENT SIDE COMPLETE A COMPLAINT
 router.patch("/complaints/complete", isAuth, async (req, res, next) => {
   try {
-    const id = ObjectId(req.body.id)
+    const id = (req.body.id)
     await Complaint.findByIdAndUpdate({ _id: id }, { case_status: "completed" })
 
     res.redirect('/form/complaints/' + req.body.id)
@@ -216,7 +215,7 @@ router.patch("/complaints/complete", isAuth, async (req, res, next) => {
 // LAWYER SIDE COMPLAINT UPDATE AND ADD NEW SOLUTION
 router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
   try {
-    const id = ObjectId(req.params.id);
+    const id = (req.params.id);
     const { summary, recommendations, video_link } = req.body
 
     const newSolution = new Solution({

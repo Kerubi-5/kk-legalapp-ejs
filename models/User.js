@@ -1,6 +1,13 @@
 const mongoose = require('mongoose')
+const { customAlphabet } = require('nanoid');
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const nanoid = customAlphabet(alphabet, 12);
 
 const UserSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        default: () => nanoid()
+    },
     username: {
         type: String,
         required: true
@@ -57,7 +64,7 @@ const UserSchema = new mongoose.Schema({
         type: Boolean
     },
     complaints: [{
-        type: mongoose.SchemaTypes.ObjectId,
+        type: String,
         ref: "Complaint"
     }],
     date_created: {

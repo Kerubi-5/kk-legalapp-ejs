@@ -8,7 +8,6 @@ const Notification = require("../models/Notification");
 // Auth types
 const isAuth = require("./auth").isAuth;
 const isClientOrLawyer = require("./auth").isClientOrLawyer;
-const { ObjectId } = require("bson");
 
 // Welcome Page
 router.get("/", (req, res) => res.render("index"));
@@ -17,8 +16,7 @@ router.get("/", (req, res) => res.render("index"));
 
 // Dashboard
 router.get("/dashboard", isClientOrLawyer, async (req, res, next) => {
-  const id = ObjectId(req.user._id);
-
+  const id = (req.user._id);
 
   try {
     const available_lawyers = await User.find({ user_type: "lawyer", is_available: true })
@@ -40,7 +38,7 @@ router.get("/dashboard", isClientOrLawyer, async (req, res, next) => {
 
 router.get("/notification/:id", isAuth, async (req, res, next) => {
   try {
-    const id = ObjectId(req.params.id);
+    const id = (req.params.id);
     await Notification.findByIdAndDelete({ _id: id });
 
     res.redirect("/dashboard");
@@ -72,7 +70,7 @@ router.get('/verify', async (req, res, next) => {
     if (!id) {
       res.send("Invalid Link")
     } else {
-      await User.findByIdAndUpdate({ _id: ObjectId(id) }, { is_verified: true })
+      await User.findByIdAndUpdate({ _id: id }, { is_verified: true })
       res.render("./pages/verified", { layout: "./pages/layout-page" })
     }
   } catch (err) {
