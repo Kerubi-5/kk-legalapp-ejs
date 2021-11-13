@@ -3,8 +3,9 @@ $(".close-notification").click(function () {
     $(this).closest(".dropdown-item").remove()
     var counter = parseInt($(".notif-counter").text())
     counter = counter - 1
-    if (counter == 0)
+    if (counter == 0) {
         $(".notif-counter").remove()
+    }
 
     $(".notif-counter").text(counter)
 
@@ -14,3 +15,8 @@ $(".close-notification").click(function () {
         url: "/notification/" + value
     })
 })
+
+$('ul .dropdown-menu .dropdown-item button').click(function (e) {
+    console.log(e)
+    e.stopPropagation();
+});

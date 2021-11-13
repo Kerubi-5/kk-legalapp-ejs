@@ -18,6 +18,12 @@ const SolutionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    re_appointment: {
+        type: Date
+    },
+    supporting_document: {
+        type: String
+    }
 })
 
 module.exports = mongoose.model('Solution', SolutionSchema)
