@@ -33,7 +33,6 @@ router.post('/register/client', async (req, res, next) => {
             birthdate,
             contact_number,
             permanent_address,
-            user_type,
         } = req.body;
 
         let errors = [];
@@ -57,8 +56,7 @@ router.post('/register/client', async (req, res, next) => {
                 user_lname,
                 birthdate,
                 contact_number,
-                permanent_address,
-                user_type
+                permanent_address
             });
         }
 
@@ -141,7 +139,6 @@ router.post('/register/lawyer', async (req, res, next) => {
                 birthdate,
                 contact_number,
                 permanent_address,
-                user_type
             });
         }
 
