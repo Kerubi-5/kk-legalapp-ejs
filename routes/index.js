@@ -16,50 +16,23 @@ router.get("/", (req, res) => res.render("index"));
 // Protected Routes
 
 // Dashboard
-router.get("/dashboard", isClientOrLawyer, (req, res, next) => {
+router.get("/dashboard", isClientOrLawyer, async (req, res, next) => {
   const id = ObjectId(req.user._id);
-  let page = req.query.page ? parseInt(req.query.page) : 1;
-  let size = req.query.size ? parseInt(req.query.size) : 2;
-  const startIndex = (page - 1) * size;
-  const endIndex = page * size;
+
 
   try {
-    User.find({ user_type: "lawyer", is_available: true }).exec(
-      async (err, data) => {
-        if (err) next(err);
+    const available_lawyers = await User.find({ user_type: "lawyer", is_available: true })
+    let user_doc = await User.findOne({ _id: id }).populate("complaints");
+    let complaints = user_doc.complaints;
+    const notifications = await Notification.find({ target: id });
 
-        let user_doc = await User.findOne({ _id: id }).populate("complaints");
-        let complaints = user_doc.complaints;
-
-        // if (filter != "") {
-        //   complaints = complaints.filter((complaint) => {
-        //     if (complaint.case_status == filter) return complaint;
-        //   });
-        // }
-
-        const numberOfPages = Math.ceil(complaints.length / size)
-
-        let iterator = (page - 5) < 1 ? 1 : page - 5;
-        let endingLink = (iterator + 5) <= numberOfPages ? (iterator + 5) : page + (numberOfPages - page);
-
-        const notifications = await Notification.find({ target: id });
-        const complaintResults = complaints.slice(startIndex, endIndex);
-
-        console.log(iterator)
-        console.log(endingLink)
-        res.render("dashboard", {
-          user_id: id,
-          result: data,
-          user_doc,
-          complaintResults,
-          page,
-          iterator,
-          endingLink,
-          size,
-          notifications,
-        });
-      }
-    );
+    res.render("dashboard", {
+      user_id: id,
+      result: available_lawyers,
+      user_doc,
+      complaintResults: complaints,
+      notifications,
+    });
   } catch (err) {
     next(err)
   }
