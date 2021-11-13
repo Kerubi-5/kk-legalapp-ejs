@@ -22,7 +22,7 @@
                 <div class="tab-pane fade show active" id="pills-complaint" role="tabpanel"
                     aria-labelledby="pills-complaint-tab">
                     <!-- This is the complaint document -->
-                    <div>
+                    <div id="complaintForm">
                         <h1>Impormasyon tungkol sa Kaso</h1>
                         <hr>
                         <div class="mb-3">
@@ -75,6 +75,9 @@
                             <embed src="/uploads/evidences/<%- result.case_file %>" type="application/pdf" width="100%"
                                 height="600px" />
                         </div>
+                        <div class="text-end">
+                            <a href="/form/complaints/edit/<%- result._id %>" id="editButton" class="btn btn-primary mb-3">EDIT</a>
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="pills-meeting" role="tabpanel" aria-labelledby="pills-meeting-tab">
@@ -117,9 +120,9 @@
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text" id="appointment_date"><i
                                                         class="fas fa-calendar"></i></span>
-                                                <input name="appointment_date" type="datetime-local" class="form-control"
-                                                    aria-label="Appointment Date" aria-describedby="Appointment Date"
-                                                    required>
+                                                <input name="appointment_date" type="datetime-local"
+                                                    class="form-control" aria-label="Appointment Date"
+                                                    aria-describedby="Appointment Date" required>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -187,7 +190,7 @@
                         <% } else if (a_type == "in progress") { %>
                         <h1>Detalye ng napagmeetingan</h1>
                         <hr>
-                        <%- include("../partials/complaint-solutions") %> 
+                        <%- include("../partials/complaint-solutions") %>
 
                         <% if (user_type == "lawyer") { %>
                         <!-- Modal Button -->
@@ -239,36 +242,41 @@
                             <div class="d-flex justify-content-between">
                                 <input name="id" value="<%- result._id %>" hidden>
                                 <button type="submit" class="btn btn-success btn-lg m-3"><i
-                                    class="fas fa-thumbs-up"></i> Mark as Resolved</button>
-                                <button type="button" class="btn btn-primary m-3 btn-lg" data-bs-toggle="modal" data-bs-target="#rescheduleModal"><i class="far fa-calendar"></i> Reschedule</button>
+                                        class="fas fa-thumbs-up"></i> Mark as Resolved</button>
+                                <button type="button" class="btn btn-primary m-3 btn-lg" data-bs-toggle="modal"
+                                    data-bs-target="#rescheduleModal"><i class="far fa-calendar"></i>
+                                    Reschedule</button>
                             </div>
                         </form>
 
                         <form action="">
-                            <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-labelledby="rescheduleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="rescheduleModal" tabindex="-1"
+                                aria-labelledby="rescheduleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="rescheduleModalLabel">Modal title</h5>
-                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="rescheduleModalLabel">Modal title</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ...
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
                                     </div>
-                                    <div class="modal-body">
-                                      ...
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                      <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                  </div>
                                 </div>
-                              </div>
+                            </div>
                         </form>
                         <% } %>
                         <!-- COMPLETED CASE -->
                         <% } else if (a_type == "completed") { %>
                         <h1>Case Completed [CLOSED]</h1>
                         <hr>
-                        <%- include("../partials/complaint-solutions") %> 
+                        <%- include("../partials/complaint-solutions") %>
                         <% } else { %>
                         <h3 class="m-5">No data recorded yet</h3>
                         <% } %>
