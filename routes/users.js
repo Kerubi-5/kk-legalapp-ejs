@@ -272,17 +272,6 @@ router.get('/edit/:id', isAuth, (req, res, next) => {
 
 })
 
-// DELETE
-router.delete('/edit/:id', async (req, res, next) => {
-    try {
-        const user = await User.findById(req.params.id)
-        await user.remove()
-        res.send({ data: true })
-    } catch (err) {
-        next(err)
-    }
-})
-
 // UPDATE
 router.patch('/edit/:id', isAuth, async (req, res, next) => {
     try {
