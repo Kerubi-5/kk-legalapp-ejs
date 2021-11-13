@@ -1,10 +1,20 @@
 Change the advice into LIST GROUP form BOOSTRAP [DONE]
 Change Background [done]
 
-
 Added submitted date in transactions table [DONE]
 Added search box in advice section [DONE]
 Make client comment on advices [Reject]
 
-
 Intercept Admin First
+
+```
+{
+client_id: "DjvSgsmtRDcj",
+legal_title: "Abusadong asawa",
+case_facts: "Tuwing umuuwi ako sa tahanan ay ako ay binubugbog ng aking asawa",
+adverse_party : "Asiong Sashortga",
+case_objectives: "Gusto kong hiwalayan at dalhin ang aking mga anak palayo sa aking asawa",
+client_questions: "TBD OR May Laman",
+lawyer_id: "hv1C7BKQZiGb",
+}
+```

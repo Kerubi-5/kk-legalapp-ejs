@@ -21,8 +21,7 @@ router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 router.get('/register/client', forwardAuthenticated, (req, res) => res.render('register-client'));
 router.get('/register/lawyer', forwardAuthenticated, (req, res) => res.render('register-lawyer'));
 
-// Register POST
-router.post('/register', (req, res, next) => {
+router.post('/register/client', async (req, res, next) => {
     try {
         const {
             username,
@@ -35,14 +34,7 @@ router.post('/register', (req, res, next) => {
             contact_number,
             permanent_address,
             user_type,
-            is_available,
-            affiliation,
-            verified_lawyer
         } = req.body;
-
-        // SETTING UP FILE UPLOAD
-        let lawyer_credential
-        let fileObj
 
         let errors = [];
 
@@ -70,6 +62,73 @@ router.post('/register', (req, res, next) => {
             });
         }
 
+        if (errors.length > 0) {
+            renderClient()
+        } else {
+            const userExists = await User.findOne({ username: username })
+            const emailExists = await User.findOne({ email: email })
+
+            if (userExists || emailExists) {
+                if (userExists) errors.push({ msg: 'Username already exist' })
+                if (emailExists) errors.push({ msg: 'Email already exist' })
+                renderClient()
+            } else {
+                newUser = new User({
+                    username,
+                    email,
+                    password,
+                    user_fname,
+                    user_lname,
+                    birthdate,
+                    contact_number,
+                    permanent_address,
+                    user_type: "client"
+                });
+
+                newUser.password = authUtils.hashPassword(password);
+                newUser.save()
+
+                const rand = newUser._id
+                const title = "Registration confirmation with 3JBG Legal Web Application!"
+                const link = "http://" + req.get('host') + "/verify?id=" + rand;
+                const msg = `<h1>Hello ${user_fname},</h1><br> Please Click on the link to verify your email.<br><a href=${link}>Click here to verify</a>`
+                sendMail(email, title, msg)
+
+                req.flash('success_msg', 'You are now registered please log in to continue')
+                res.redirect('/users/login')
+            }
+        }
+    } catch (err) {
+        next(err)
+    }
+})
+
+router.post('/register/lawyer', async (req, res, next) => {
+    try {
+        const {
+            username,
+            email,
+            password,
+            password2,
+            user_fname,
+            user_lname,
+            birthdate,
+            contact_number,
+            permanent_address,
+        } = req.body;
+
+        let errors = [];
+
+        if (!req.files) errors.push({ msg: 'There is no pdf file credential uploaded' })
+
+        if (!username || !email || !password || !password2 || !user_fname || !user_lname || !birthdate || !contact_number || !permanent_address) errors.push({ msg: 'Please enter all fields' });
+
+        if (username.length > 20) errors.push({ msg: 'Username cannot be longer than 20 characters' })
+
+        if (password != password2) errors.push({ msg: 'Passwords do not match' });
+
+        if (password.length < 6 || password.length > 20) errors.push({ msg: 'Password must be at least 6 characters, and not more than 20 characters long' });
+
         function renderLawyer() {
             res.render('register-lawyer', {
                 errors,
@@ -86,75 +145,57 @@ router.post('/register', (req, res, next) => {
             });
         }
 
-        if (errors.length > 0 && user_type == "client") {
-            renderClient()
-        } else if (errors.length > 0 && user_type == "lawyer") {
+        if (errors.length > 0) {
             renderLawyer()
         } else {
-            User.findOne({ $or: [{ username: username }, { email: email }] }).then(user => {
-                if (user && user_type == "client") {
-                    errors.push({ msg: 'Username or email already exist' });
-                    renderClient()
-                } else if (user && user_type == "lawyer") {
-                    errors.push({ msg: 'Username or email already exist' });
-                    renderLawyer()
-                } else {
-                    let newUser = new User()
-                    if (user_type == "client") {
-                        newUser = new User({
-                            username,
-                            email,
-                            password,
-                            user_fname,
-                            user_lname,
-                            birthdate,
-                            contact_number,
-                            permanent_address,
-                            user_type
-                        });
-                    } else if (user_type == "lawyer") {
-                        if (req.files) {
-                            fileObj = req.files.lawyer_credential
-                            lawyer_credential = Date.now() + '-' + Math.round(Math.random() * 1E9) + fileObj.name
-                        }
+            const userExists = await User.findOne({ username: username })
+            const emailExists = await User.findOne({ email: email })
 
-                        newUser = new User({
-                            username,
-                            email,
-                            password,
-                            user_fname,
-                            user_lname,
-                            birthdate,
-                            contact_number,
-                            permanent_address,
-                            user_type,
-                            is_available,
-                            lawyer_credential,
-                            affiliation,
-                            verified_lawyer
-                        });
+            if (userExists || emailExists) {
+                if (userExists) errors.push({ msg: 'Username already exist' })
+                if (emailExists) errors.push({ msg: 'Email already exist' })
+                renderLawyer()
+            } else {
+                const fileObj = req.files.lawyer_credential
+                const lawyer_credential = Date.now() + '-' + Math.round(Math.random() * 1E9) + fileObj.name
 
-                        fileObj.mv('./public/uploads/credentials/' + lawyer_credential)
-                    }
+                newUser = new User({
+                    username,
+                    email,
+                    password,
+                    user_fname,
+                    user_lname,
+                    birthdate,
+                    contact_number,
+                    permanent_address,
+                    lawyer_credential,
+                    user_type: "lawyer",
+                    is_available: false,
+                    verified_lawyer: false
+                });
 
-                    newUser.password = authUtils.hashPassword(password);
-                    newUser.save()
+                fileObj.mv('./public/uploads/credentials/' + lawyer_credential)
 
-                    const rand = newUser._id
-                    const title = "Registration confirmation with 3JBG Legal Web Application!"
-                    const link = "http://" + req.get('host') + "/verify?id=" + rand;
-                    const msg = `<h1>Hello ${user_fname},</h1><br> Please Click on the link to verify your email.<br><a href=${link}>Click here to verify</a>`
-                    sendMail(email, title, msg)
+                newUser.password = authUtils.hashPassword(password);
+                newUser.save()
 
-                    req.flash('success_msg', 'You are now registered please log in to continue')
-                    res.redirect('/users/login')
-                }
-            });
+                const rand = newUser._id
+                const title = "Registration confirmation with 3JBG Legal Web Application!"
+                const link = "http://" + req.get('host') + "/verify?id=" + rand;
+                const msg = `<h1>Hello ${user_fname},</h1><br> Please Click on the link to verify your email.<br><a href=${link}>Click here to verify</a>`
+                sendMail(email, title, msg)
+
+                req.flash('success_msg', 'You are now registered please log in to continue')
+                res.redirect('/users/login')
+            }
         }
+
+
+
     } catch (err) {
         next(err)
     }
-});
+})
 
 router.get('/resend-email', isAuth, async (req, res, next) => {
     try {

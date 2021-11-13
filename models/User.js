@@ -48,13 +48,13 @@ const UserSchema = new mongoose.Schema({
     lawyer_credential: {
         type: String,
     },
-    is_available: {
-        type: Boolean,
-    },
     // Hide information
     is_public: {
         type: Boolean,
         default: false
+    },
+    is_available: {
+        type: Boolean
     },
     is_verified: {
         type: Boolean,
