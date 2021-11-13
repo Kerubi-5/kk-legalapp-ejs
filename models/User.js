@@ -67,7 +67,15 @@ const UserSchema = new mongoose.Schema({
     avatar: {
         type: String,
         default: "unknown.jpg"
-    }
+    },
+    background: [{
+        organization: {
+            type: String
+        },
+        description: {
+            type: String
+        }
+    }]
 })
 
 module.exports = mongoose.model('User', UserSchema)
