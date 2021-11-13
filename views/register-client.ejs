@@ -8,16 +8,9 @@
         <%- include ("./partials/messages"); %>
 
         <!-- CLIENT REGISTRATION -->
-        <form action="/users/register" method="POST">
+        <form action="/users/register/client" method="POST">
           <!-- USERNAME -->
           <%- include("./partials/registration-form") %>
-          <!-- HIDDEN CLIENT INPUT -->
-          <input name="user_type" value="client" hidden></input>
-          <div class="mb-3 text-center">
-            <!--Dito sa button kung san magproprompt yung modal, dadagdagan lang netong data-bs-toggle="modal" and data-bs-target="id nung modal"-->
-            <a class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#form_registerModal">Register</a>
-          </div>
-
           <!-- Modal for Privacy Rights -->
           <%- include ("./partials/privacy-form-modal") %>
         </form>

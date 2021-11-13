@@ -7,7 +7,7 @@
                 </h1>
                 <%- include ("./partials/messages"); %>
                 <!-- LAWYER REGISTRATION -->
-                <form action="/users/register" method="POST" enctype="multipart/form-data">
+                <form action="/users/register/lawyer" method="POST" enctype="multipart/form-data">
                     <!-- USERNAME -->
                     <%- include("./partials/registration-form") %>
                     <div class="input-group">
@@ -18,15 +18,6 @@
                         </label>
                     </div>
                     <small class="mb-3">Upload only PDF for credentials</small>
-                    <!-- HIDDEN LAWYER INPUT -->
-                    <input name="user_type" value="lawyer" hidden>
-                    <input name="is_available" value="false" hidden>
-                    <input name="verified_lawyer" value="false" hidden>
-                    <div class="mb-3 text-center">
-                        <!--Dito sa button kung san magproprompt yung modal, dadagdagan lang netong data-bs-toggle="modal" and data-bs-target="id nung modal"-->
-                        <a class="btn btn-primary btn-lg" data-bs-toggle="modal"
-                            data-bs-target="#form_registerModal">Register</a>
-                    </div>
                     <!-- Modal for Privacy Rights -->
                     <%- include ("./partials/privacy-form-modal") %>
                 </form>
