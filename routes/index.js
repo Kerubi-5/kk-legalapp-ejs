@@ -24,7 +24,7 @@ router.get("/dashboard", isClientOrLawyer, async (req, res, next) => {
     let complaints = user_doc.complaints;
     const notifications = await Notification.find({ target: id });
 
-    res.render("dashboard", {
+    res.render("./complaint/index", {
       user_id: id,
       result: available_lawyers,
       user_doc,

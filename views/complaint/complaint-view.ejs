@@ -1,7 +1,7 @@
 <!-- CONSULTATION DETAILS -->
 <div class="container">
     <div class="mt-3">
-        <%- include ("./partials/messages"); %>
+        <%- include ("../partials/messages"); %>
     </div>
     <div class="m-3 border rounded bg-white shadow" style="padding-left: 20px; padding-right: 20px;">
         <!-- Info for merit test -->
@@ -187,7 +187,7 @@
                         <% } else if (a_type == "in progress") { %>
                         <h1>Detalye ng napagmeetingan</h1>
                         <hr>
-                        <%- include("./partials/complaint-solutions") %> 
+                        <%- include("../partials/complaint-solutions") %> 
 
                         <% if (user_type == "lawyer") { %>
                         <!-- Modal Button -->
@@ -268,7 +268,7 @@
                         <% } else if (a_type == "completed") { %>
                         <h1>Case Completed [CLOSED]</h1>
                         <hr>
-                        <%- include("./partials/complaint-solutions") %> 
+                        <%- include("../partials/complaint-solutions") %> 
                         <% } else { %>
                         <h3 class="m-5">No data recorded yet</h3>
                         <% } %>

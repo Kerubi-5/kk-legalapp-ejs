@@ -120,10 +120,10 @@ router.get("/complaints/:id", isAuth, (req, res, next) => {
 
         // Only users involved in this complaint will be able to see the content of the complaint
         if (
-          user_id.equals(result.client_id._id) ||
-          user_id.equals(result.lawyer_id._id)
+          user_id === result.client_id._id ||
+          user_id === result.lawyer_id._id
         )
-          res.render("consultation-view", {
+          res.render("./complaint/complaint-view", {
             user_id: user_id,
             result,
             user_type: user_type,
