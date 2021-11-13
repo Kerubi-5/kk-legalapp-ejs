@@ -186,9 +186,6 @@ router.post('/register/lawyer', async (req, res, next) => {
                 res.redirect('/users/login')
             }
         }
-
-
-
     } catch (err) {
         next(err)
     }
@@ -231,22 +228,22 @@ router.get('/logout', (req, res) => {
  */
 
 // Public Profile View
-router.get('/:id', isAuth, (req, res, next) => {
+router.get('/:id', isAuth, async (req, res, next) => {
     const id = (req.user._id)
     const _id = req.params.id
 
-    if (_id.match(/^[0-9a-fA-F]{24}$/)) {
-        User.findOne({ _id }, async (err, result) => {
-            if (err) next(err)
-
+    try {
+        const result = await User.findById({ _id })
+        if (result) {
             const notifications = await Notification.find({ target: id })
-
             res.render('public-profile', { result, user_id: id, param_id: _id, notifications })
-        })
-    } else {
-        throw new Error('There is no user with that kind of ID')
-
+        } else {
+            throw new Error("There is no user with that ID")
+        }
+    } catch (err) {
+        next(err)
     }
+
 })
 
 // Profile Edit View

@@ -9,7 +9,6 @@ $(".close-notification").click(function () {
 
     $(".notif-counter").text(counter)
 
-
     $.ajax({
         method: "GET",
         url: "/notification/" + value

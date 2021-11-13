@@ -71,7 +71,7 @@ router.get("/accounts/client", isAdmin, async (req, res, next) => {
 router.get("/accounts/:id", isAdmin, async (req, res, next) => {
   try {
     const id = (req.params.id)
-    const user_client = await User.findById({ layout: false, _id: id })
+    const user_client = await User.findById({ _id: id })
 
     res.render("./admin/user-view", { layout: false, user: user_client })
   } catch (err) {
