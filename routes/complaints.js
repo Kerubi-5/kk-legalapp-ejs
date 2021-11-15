@@ -15,6 +15,9 @@ const isAuth = require("./auth").isAuth;
 // Node Mailer
 const sendMail = require("../utils/transporter")
 
+// Node FS
+const fs = require('fs')
+
 // COMPLAINT POST SUBMIT CLIENT SIDE
 router.post("/consultation", isClient, async (req, res, next) => {
   try {
@@ -33,7 +36,7 @@ router.post("/consultation", isClient, async (req, res, next) => {
 
     // SETTING UP FILE UPLOAD VARIABLES
     let fileObj;
-    let case_file;
+    let case_files;
 
     if (
       !legal_title ||
@@ -53,12 +56,12 @@ router.post("/consultation", isClient, async (req, res, next) => {
       res.redirect("/dashboard");
     } else {
       if (req.files) {
-        fileObj = req.files.case_file;
-        case_file =
+        fileObj = req.files.case_files;
+        case_files =
           Date.now() + "-" + Math.round(Math.random() * 1e9) + fileObj.name;
       }
 
-      fileObj.mv("./public/uploads/evidences/" + case_file);
+      fileObj.mv("./public/uploads/evidences/" + case_files);
 
       const newComplaint = new Complaint({
         client_id,
@@ -68,7 +71,7 @@ router.post("/consultation", isClient, async (req, res, next) => {
         case_objectives,
         client_questions,
         case_status,
-        case_file,
+        case_files,
         lawyer_id,
       });
 
@@ -136,8 +139,78 @@ router.get("/complaints/:id", isAuth, (req, res, next) => {
   } catch (err) {
     next(err)
   }
-
 });
+
+// COMPLAINT FORM EDIT
+router.route("/complaints/edit/:id")
+  .get(async (req, res, next) => {
+    try {
+
+    } catch (err) {
+      next(err)
+    }
+    // const user_id = req.user._id
+    const complaint_id = req.params.id;
+    const result = await Complaint.findById({ _id: complaint_id }).populate('client_id').populate('lawyer_id')
+    // const notifications = await Notification.find({ target: user_id })
+    // res.render('./complaint/complaint-edit', { user_id, result, notifications })
+    res.json(result)
+  })
+  .patch(async (req, res, next) => {
+    try {
+      const id = req.params.id
+      const files = req.files ? req.files.case_files : ""
+      const {
+        legal_title,
+        case_facts,
+        adverse_party,
+        case_objectives,
+        client_questions
+      } = req.body
+
+      let case_files = []
+      let errors = []
+
+      if (!legal_title || !case_facts || !adverse_party || !case_objectives || !client_questions || !files) errors.push("There are missing fields")
+
+      if (errors.length > 0) req.flash('error_msg', 'There are some missing fields')
+      else {
+        const complaintResult = await Complaint.findById(id)
+        const fileNames = complaintResult.case_files
+        // Uploading File
+        if (Array.isArray(files)) {
+          for (let index = 0; index < files.length; index++) {
+            let case_file = Date.now() + "-" + Math.round(Math.random() * 1e9) + files[index].name;
+            case_files.push(case_file)
+            files[index].mv("./public/uploads/evidences/" + case_file);
+          }
+        } else {
+          let case_file = Date.now() + "-" + Math.round(Math.random() * 1e9) + files.name;
+          case_files.push(case_file)
+          files.mv("./public/uploads/evidences/" + case_file)
+        }
+
+        // DELETING FILE
+        if (fileNames) {
+          fileNames.forEach(element => {
+            fs.unlink(`./public/uploads/evidences/${element}`, (err) => {
+              if (err) {
+                next(err)
+              }
+            })
+          });
+        }
+
+        await Complaint.findByIdAndUpdate({ _id: id }, { legal_title: legal_title, case_facts: case_facts, adverse_party: adverse_party, case_objectives: case_objectives, client_questions: client_questions, case_files: case_files })
+        // SET NEW ARRAY FILES
+        await Complaint.findByIdAndUpdate({ _id: id }, { $set: { case_files: case_files } })
+        req.flash('success_msg', 'Succesfully edited complaint form')
+      }
+      res.redirect('/form/complaints/' + id)
+    } catch (err) {
+      next(err)
+    }
+  })
 
 // COMPLAINT ACCEPT LAWYER SIDE
 router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
@@ -249,8 +322,6 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
     next(err)
   }
 })
-
-
 
 // VIDEO LINK
 router.get("/video", async (req, res, next) => {

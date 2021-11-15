@@ -23,7 +23,10 @@
                     aria-labelledby="pills-complaint-tab">
                     <!-- This is the complaint document -->
                     <div id="complaintForm">
-                        <h1>Impormasyon tungkol sa Kaso</h1>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h1>Impormasyon tungkol sa Kaso</h1>
+                            <button id="editButton" onclick="showModal('<%- result._id %>')" value="<%- result._id %>" class="btn btn-primary">EDIT</button>
+                        </div>
                         <hr>
                         <div class="mb-3">
                             <label name="case_id" for="case_no" class="form-label">#Case ID:</label>
@@ -33,51 +36,49 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Maikling deskripsyon ng legal na problema</label>
-                            <input type="text" class="form-control" id="client_name" value="<%- result.legal_title %>"
+                            <input type="text" class="form-control" value="<%- result.legal_title %>"
                                 readonly>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Pangalan ng Kliyente</label>
-                            <input type="text" class="form-control" id="client_name"
+                            <input type="text" class="form-control"
                                 value="<%- result.client_id.user_fname %>" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="case_facts" class="form-label">Kwento/Detalye
                                 ng Legal na Problema</label>
-                            <textarea class="form-control" class="form-control" id="case_facts" rows="3"
+                            <textarea class="form-control" class="form-control" rows="3"
                                 readonly><%- result.case_facts %></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="adverse_party" class="form-label">Kalabang Partido</label>
-                            <input type="text" class="form-control" id="adverse_party" readonly
+                            <input type="text" class="form-control" readonly
                                 value="<%- result.adverse_party %>">
                         </div>
                         <div class="mb-3">
                             <label for="case_objectives" class="form-label">Mga layunin na
                                 gustong makamit sa legal na problema</label>
-                            <textarea class="form-control" class="form-control" id="case_objectives" rows="3"
+                            <textarea class="form-control" class="form-control" rows="3"
                                 readonly><%- result.case_objectives %></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
-                            <input type="text" class="form-control" id="lawyer_details" readonly
+                            <input type="text" class="form-control" readonly
                                 value="<%- result.lawyer_id.user_fname %>">
                         </div>
                         <div class="mb-5">
                             <label for="client_questions" class="form-label">Mga
                                 katanungan sa abogado</label>
-                            <textarea class="form-control" class="form-control" id="client_questions" rows="3"
+                            <textarea class="form-control" class="form-control" rows="3"
                                 readonly><%- result.client_questions %></textarea>
                         </div>
-                        <div class="mb-3 text-center">
-                            <caption>Mga dokumentong makakatulong sa kaso</caption>
-
-                            <embed src="/uploads/evidences/<%- result.case_file %>" type="application/pdf" width="100%"
-                                height="600px" />
-                        </div>
-                        <div class="text-end">
-                            <a href="/form/complaints/edit/<%- result._id %>" id="editButton" class="btn btn-primary mb-3">EDIT</a>
-                        </div>
+                        <caption>Mga dokumentong makakatulong sa kaso</caption>
+                        <% for( let index = 0; index < result.case_files.length; index++ ) { %>
+                            <div class="mb-3">
+                                <embed src="/uploads/evidences/<%- result.case_files[index] %>" type="application/pdf" width="100%"
+                                    height="600px" />
+                            </div>
+                        <% } %> 
                     </div>
                 </div>
                 <div class="tab-pane fade" id="pills-meeting" role="tabpanel" aria-labelledby="pills-meeting-tab">
@@ -283,6 +284,105 @@
                     </div>
                 </div>
             </div>
+            <!-- Modal -->
+            <form action="/form/complaints/edit/<%- result._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
+                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">Impormasyon tungkol sa Kaso</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="complaintForm">
+                                    <div class="mb-3">
+                                        <label for="case_no" class="form-label">#Case ID:</label>
+                                        <input name="case_id" type="text" class="form-control" id="case_id" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Maikling deskripsyon ng legal na problema</label>
+                                        <input name="legal_title" type="text" class="form-control" id="legal_title">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Pangalan ng Kliyente</label>
+                                        <input type="text" class="form-control" id="client_name" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="case_facts" class="form-label">Kwento/Detalye
+                                            ng Legal na Problema</label>
+                                        <textarea name="case_facts" class="form-control" id="case_facts" rows="3"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="adverse_party" class="form-label">Kalabang Partido</label>
+                                        <input name="adverse_party" type="text" class="form-control" id="adverse_party">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="case_objectives" class="form-label">Mga layunin na
+                                            gustong makamit sa legal na problema</label>
+                                        <textarea name="case_objectives" class="form-control" id="case_objectives" rows="3"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
+                                        <input type="text" class="form-control" id="lawyer_details" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="client_questions" class="form-label">Mga
+                                            katanungan sa abogado</label>
+                                        <textarea name="client_questions" class="form-control" id="client_questions" rows="3"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="case_files" class="form-label">Mga dokumentong makakatulong sa kaso</label>
+                                        <input name="case_files" id="case_files" class="form-control" type="file" multiple="multiple" accept="application/pdf">
+                                    </div>
+                                    <div id="filename_append">
+                                        <caption>Selected files: </caption>
+                                        <ul id="file_list">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
         </section>
     </div>
 </div>
+
+<script>
+    function showModal(id) {
+        let url = `http://localhost:3000/form/complaints/edit/${id}`
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            success: (data) => {
+                $("#editModal .modal-body #case_id").val(data._id)
+                $("#editModal .modal-body #legal_title").val(data.legal_title)
+                $("#editModal .modal-body #client_name").val(data.client_id.user_fname)
+                $("#editModal .modal-body #case_facts").val(data.case_facts)
+                $("#editModal .modal-body #adverse_party").val(data.adverse_party)
+                $("#editModal .modal-body #case_objectives").val(data.case_objectives)
+                $("#editModal .modal-body #lawyer_details").val(data.lawyer_id.user_fname)
+                $("#editModal .modal-body #client_questions").val(data.client_questions)           
+                $("#editModal").modal('show');
+            }
+        })
+    }
+
+    $("#case_files").change(function () {
+        let files = $(this)[0].files
+        let file_item = ""
+        for (let i = 0; i < files.length; i++) {
+            file_item += `<li class="file-item"> ${files[i].name} </li>`;
+        }
+        $("#file_list").html(file_item)
+    });
+</script>

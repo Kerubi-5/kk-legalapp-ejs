@@ -31,9 +31,9 @@ const ComplaintSchema = new mongoose.Schema({
     client_questions: {
         type: String
     },
-    case_file: {
+    case_files: [{
         type: String
-    },
+    }],
     case_status: {
         type: String,
         default: "pending"
