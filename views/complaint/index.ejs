@@ -42,7 +42,6 @@
                                         <th></th>
                                     </thead>
                                     <% for( let index=0; index < complaintResults.length; index++ ) { %>
-
                                     <tr>
                                         <td>
                                             <%- complaintResults[index].legal_title %>
@@ -64,7 +63,6 @@
                                     </tr>
                                     <% } %>
                             </table>
-                            
                         </div>
                     </div>
                     <% if (user_doc.user_type == "client") { %>
@@ -75,79 +73,78 @@
                             <div id="step1" class="m-3">
                                 <!-- CONSULT FORM -->
                                 <form action="/form/consultation" method="POST" enctype="multipart/form-data">
-                                <h1>Consult Form</h1>
-                                <hr>
-                                <div class="mb-3">
-                                    <label for="legal_title" class="form-label">Maikling deskripsyon ng legal na
-                                        problema</label>
-                                    <input name="legal_title" type="text" class="form-control" id="legal_title"
-                                        placeholder="Ano ang kabuuhang ideya ng problema">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="case_facts" class="form-label">Kwento/Detalye
-                                        ng Legal na Problema</label>
-                                    <textarea name="case_facts" class="form-control" class="form-control"
-                                        id="case_facts" rows="3"></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="adverse_party" class="form-label">Kalabang Partido</label>
-                                    <input name="adverse_party" type="text" class="form-control" id="adverse_party"
-                                        placeholder="Ilagay ang TBD kung hindi sure">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="case_objectives" class="form-label">Mga layunin na
-                                        gustong makamit sa legal na problema</label>
-                                    <textarea name="case_objectives" class="form-control" class="form-control"
-                                        id="case_objectives" rows="3"></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="client_questions" class="form-label">Mga
-                                        katanungan sa abogado</label>
-                                    <textarea name="client_questions" class="form-control" class="form-control"
-                                        id="client_questions" rows="3"></textarea>
-                                </div>
-                                <div class="m-3 text-center">
-                                    <button class="btn btn-primary to2" type="button" value="Next">Next <i
-                                            class="fas fa-arrow-right"></i></button>
-                                </div>
+                                    <h1>Consult Form</h1>
+                                    <hr>
+                                    <div class="mb-3">
+                                        <label for="legal_title" class="form-label">Maikling deskripsyon ng legal na
+                                            problema</label>
+                                        <input name="legal_title" type="text" class="form-control" id="legal_title"
+                                            placeholder="Ano ang kabuuhang ideya ng problema">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="case_facts" class="form-label">Kwento/Detalye
+                                            ng Legal na Problema</label>
+                                        <textarea name="case_facts" class="form-control" class="form-control"
+                                            id="case_facts" rows="3"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="adverse_party" class="form-label">Kalabang Partido</label>
+                                        <input name="adverse_party" type="text" class="form-control" id="adverse_party"
+                                            placeholder="Ilagay ang TBD kung hindi sure">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="case_objectives" class="form-label">Mga layunin na
+                                            gustong makamit sa legal na problema</label>
+                                        <textarea name="case_objectives" class="form-control" class="form-control"
+                                            id="case_objectives" rows="3"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="client_questions" class="form-label">Mga
+                                            katanungan sa abogado</label>
+                                        <textarea name="client_questions" class="form-control" class="form-control"
+                                            id="client_questions" rows="3"></textarea>
+                                    </div>
+                                    <div class="m-3 text-center">
+                                        <button class="btn btn-primary to2" type="button" value="Next">Next <i
+                                                class="fas fa-arrow-right"></i></button>
+                                    </div>
                             </div>
                             <div id="step2" class="m-3" style="display:none">
                                 <!-- Available Lawyers List -->
-                                    <table class="table table-striped" style="overflow-y:auto;">
-                                        <% if (!(Object.keys(result).length===0)) { %>
-                                        <h4>Choose one from the available lawyers</h4>
-                                        <% result.forEach((lawyer)=> { %>
+                                <table class="table table-striped" style="overflow-y:auto;">
+                                    <% if (!(Object.keys(result).length===0)) { %>
+                                    <h4>Choose one from the available lawyers</h4>
+                                    <% result.forEach((lawyer)=> { %>
+                                    <% if (lawyer.user_type=="lawyer" && (lawyer.availability.start_date.getTime() < todayDate.getTime() && lawyer.availability.end_date.getTime() > todayDate.getTime())) { %>
+                                    <tr>
+                                        <td width="20">
+                                            <img src="uploads/avatar/<%- lawyer.avatar %>"
+                                                style="display: table-cell; width: 100%;">
+                                        </td>
+                                        <td width="70%">
+                                            <a target="_blank" href="/users/<%- lawyer._id %> ">
+                                                <%- lawyer.user_fname %>
+                                                <%- lawyer.user_lname %>
+                                            </a>
 
-                                        <% if (lawyer.user_type=="lawyer" && lawyer.is_available) { %>
-                                        <tr>
-                                            <td width="20">
-                                                <img src="uploads/avatar/<%- lawyer.avatar %>"
-                                                    style="display: table-cell; width: 100%;">
-                                            </td>
-                                            <td width="70%">
-                                                <a target="_blank" href="/users/<%- lawyer._id %> ">
-                                                    <%- lawyer.user_fname %>
-                                                    <%- lawyer.user_lname %>
-                                                </a>
-
-                                            </td>
-                                            <td width="10%" vertical="centered" vertical>
-                                                <input class="form-check-input big" type="radio" name="lawyer_id"
-                                                    value="<%-lawyer._id%>" id="flexRadioDefault1">
-                                            </td>
-                                        </tr>
-                                        <% } %>
-                                        <% }) %>
-                                        <% } else { %>
-                                        <h4>No available lawyers at the moment</h4>
-                                        <% } %>
-                                    </table>
-                                    <div class="d-flex justify-content-center m-3">
-                                        <button class="btn btn-primary me-3 to1" type="button" value="Previous"><i
-                                                class="fas fa-arrow-left"></i> Go Back</button>
-                                        <button class="btn btn-primary to3" type="button" value="Previous">Confirm Lawyer
-                                            <i class="fas fa-check"></i></button>
-                                    </div>
+                                        </td>
+                                        <td width="10%" vertical="centered" vertical>
+                                            <input class="form-check-input big" type="radio" name="lawyer_id"
+                                                value="<%-lawyer._id%>" id="flexRadioDefault1">
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                    <% }) %>
+                                    <% } else { %>
+                                    <h4>No available lawyers at the moment</h4>
+                                    <% } %>
+                                </table>
+                                <div class="d-flex justify-content-center m-3">
+                                    <button class="btn btn-primary me-3 to1" type="button" value="Previous"><i
+                                            class="fas fa-arrow-left"></i> Go Back</button>
+                                    <button class="btn btn-primary to3" type="button" value="Previous">Confirm Lawyer
+                                        <i class="fas fa-check"></i></button>
+                                </div>
                             </div>
                             <div id="step3" style="display: none;">
                                 <div id="confirmSection" class="m-3">
@@ -189,7 +186,8 @@
                                     <div class="mb-3">
                                         <label for="case_files" class="form-label">Mga dokumentong
                                             makakatulong sa legal na problema</label>
-                                        <input name="case_files" class="form-control" type="file" id="case_files" accept="application/pdf">
+                                        <input name="case_files" class="form-control" type="file" id="case_files"
+                                            accept="application/pdf">
                                     </div>
                                     <input type="text" name="case_status" value="pending" hidden>
                                     <small>
@@ -198,7 +196,6 @@
                                         sang-ayon sa batas
                                     </small>
                                 </div>
-
                                 <div class="d-flex justify-content-center m-3">
                                     <button class="btn btn-primary me-3 to2" type="button" value="Next"><i
                                             class="fas fa-arrow-left"></i> Go Back</button>
@@ -218,7 +215,6 @@
 
 <script>
     $(document).ready(function () {
-
         $(".to1").on('click', function () {
             $("#step1").fadeIn('slow');
             $("#step2").hide();
@@ -250,6 +246,5 @@
             $("#step2").hide();
             $("#step3").fadeIn('slow');
         })
-
     });
 </script>
