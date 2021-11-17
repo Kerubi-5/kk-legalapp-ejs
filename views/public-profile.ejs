@@ -15,14 +15,16 @@
                         <% if (param_id == user_id) { %>
                         <form action="/users/edit/public/<%- user_id %>?_method=PATCH" method="POST">
                             <button type="submit"
-                                class="btn btn-success"><%- result.is_public ? "Public" : "Private" %></button><small style="color: red;">  Sets the visibility from other users</small>
+                                class="btn btn-success"><%- result.is_public ? "Public" : "Private" %></button><small
+                                style="color: red;"> Sets the visibility from other users</small>
                         </form>
                         <% if (result.user_type == "lawyer") { %>
-                            <hr>
-                            <form action="/users/edit/is_available/<%- user_id %>?_method=PATCH" method="POST">
-                                <button type="submit"
-                                    class="btn btn-success"><%- result.is_available ? "Active" : "Inactive" %></button><small style="color: red;">  This will let you appear in the clientelle</small>
-                            </form>
+                        <hr>
+                        <form action="/users/edit/is_available/<%- user_id %>?_method=PATCH" method="POST">
+                            <button type="submit"
+                                class="btn btn-success"><%- result.is_available ? "Active" : "Inactive" %></button><small
+                                style="color: red;"> This will let you appear in the clientelle</small>
+                        </form>
 
                         <% } %>
                         <% } %>
@@ -86,29 +88,29 @@
                         </tr>
                     </table>
                     <% } else { %>
-                        This profile's information is private
-                    <% } %> 
+                    This profile's information is private
+                    <% } %>
 
-                    <% if (result.user_type == "lawyer") { %> 
-                            <h4>Background</h4>
-                            <hr>
-                            <div class="container mt-3">
-                                <div class="m-auto">
-                                    <div class="list-group">
-                                        <% for( let index = 0; index < result.background.length; index++ ) { %>
-                                            <div class="list-group-item list-group-item-action d-flex gap-3 py-3">
-                                                <div class="d-flex gap-2 w-100 justify-content-between">
-                                                  <div>
-                                                    <h6 class="mb-0"><%- result.background[index].organization %></h6>
-                                                    <p class="mb-0 opacity-75"><%- result.background[index].description %></p>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                        <% } %>
-                                      </div>
+                    <% if (result.user_type == "lawyer") { %>
+                    <h4>Background</h4>
+                    <hr>
+                    <div class="container mt-3">
+                        <div class="m-auto">
+                            <div class="list-group m-3">
+                                <% for( let index = 0; index < result.background.length; index++ ) { %>
+                                <div class="gap-3 py-3 mb-3">
+                                    <div class="gap-2">
+                                        <div>
+                                            <h6 class="mb-0"><%- result.background[index].organization %></h6>
+                                            <p class="mb-0 opacity-75"><%- result.background[index].description %></p>
+                                        </div>
+                                    </div>
                                 </div>
+                                <% } %>
                             </div>
-                    <% } %> 
+                        </div>
+                    </div>
+                    <% } %>
                 </div>
             </div>
         </div>
