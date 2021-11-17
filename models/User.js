@@ -53,8 +53,13 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    is_available: {
-        type: Boolean
+    availability: {
+        start_date: {
+            type: Date
+        },
+        end_date: {
+            type: Date
+        },
     },
     is_verified: {
         type: Boolean,

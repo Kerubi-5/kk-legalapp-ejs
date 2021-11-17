@@ -167,7 +167,6 @@ router.post('/register/lawyer', async (req, res, next) => {
                     permanent_address,
                     lawyer_credential,
                     user_type: "lawyer",
-                    is_available: false,
                     verified_lawyer: false
                 });
 
@@ -269,7 +268,7 @@ router.get('/edit/:id', isAuth, (req, res, next) => {
 
 })
 
-// UPDATE
+// UPDATE BACKGROUND
 router.patch('/edit/:id', isAuth, async (req, res, next) => {
     try {
         const filter = req.params.id
@@ -326,14 +325,7 @@ router.patch('/edit/:id', isAuth, async (req, res, next) => {
     }
 })
 
-router.patch('/edit/background/:id', async (req, res, next) => {
-    try {
-
-    } catch (err) {
-        next(err)
-    }
-})
-
+// SET PROFILE VISIBILITY
 router.patch('/edit/public/:id', isAuth, async (req, res, next) => {
     try {
         const filter = req.params.id
@@ -349,15 +341,19 @@ router.patch('/edit/public/:id', isAuth, async (req, res, next) => {
     }
 })
 
-router.patch('/edit/is_available/:id', isAuth, async (req, res, next) => {
+// SET DATE AVAILABILITY
+router.patch('/edit/available/:id', isAuth, async (req, res, next) => {
     try {
         const filter = req.params.id
-        const update = await User.findOne({ _id: filter })
-        is_available = !update.is_available
-        await User.findOneAndUpdate({ _id: filter }, { is_available })
-        const message = !update.is_available ? "available" : "unavailable"
+        const { start_date, end_date } = req.body
+        const availability = {
+            start_date: start_date,
+            end_date: end_date
+        }
 
-        req.flash('success_msg', `You are now ${message} for service`)
+        await User.findByIdAndUpdate(filter, { $set: { availability: availability } })
+
+        req.flash('success_msg', `You are now available through dates ${availability.start_date} to ${availability.end_date}`)
         res.redirect('/users/' + filter)
     } catch (err) {
         next(err)
