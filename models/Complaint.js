@@ -45,6 +45,9 @@ const ComplaintSchema = new mongoose.Schema({
     appointment_date: {
         type: Date
     },
+    meeting_link: {
+        type: String
+    },
     solutions: [{
         type: String,
         ref: "Solution"

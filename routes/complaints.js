@@ -216,7 +216,7 @@ router.route("/complaints/edit/:id")
 router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
   try {
     const filter = req.body.id;
-    const { case_status, appointment_date } = req.body;
+    const { case_status, appointment_date, meeting_link } = req.body;
     let error = false
 
     // DATE VARIABLES FOR COMPARISON
@@ -227,7 +227,7 @@ router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
 
       const complaintResult = await Complaint.findOneAndUpdate(
         { _id: filter },
-        { case_status: case_status, appointment_date: appointment_date }
+        { case_status: case_status, appointment_date: appointment_date, meeting_link: meeting_link }
       );
 
       const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });

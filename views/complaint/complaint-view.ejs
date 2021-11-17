@@ -18,6 +18,7 @@
                         aria-selected="false">Meeting Details</button>
                 </li>
             </ul>
+            <hr>
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-complaint" role="tabpanel"
                     aria-labelledby="pills-complaint-tab">
@@ -80,11 +81,14 @@
                 </div>
                 <div class="tab-pane fade" id="pills-meeting" role="tabpanel" aria-labelledby="pills-meeting-tab">
                     <!-- This is the Details Content -->
-
-                    <!-- THIS IS THE PENDING CASE -->
+                    <h1>Detalyte ng mga napagmeetingan</h1>
+                    <% if (result.meeting_link) { %> 
+                    Zoom meeting: <a href="/external?link=<%- result.meeting_link %>" target="_blank"><%- result.meeting_link %></a>
+                    <hr>
+                    <% } %> 
+                    <!-- PENDING CASE -->
                     <% if (user_type=="lawyer" && a_type=="pending" ) { %>
                     <div id="pendingCase">
-                        <hr>
                         <label for="buttons" class="form-label" style="font-size:x-large"><b>Tanggapin ang
                                 request?</b></label>
                         <div class="mb-3 mt-2 d-flex">
@@ -123,6 +127,10 @@
                                                     class="form-control" aria-label="Appointment Date"
                                                     aria-describedby="Appointment Date" required>
                                             </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Zoom link na gagamitin</label>
+                                                <input name="meeting_link" type="text" class="form-control">
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -139,12 +147,13 @@
                     <div id="prelimMeeting">
                         <p>Wait for the meeting schedule</p>
                         <% if (user_type == "lawyer") { %>
-                        <p>Click update transaction to enter the first meeting details</p>
+                        <br>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-primary btn-lg mb-3" data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop">
                             Update Transaction
                         </button>
+                        <small style="color: red;">Click update transaction to enter the first meeting details</small>
 
                         <!-- Modal -->
                         <form action="/form/complaints/ongoing/<%- result._id %>" method="POST">
@@ -367,6 +376,7 @@
     </div>
 </div>
 
+<!-- JQuery Script for Complaint Submission -->
 <script>
     function showModal(id) {
         let url = `http://localhost:3000/form/complaints/edit/${id}`
