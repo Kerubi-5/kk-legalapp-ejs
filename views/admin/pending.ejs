@@ -18,72 +18,47 @@
                 </tr>
             </thead>
             <tbody>
+                <% complaints.forEach(element => { %>
                 <tr>
-                    <th scope="row">050</th>
-                    <td>Pedro Ibarra</td>
-                    <td>Yedi Jonson</td>
-                    <td><button class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">Review </button></td>
+                    <th scope="row"><%- element._id %></th>
+                    <td><%- element.client_id.user_fname + " " + element.client_id.user_lname %> </td>
+                    <td><%- element.lawyer_id.user_fname + " " + element.lawyer_id.user_lname %> </td>
+                    <td><button type="button" class="btn btn-primary btn-sm"
+                            onclick="showModal('<%- element._id %>')">Review</button></td>
+                </tr>
+                <% }) %>
 
             </tbody>
         </table>
 
     </div>
 </div>
-<!--End of Pending Content-->
 <!--Modal content-->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">CASE INFORMATION</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="text-align: justify;">
-                <form>
-                    <label for="uid" class="form-label">Case ID:</label>
-                    <span class="badge bg-dark rounded-pill">050</span><br>
-
-                    <div class="mb-3">
-                        <label class="form-label">Clients Name:</label>
-                        <input type="text" class="form-control" id="client_name" value="Pedro Ibarra" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Requested Lawyer:</label>
-                        <input type="text" class="form-control" id="" value="Yedi Jonson" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Yearly income:</label>
-                        <input type="text" class="form-control" id="" value="50,000-70,000" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="facts_of_the_case" class="form-label">Details of the Problem:</label>
-                        <textarea class="form-control" class="form-control" id="facts_of_the_case" rows="3"
-                            readonly>Palaging binubogbog ng tatay ko ang nanay ko pag lasing siya.</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="adverse_party" class="form-label">Adverse Party:</label>
-                        <input type="text" class="form-control" id="adverse_party" readonly value="Crisostomo Ibarra">
-                    </div>
-                    <div class="mb-3">
-                        <label for="case_objectives" class="form-label">Goal of Legal Consultation:</label>
-                        <textarea class="form-control" class="form-control" id="case_objectives" rows="3"
-                            readonly>Nais ko po sana sampahan ng kaso ang aking tatay.</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="client_questions" class="form-label">Questions to be Addressed:</label>
-                        <textarea class="form-control" class="form-control" id="client_questions" rows="3"
-                            readonly>Ano ang maaari kong isampang kaso sa aking tatay? Ano-ano ang kaylangan ko para makapagsampa ng kaso?</textarea>
-                    </div>
-
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success"><b>Accept Request</b></button>
-                <button type="button" class="btn btn-danger"><b>Deny Request</b></button>
+<form id="verifyCase" method="POST">
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">REVIEW COMPLAINT</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align: justify;">
+                </div>
+                <div class="modal-footer">
+                    <button id="acceptBtn" value="accept" type="submit" class="btn btn-success">Accept</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 
 <!--end of Modal Content-->
+
+<script>
+    function showModal(data) {
+        $("#myModal .modal-body").load(`/admin/pending/${data}`, () => {
+            $("#myModal").modal('show')
+            $("#verifyCase").attr("action", `/admin/pending/${data}?_method=PATCH`)
+        })
+    }
+</script>

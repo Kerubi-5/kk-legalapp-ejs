@@ -51,7 +51,11 @@ const ComplaintSchema = new mongoose.Schema({
     solutions: [{
         type: String,
         ref: "Solution"
-    }]
+    }],
+    is_verified: {
+        type: Boolean,
+        default: false
+    }
 })
 
 module.exports = mongoose.model('Complaint', ComplaintSchema)

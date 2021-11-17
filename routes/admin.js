@@ -80,8 +80,23 @@ router.get("/accounts/:id", isAdmin, async (req, res, next) => {
 })
 
 router.get("/pending", isAdmin, async (req, res, next) => {
-  res.render("./admin/pending", { layout: "./layouts/admin-layout" });
+  const complaintResults = await Complaint.find({ is_verified: false }).populate('client_id').populate('lawyer_id')
+  res.render("./admin/pending", { layout: "./layouts/admin-layout", complaints: complaintResults });
 });
+
+router.route('/pending/:id')
+  .get(isAdmin, async (req, res, next) => {
+    const id = (req.params.id)
+    const complaintResult = await Complaint.findById({ _id: id, is_verified: false }).populate('client_id').populate('lawyer_id')
+    res.render("./admin/pending-view", { layout: false, result: complaintResult })
+  })
+  .patch(isAdmin, async (req, res, next) => {
+    const id = (req.params.id)
+    console.log(id)
+    await Complaint.findByIdAndUpdate({ _id: id }, { is_verified: true })
+    req.flash('success_msg', 'Succesfully verified a complaint')
+    res.redirect('/admin/pending')
+  })
 
 // VERIFY USER
 router.get("/verification/:id", isAdmin, async (req, res, next) => {

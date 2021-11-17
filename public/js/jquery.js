@@ -16,6 +16,5 @@ $(".close-notification").click(function () {
 })
 
 $('ul .dropdown-menu .dropdown-item button').click(function (e) {
-    console.log(e)
     e.stopPropagation();
 });

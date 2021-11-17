@@ -30,7 +30,7 @@ router.get("/dashboard", isClientOrLawyer, async (req, res, next) => {
       user_id: id,
       result: available_lawyers,
       user_doc,
-      complaintResults: complaints,
+      complaintResults: complaints.filter(element => element.is_verified == true),
       notifications,
       todayDate
     });
