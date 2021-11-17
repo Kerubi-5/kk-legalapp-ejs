@@ -93,14 +93,14 @@
                                 request?</b></label>
                         <div class="mb-3 mt-2 d-flex">
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#staticBackdrop">
                                 Accept
                             </button>
                             <form action="/form/complaints/reject?_method=PATCH" method="POST">
                                 <input name="id" type="text" value="<%- result._id %>" hidden>
                                 <input name="case_status" type="text" value="denied" hidden>
-                                <button type="submit" class="btn btn-danger btn-lg">Reject</button>
+                                <button type="submit" class="btn btn-danger">Reject</button>
                             </form>
                         </div>
 
@@ -145,11 +145,11 @@
                     <% } else if (a_type=="prelim meeting" ){ %>
                     <!-- PRELIMINARY MEETING CASE -->
                     <div id="prelimMeeting">
-                        <p>Wait for the meeting schedule</p>
+                        <p>The meeting schedule will be on <strong><time datetime="<%- result.appointment_date %>">"<%- result.appointment_date %>"</time></strong></p>
                         <% if (user_type == "lawyer") { %>
                         <br>
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary btn-lg mb-3" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop">
                             Update Transaction
                         </button>
@@ -204,7 +204,7 @@
 
                         <% if (user_type == "lawyer") { %>
                         <!-- Modal Button -->
-                        <button type="button" class="btn btn-primary btn-lg mb-3" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop">
                             Update Transaction
                         </button>
@@ -248,14 +248,14 @@
                             </div>
                         </form>
                         <% } else if (user_type == "client") { %>
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between mb-3">
                             <form action="/form/complaints/complete?_method=PATCH" method="POST">
                                 <input name="id" value="<%- result._id %>" hidden>
-                                <button type="submit" class="btn btn-success btn-lg m-3"><i
+                                <button type="submit" class="btn btn-success"><i
                                         class="fas fa-thumbs-up"></i> Mark as Resolved</button>
                             </form>
 
-                            <button type="button" class="btn btn-primary m-3 btn-lg" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#rescheduleModal"><i class="far fa-calendar"></i>
                                 Reschedule</button>
                         </div>
