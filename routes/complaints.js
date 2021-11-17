@@ -323,15 +323,6 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
   }
 })
 
-// VIDEO LINK
-router.get("/video", async (req, res, next) => {
-  try {
-    const link = req.query.link
-    res.status(301).redirect(link)
 
-  } catch (err) {
-    next(err)
-  }
-})
 
 module.exports = router;

@@ -94,4 +94,15 @@ router.get('/faq/tagalog', async (req, res, next) => {
   }
 })
 
+// EXTERNAL LINK
+router.get("/external", async (req, res, next) => {
+  try {
+    const link = req.query.link
+    res.status(301).redirect(link)
+
+  } catch (err) {
+    next(err)
+  }
+})
+
 module.exports = router;
