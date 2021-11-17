@@ -11,7 +11,6 @@
                             <%- result.username %>'s profile
                         </h1>
                         <h6>This profile is <%- result.is_public ? "Public" : "Private" %></h6>
-
                         <% if (param_id == user_id) { %>
                         <form action="/users/edit/public/<%- user_id %>?_method=PATCH" method="POST">
                             <button type="submit"
@@ -25,7 +24,6 @@
                                 class="btn btn-success"><%- result.is_available ? "Active" : "Inactive" %></button><small
                                 style="color: red;"> This will let you appear in the clientelle</small>
                         </form>
-
                         <% } %>
                         <% } %>
                     </span>
@@ -36,9 +34,7 @@
         <div class="card">
             <div class="mt-2">
                 <%- include ("./partials/messages"); %>
-
             </div>
-
             <div class="card-body">
                 <div class="col">
                     <% if (result.is_public || param_id == user_id) { %>
@@ -49,8 +45,8 @@
                             </div>
                             <div class="col">
                                 <% if (isAuthenticated && param_id==user_id) { %>
-                                <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Personal
-                                    Information</a>
+                                <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Information <i
+                                        class="fas fa-user-edit"></i></a>
                                 <% } %>
                             </div>
 
