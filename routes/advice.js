@@ -37,6 +37,14 @@ router.get("/", isAuth, async (req, res, next) => {
     }
 });
 
+router.get("/main", isAuth, async (req, res, next) => {
+    const user_id = req.user._id
+    const notifications = await Notification.find({ target: user_id })
+
+    res.render('./advice/advice-sample', { user_id, notifications })
+})
+
+
 router.post("/", isAuth, async (req, res, next) => {
     try {
         const id = (req.user._id)
