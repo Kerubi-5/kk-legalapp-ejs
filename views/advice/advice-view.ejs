@@ -1,4 +1,4 @@
-<div class="container bg-white border shadow">
+<div class="container bg-white border shadow mt-3 mb-3">
     <div class="text-center mt-5">
         <h4>Topic <%- adviceDoc.is_resolved ? "[CLOSED]" : "" %></h4>
     </div>
@@ -76,9 +76,11 @@
         <div class="border m-3">
             <div class="m-3">
                 <h3>Comment</h3>
-                <textarea class="comment-box <%- adviceDoc.is_resolved ? "disabled" : ""%>" name="answer" rows="15" id="comment" style="width: 100%;" ></textarea>
+                <textarea class="comment-box <%- adviceDoc.is_resolved ? "disabled" : ""%>" name="answer" rows="15"
+                    id="comment" style="width: 100%;"></textarea>
                 <div>
-                    <button type="submit" class="btn btn-primary <%- adviceDoc.is_resolved ? "disabled" : ""%>">Comment</button>
+                    <button type="submit"
+                        class="btn btn-primary <%- adviceDoc.is_resolved ? "disabled" : ""%>">Comment</button>
                 </div>
             </div>
         </div>

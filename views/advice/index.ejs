@@ -1,4 +1,4 @@
-<div class="container bg-white">
+<div class="container bg-white mt-3 mb-3">
     <div class="row">
         <!-- Modal -->
         <form action="/advice" method="POST">
@@ -36,7 +36,8 @@
             <!-- FORUM HEADER -->
             <div class="d-flex justify-content-between align-items-center border">
                 <div class="input-group m-3" style="width: 18rem;">
-                    <input id="search_text" type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="search_query">
+                    <input id="search_text" type="text" class="form-control" placeholder=""
+                        aria-label="Example text with button addon" aria-describedby="search_query">
                     <a class="btn btn-outline-secondary" id="search_query">Search</a>
                     <a href="/advice" class="btn btn-outline-secondary">Clear</a>
                 </div>
@@ -52,33 +53,36 @@
                 <div class="m-3" style="max-height: 100%;">
                     <div class="list-group m-3">
                         <h5>FAQ</h5>
-                        <a href="/advice/main" class="list-group-item list-group-item-action d-flex gap-3 py-3 mb-3" aria-current="true">
-                            <img src="/assets/images/company-logo2.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                        <a href="/advice/main" class="list-group-item list-group-item-action d-flex gap-3 py-3 mb-3"
+                            aria-current="true">
+                            <img src="/assets/images/company-logo2.png" alt="twbs" width="32" height="32"
+                                class="rounded-circle flex-shrink-0">
                             <div class="d-flex gap-2 w-100 justify-content-between">
-                              <div>
-                                <h6 class="mb-0">HELP</h6>
-                                <p class="mb-0 opacity-75">How to use the website...</p>
-                              </div>
-                            </div>
-                          </a>
-                          <h5>Discussions</h5>
-                        <% advices.forEach(advice => { %>
-                            <a href="/advice/<%- advice._id %>" class="list-group-item list-group-item-action d-flex gap-3 py-3 mb-3" aria-current="true">
-                                <img src="/assets/images/company-logo2.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
-                                <div class="d-flex gap-2 w-100 justify-content-between">
-                                  <div>
-                                    <h6 class="mb-0"><%- advice.legal_title %> <%- advice.is_resolved ? "[CLOSED]" : "" %> </h6>
-                                    <p class="mb-0 opacity-75"><%- advice.legal_description.slice(0, 20)+"..." %> </p>
-                                  </div>
-                                  <small class="opacity-50 text-nowrap"><%- advice.date_submitted.toLocaleString('en-US') %></small>
+                                <div>
+                                    <h6 class="mb-0">HELP</h6>
+                                    <p class="mb-0 opacity-75">How to use the website...</p>
                                 </div>
-                              </a>
+                            </div>
+                        </a>
+                        <h5>Discussions</h5>
+                        <% advices.forEach(advice => { %>
+                        <a href="/advice/<%- advice._id %>"
+                            class="list-group-item list-group-item-action d-flex gap-3 py-3 mb-3" aria-current="true">
+                            <img src="/assets/images/company-logo2.png" alt="twbs" width="32" height="32"
+                                class="rounded-circle flex-shrink-0">
+                            <div class="d-flex gap-2 w-100 justify-content-between">
+                                <div>
+                                    <h6 class="mb-0"><%- advice.legal_title %>
+                                        <%- advice.is_resolved ? "[CLOSED]" : "" %> </h6>
+                                    <p class="mb-0 opacity-75"><%- advice.legal_description.slice(0, 20)+"..." %> </p>
+                                </div>
+                                <small
+                                    class="opacity-50 text-nowrap"><%- advice.date_submitted.toLocaleString('en-US') %></small>
+                            </div>
+                        </a>
                         <% }) %>
                     </div>
-
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -87,6 +91,6 @@
 <script>
     $('#search_text').keyup(() => {
         value = $("#search_text").val()
-        $("#search_query").attr('href', "/advice?filter="+value) 
+        $("#search_query").attr('href', "/advice?filter=" + value)
     })
 </script>
