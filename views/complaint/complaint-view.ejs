@@ -81,11 +81,18 @@
                 </div>
                 <div class="tab-pane fade" id="pills-meeting" role="tabpanel" aria-labelledby="pills-meeting-tab">
                     <!-- This is the Details Content -->
-                    <h1>Detalyte ng mga napagmeetingan</h1>
-                    <% if (result.meeting_link) { %> 
-                    Zoom meeting: <a href="/external?link=<%- result.meeting_link %>" target="_blank"><%- result.meeting_link %></a>
+                    <h1>Detalye ng mga napagmeetingan</h1>
                     <hr>
-                    <% } %> 
+                    <% if (result.meeting_link) { %>
+                    <p>Zoom meeting: <a href="/external?link=<%- result.meeting_link %>"
+                            target="_blank"><%- result.meeting_link %></a></p>
+                    <% if (locals.result.appointment_date){ %>
+                    <p>The meeting schedule is <strong><time
+                                datetime="<%- result.appointment_date %>">"<%- result.appointment_date %>"</time></strong>
+                    </p>
+                    <% } %>
+                    <hr>
+                    <% } %>
                     <!-- PENDING CASE -->
                     <% if (user_type=="lawyer" && a_type=="pending" ) { %>
                     <div id="pendingCase">
@@ -145,7 +152,6 @@
                     <% } else if (a_type=="prelim meeting" ){ %>
                     <!-- PRELIMINARY MEETING CASE -->
                     <div id="prelimMeeting">
-                        <p>The meeting schedule will be on <strong><time datetime="<%- result.appointment_date %>">"<%- result.appointment_date %>"</time></strong></p>
                         <% if (user_type == "lawyer") { %>
                         <br>
                         <!-- Button trigger modal -->
@@ -198,10 +204,7 @@
                     <% } else if (a_type == "in progress") { %>
                     <!-- CASE IN PROGRESS -->
                     <div id="inProgress">
-                        <h1>Detalye ng napagmeetingan</h1>
-                        <hr>
                         <%- include("../partials/complaint-solutions") %>
-
                         <% if (user_type == "lawyer") { %>
                         <!-- Modal Button -->
                         <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
@@ -251,8 +254,8 @@
                         <div class="d-flex justify-content-between mb-3">
                             <form action="/form/complaints/complete?_method=PATCH" method="POST">
                                 <input name="id" value="<%- result._id %>" hidden>
-                                <button type="submit" class="btn btn-success"><i
-                                        class="fas fa-thumbs-up"></i> Mark as Resolved</button>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-thumbs-up"></i> Mark as
+                                    Resolved</button>
                             </form>
 
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
