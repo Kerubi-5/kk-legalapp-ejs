@@ -25,7 +25,8 @@
                     <div id="complaintForm">
                         <div class="d-flex justify-content-between align-items-center">
                             <h1>Impormasyon tungkol sa Kaso</h1>
-                            <button id="editButton" onclick="showModal('<%- result._id %>')" value="<%- result._id %>" class="btn btn-primary">EDIT</button>
+                            <button id="editButton" onclick="showModal('<%- result._id %>')" value="<%- result._id %>"
+                                class="btn btn-primary">EDIT</button>
                         </div>
                         <hr>
                         <div class="mb-3">
@@ -36,13 +37,11 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Maikling deskripsyon ng legal na problema</label>
-                            <input type="text" class="form-control" value="<%- result.legal_title %>"
-                                readonly>
+                            <input type="text" class="form-control" value="<%- result.legal_title %>" readonly>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Pangalan ng Kliyente</label>
-                            <input type="text" class="form-control"
-                                value="<%- result.client_id.user_fname %>" readonly>
+                            <input type="text" class="form-control" value="<%- result.client_id.user_fname %>" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="case_facts" class="form-label">Kwento/Detalye
@@ -52,8 +51,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="adverse_party" class="form-label">Kalabang Partido</label>
-                            <input type="text" class="form-control" readonly
-                                value="<%- result.adverse_party %>">
+                            <input type="text" class="form-control" readonly value="<%- result.adverse_party %>">
                         </div>
                         <div class="mb-3">
                             <label for="case_objectives" class="form-label">Mga layunin na
@@ -63,8 +61,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
-                            <input type="text" class="form-control" readonly
-                                value="<%- result.lawyer_id.user_fname %>">
+                            <input type="text" class="form-control" readonly value="<%- result.lawyer_id.user_fname %>">
                         </div>
                         <div class="mb-5">
                             <label for="client_questions" class="form-label">Mga
@@ -74,18 +71,19 @@
                         </div>
                         <caption>Mga dokumentong makakatulong sa kaso</caption>
                         <% for( let index = 0; index < result.case_files.length; index++ ) { %>
-                            <div class="mb-3">
-                                <embed src="/uploads/evidences/<%- result.case_files[index] %>" type="application/pdf" width="100%"
-                                    height="600px" />
-                            </div>
-                        <% } %> 
+                        <div class="mb-3">
+                            <embed src="/uploads/evidences/<%- result.case_files[index] %>" type="application/pdf"
+                                width="100%" height="600px" />
+                        </div>
+                        <% } %>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="pills-meeting" role="tabpanel" aria-labelledby="pills-meeting-tab">
                     <!-- This is the Details Content -->
-                    <div>
-                        <!-- THIS IS THE PENDING CASE -->
-                        <% if (user_type=="lawyer" && a_type=="pending" ) { %>
+
+                    <!-- THIS IS THE PENDING CASE -->
+                    <% if (user_type=="lawyer" && a_type=="pending" ) { %>
+                    <div id="pendingCase">
                         <hr>
                         <label for="buttons" class="form-label" style="font-size:x-large"><b>Tanggapin ang
                                 request?</b></label>
@@ -135,9 +133,10 @@
                                 </div>
                             </div>
                         </form>
-
-                        <!-- PRELIMINARY MEETING CASE -->
-                        <% } else if (a_type=="prelim meeting" ){ %>
+                    </div>
+                    <% } else if (a_type=="prelim meeting" ){ %>
+                    <!-- PRELIMINARY MEETING CASE -->
+                    <div id="prelimMeeting">
                         <p>Wait for the meeting schedule</p>
                         <% if (user_type == "lawyer") { %>
                         <p>Click update transaction to enter the first meeting details</p>
@@ -186,9 +185,10 @@
                             </div>
                         </form>
                         <% } %>
-
-                        <!-- CASE IN PROGRESS -->
-                        <% } else if (a_type == "in progress") { %>
+                    </div>
+                    <% } else if (a_type == "in progress") { %>
+                    <!-- CASE IN PROGRESS -->
+                    <div id="inProgress">
                         <h1>Detalye ng napagmeetingan</h1>
                         <hr>
                         <%- include("../partials/complaint-solutions") %>
@@ -239,16 +239,17 @@
                             </div>
                         </form>
                         <% } else if (user_type == "client") { %>
-                        <form action="/form/complaints/complete?_method=PATCH" method="POST">
-                            <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between">
+                            <form action="/form/complaints/complete?_method=PATCH" method="POST">
                                 <input name="id" value="<%- result._id %>" hidden>
                                 <button type="submit" class="btn btn-success btn-lg m-3"><i
                                         class="fas fa-thumbs-up"></i> Mark as Resolved</button>
-                                <button type="button" class="btn btn-primary m-3 btn-lg" data-bs-toggle="modal"
-                                    data-bs-target="#rescheduleModal"><i class="far fa-calendar"></i>
-                                    Reschedule</button>
-                            </div>
-                        </form>
+                            </form>
+
+                            <button type="button" class="btn btn-primary m-3 btn-lg" data-bs-toggle="modal"
+                                data-bs-target="#rescheduleModal"><i class="far fa-calendar"></i>
+                                Reschedule</button>
+                        </div>
 
                         <form action="">
                             <div class="modal fade" id="rescheduleModal" tabindex="-1"
@@ -273,19 +274,25 @@
                             </div>
                         </form>
                         <% } %>
-                        <!-- COMPLETED CASE -->
-                        <% } else if (a_type == "completed") { %>
+                    </div>
+                    <% } else if (a_type == "completed") { %>
+                    <!-- COMPLETED CASE -->
+                    <div id="completedCase">
                         <h1>Case Completed [CLOSED]</h1>
                         <hr>
                         <%- include("../partials/complaint-solutions") %>
-                        <% } else { %>
-                        <h3 class="m-5">No data recorded yet</h3>
-                        <% } %>
                     </div>
+                    <!-- NO DATA RECORDED -->
+                    <% } else { %>
+                    <div id="noData">
+                        <h3 class="m-5">No data recorded yet</h3>
+                    </div>
+                    <% } %>
                 </div>
             </div>
             <!-- Modal -->
-            <form action="/form/complaints/edit/<%- result._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
+            <form action="/form/complaints/edit/<%- result._id %>?_method=PATCH" method="POST"
+                enctype="multipart/form-data">
                 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -312,7 +319,8 @@
                                     <div class="mb-3">
                                         <label for="case_facts" class="form-label">Kwento/Detalye
                                             ng Legal na Problema</label>
-                                        <textarea name="case_facts" class="form-control" id="case_facts" rows="3"></textarea>
+                                        <textarea name="case_facts" class="form-control" id="case_facts"
+                                            rows="3"></textarea>
                                     </div>
                                     <div class="mb-3">
                                         <label for="adverse_party" class="form-label">Kalabang Partido</label>
@@ -321,7 +329,8 @@
                                     <div class="mb-3">
                                         <label for="case_objectives" class="form-label">Mga layunin na
                                             gustong makamit sa legal na problema</label>
-                                        <textarea name="case_objectives" class="form-control" id="case_objectives" rows="3"></textarea>
+                                        <textarea name="case_objectives" class="form-control" id="case_objectives"
+                                            rows="3"></textarea>
                                     </div>
                                     <div class="mb-3">
                                         <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
@@ -330,11 +339,14 @@
                                     <div class="mb-3">
                                         <label for="client_questions" class="form-label">Mga
                                             katanungan sa abogado</label>
-                                        <textarea name="client_questions" class="form-control" id="client_questions" rows="3"></textarea>
+                                        <textarea name="client_questions" class="form-control" id="client_questions"
+                                            rows="3"></textarea>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="case_files" class="form-label">Mga dokumentong makakatulong sa kaso</label>
-                                        <input name="case_files" id="case_files" class="form-control" type="file" multiple="multiple" accept="application/pdf">
+                                        <label for="case_files" class="form-label">Mga dokumentong makakatulong sa
+                                            kaso</label>
+                                        <input name="case_files" id="case_files" class="form-control" type="file"
+                                            multiple="multiple" accept="application/pdf">
                                     </div>
                                     <div id="filename_append">
                                         <caption>Selected files: </caption>
@@ -351,7 +363,6 @@
                     </div>
                 </div>
             </form>
-
         </section>
     </div>
 </div>
@@ -371,7 +382,7 @@
                 $("#editModal .modal-body #adverse_party").val(data.adverse_party)
                 $("#editModal .modal-body #case_objectives").val(data.case_objectives)
                 $("#editModal .modal-body #lawyer_details").val(data.lawyer_id.user_fname)
-                $("#editModal .modal-body #client_questions").val(data.client_questions)           
+                $("#editModal .modal-body #client_questions").val(data.client_questions)
                 $("#editModal").modal('show');
             }
         })
