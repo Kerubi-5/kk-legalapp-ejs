@@ -5,7 +5,7 @@ const router = express.Router();
 const User = require("../models/User");
 const Complaint = require("../models/Complaint");
 const Notification = require("../models/Notification");
-const Solution = require("../models/Solution")
+const Solution = require("../models/Solution");
 
 // Auth types
 const isClient = require("./auth").isClient;
@@ -13,16 +13,16 @@ const isLawyer = require("./auth").isLawyer;
 const isAuth = require("./auth").isAuth;
 
 // Node Mailer
-const sendMail = require("../utils/transporter")
+const sendMail = require("../utils/transporter");
 
 // Node FS
-const fs = require('fs')
+const fs = require("fs");
 
 // COMPLAINT POST SUBMIT CLIENT SIDE
 router.post("/consultation", isClient, async (req, res, next) => {
   try {
-    const client_id = (req.user._id);
-    const lawyer_id = (req.body.lawyer_id);
+    const client_id = req.user._id;
+    const lawyer_id = req.body.lawyer_id;
     const {
       legal_title,
       case_facts,
@@ -78,14 +78,20 @@ router.post("/consultation", isClient, async (req, res, next) => {
       newComplaint.save();
 
       // Find User Client and push Complaint
-      const client_result = await User.findOne({ _id: client_id, user_type: "client" })
-      client_result.complaints.push(newComplaint)
-      await client_result.save()
+      const client_result = await User.findOne({
+        _id: client_id,
+        user_type: "client",
+      });
+      client_result.complaints.push(newComplaint);
+      await client_result.save();
 
       // Find User Lawyer and push Complaint
-      const lawyer_result = await User.findOne({ _id: lawyer_id, user_type: "lawyer" })
-      lawyer_result.complaints.push(newComplaint)
-      await lawyer_result.save()
+      const lawyer_result = await User.findOne({
+        _id: lawyer_id,
+        user_type: "lawyer",
+      });
+      lawyer_result.complaints.push(newComplaint);
+      await lawyer_result.save();
 
       const pushNotify = new Notification({
         complaint_id: newComplaint._id,
@@ -99,15 +105,15 @@ router.post("/consultation", isClient, async (req, res, next) => {
       res.redirect("/dashboard");
     }
   } catch (err) {
-    next(err)
+    next(err);
   }
 });
 
 // COMPLAINT VIEW TRANSACTION ONGOING
 router.get("/complaints/:id", isAuth, (req, res, next) => {
   try {
-    const user_id = (req.user._id);
-    const complaint_id = (req.params.id);
+    const user_id = req.user._id;
+    const complaint_id = req.params.id;
 
     Complaint.findOne({ _id: complaint_id })
       .populate("client_id")
@@ -132,111 +138,151 @@ router.get("/complaints/:id", isAuth, (req, res, next) => {
             user_type: user_type,
             a_type: result.case_status,
             notifications,
-            solutions: result.solutions
+            solutions: result.solutions,
           });
-        else throw new Error('You do not have authority to view this complaint')
+        else
+          throw new Error("You do not have authority to view this complaint");
       });
   } catch (err) {
-    next(err)
+    next(err);
   }
 });
 
 // COMPLAINT FORM EDIT
-router.route("/complaints/edit/:id")
+router
+  .route("/complaints/edit/:id")
   .get(async (req, res, next) => {
     try {
-
     } catch (err) {
-      next(err)
+      next(err);
     }
     // const user_id = req.user._id
     const complaint_id = req.params.id;
-    const result = await Complaint.findById({ _id: complaint_id }).populate('client_id').populate('lawyer_id')
+    const result = await Complaint.findById({ _id: complaint_id })
+      .populate("client_id")
+      .populate("lawyer_id");
     // const notifications = await Notification.find({ target: user_id })
     // res.render('./complaint/complaint-edit', { user_id, result, notifications })
-    res.json(result)
+    res.json(result);
   })
   .patch(async (req, res, next) => {
     try {
-      const id = req.params.id
-      const files = req.files ? req.files.case_files : ""
+      const id = req.params.id;
+      const files = req.files ? req.files.case_files : "";
       const {
         legal_title,
         case_facts,
         adverse_party,
         case_objectives,
-        client_questions
-      } = req.body
+        client_questions,
+      } = req.body;
 
-      let case_files = []
-      let errors = []
+      let case_files = [];
+      let errors = [];
 
-      if (!legal_title || !case_facts || !adverse_party || !case_objectives || !client_questions || !files) errors.push("There are missing fields")
+      if (
+        !legal_title ||
+        !case_facts ||
+        !adverse_party ||
+        !case_objectives ||
+        !client_questions ||
+        !files
+      )
+        errors.push("There are missing fields");
 
-      if (errors.length > 0) req.flash('error_msg', 'There are some missing fields')
+      if (errors.length > 0)
+        req.flash("error_msg", "There are some missing fields");
       else {
-        const complaintResult = await Complaint.findById(id)
-        const fileNames = complaintResult.case_files
+        const complaintResult = await Complaint.findById(id);
+        const fileNames = complaintResult.case_files;
         // Uploading File
         if (Array.isArray(files)) {
           for (let index = 0; index < files.length; index++) {
-            let case_file = Date.now() + "-" + Math.round(Math.random() * 1e9) + files[index].name;
-            case_files.push(case_file)
+            let case_file =
+              Date.now() +
+              "-" +
+              Math.round(Math.random() * 1e9) +
+              files[index].name;
+            case_files.push(case_file);
             files[index].mv("./public/uploads/evidences/" + case_file);
           }
         } else {
-          let case_file = Date.now() + "-" + Math.round(Math.random() * 1e9) + files.name;
-          case_files.push(case_file)
-          files.mv("./public/uploads/evidences/" + case_file)
+          let case_file =
+            Date.now() + "-" + Math.round(Math.random() * 1e9) + files.name;
+          case_files.push(case_file);
+          files.mv("./public/uploads/evidences/" + case_file);
         }
 
-        // DELETING FILE
+        const path = "./public/uploads/evidences/";
+
         if (fileNames) {
-          fileNames.forEach(element => {
-            fs.unlink(`./public/uploads/evidences/${element}`, (err) => {
-              if (err) {
-                next(err)
-              }
-            })
+          fileNames.forEach((element) => {
+            if (fs.existsSync(path + element)) {
+              fs.unlink(path + element, (err) => {
+                if (err) {
+                  next(err);
+                }
+              });
+            }
           });
         }
 
-        await Complaint.findByIdAndUpdate({ _id: id }, { legal_title: legal_title, case_facts: case_facts, adverse_party: adverse_party, case_objectives: case_objectives, client_questions: client_questions, case_files: case_files })
+        await Complaint.findByIdAndUpdate(
+          { _id: id },
+          {
+            legal_title: legal_title,
+            case_facts: case_facts,
+            adverse_party: adverse_party,
+            case_objectives: case_objectives,
+            client_questions: client_questions,
+            case_files: case_files,
+          }
+        );
         // SET NEW ARRAY FILES
-        await Complaint.findByIdAndUpdate({ _id: id }, { $set: { case_files: case_files } })
-        req.flash('success_msg', 'Succesfully edited complaint form')
+        await Complaint.findByIdAndUpdate(
+          { _id: id },
+          { $set: { case_files: case_files } }
+        );
+        req.flash("success_msg", "Succesfully edited complaint form");
       }
-      res.redirect('/form/complaints/' + id)
+      res.redirect("/form/complaints/" + id);
     } catch (err) {
-      next(err)
+      next(err);
     }
-  })
+  });
 
 // COMPLAINT ACCEPT LAWYER SIDE
 router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
   try {
     const filter = req.body.id;
     const { case_status, appointment_date, meeting_link } = req.body;
-    let error = false
+    let error = false;
 
     // DATE VARIABLES FOR COMPARISON
-    const myDate = new Date(appointment_date)
-    const todayDate = new Date(Date.now())
+    const myDate = new Date(appointment_date);
+    const todayDate = new Date(Date.now());
 
     if (myDate.getTime() >= todayDate) {
-
       const complaintResult = await Complaint.findOneAndUpdate(
         { _id: filter },
-        { case_status: case_status, appointment_date: appointment_date, meeting_link: meeting_link }
+        {
+          case_status: case_status,
+          appointment_date: appointment_date,
+          meeting_link: meeting_link,
+        }
       );
 
-      const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
-      const clientDeets = await User.findOne({ _id: complaintResult.client_id });
+      const lawyerDeets = await User.findOne({
+        _id: complaintResult.lawyer_id,
+      });
+      const clientDeets = await User.findOne({
+        _id: complaintResult.client_id,
+      });
 
-      const link = "http://" + req.get('host')
-      const title = `Your consultation request ${complaintResult.legal_title} has been approved!`
-      const msg = `<h1>Hello ${clientDeets.user_fname},</h1><br> Your consultation request with lawyer ${lawyerDeets.user_fname} has been approved.<br><a href=${link}>Click here to visit website</a>`
-      sendMail(clientDeets.email, title, msg)
+      const link = "http://" + req.get("host");
+      const title = `Your consultation request ${complaintResult.legal_title} has been approved!`;
+      const msg = `<h1>Hello ${clientDeets.user_fname},</h1><br> Your consultation request with lawyer ${lawyerDeets.user_fname} has been approved.<br><a href=${link}>Click here to visit website</a>`;
+      sendMail(clientDeets.email, title, msg);
 
       const pushNotify = new Notification({
         complaint_id: complaintResult._id,
@@ -247,21 +293,22 @@ router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
 
       await pushNotify.save();
     } else {
-      error = true
-      req.flash('error_msg', 'Date should be now or later')
+      error = true;
+      req.flash("error_msg", "Date should be now or later");
     }
 
-    if (!error) req.flash("success_msg", `Succesfully accepted case with id: ${filter}`);
+    if (!error)
+      req.flash("success_msg", `Succesfully accepted case with id: ${filter}`);
     res.redirect("/form/complaints/" + filter);
   } catch (err) {
-    next(err)
+    next(err);
   }
 });
 
 router.patch("/complaints/reject", isLawyer, async (req, res, next) => {
   try {
-    const filter = req.body.id
-    const case_status = req.body.case_status
+    const filter = req.body.id;
+    const case_status = req.body.case_status;
     complaintResult = await Complaint.findOneAndUpdate(
       { _id: filter },
       { case_status: case_status }
@@ -269,40 +316,43 @@ router.patch("/complaints/reject", isLawyer, async (req, res, next) => {
 
     res.redirect("/form/complaints/" + filter);
   } catch (err) {
-    next(err)
+    next(err);
   }
-})
+});
 
 // CLIENT SIDE COMPLETE A COMPLAINT
 router.patch("/complaints/complete", isAuth, async (req, res, next) => {
   try {
-    const id = (req.body.id)
-    await Complaint.findByIdAndUpdate({ _id: id }, { case_status: "completed" })
+    const id = req.body.id;
+    await Complaint.findByIdAndUpdate(
+      { _id: id },
+      { case_status: "completed" }
+    );
 
-    res.redirect('/form/complaints/' + req.body.id)
+    res.redirect("/form/complaints/" + req.body.id);
   } catch (err) {
-    next(err)
+    next(err);
   }
-})
+});
 
 // LAWYER SIDE COMPLAINT UPDATE AND ADD NEW SOLUTION
 router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
   try {
-    const id = (req.params.id);
-    const { summary, recommendations, video_link } = req.body
+    const id = req.params.id;
+    const { summary, recommendations, video_link } = req.body;
 
     const newSolution = new Solution({
       complaint_id: id,
       summary: summary,
       recommendations: recommendations,
-      video_link: video_link
-    })
+      video_link: video_link,
+    });
 
     // Updating Complaint and Inserting new Solution
-    const complaintResult = await Complaint.findOne({ _id: id })
-    complaintResult.case_status = "in progress"
-    complaintResult.solutions.push(newSolution)
-    await complaintResult.save()
+    const complaintResult = await Complaint.findOne({ _id: id });
+    complaintResult.case_status = "in progress";
+    complaintResult.solutions.push(newSolution);
+    await complaintResult.save();
 
     const lawyerDeets = await User.findOne({ _id: complaintResult.lawyer_id });
 
@@ -313,16 +363,14 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
       target: complaintResult.client_id,
     });
 
-    await newSolution.save()
-    await pushNotify.save()
+    await newSolution.save();
+    await pushNotify.save();
 
     req.flash("success_msg", `Succesfully updated case with id: ${id}`);
     res.redirect("/form/complaints/" + id);
   } catch (err) {
-    next(err)
+    next(err);
   }
-})
-
-
+});
 
 module.exports = router;
