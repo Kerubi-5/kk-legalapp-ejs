@@ -114,7 +114,6 @@ router
   })
   .patch(isAdmin, async (req, res, next) => {
     const id = req.params.id;
-    console.log(id);
     await Complaint.findByIdAndUpdate({ _id: id }, { is_verified: true });
     req.flash("success_msg", "Succesfully verified a complaint");
     res.redirect("/admin/pending");
