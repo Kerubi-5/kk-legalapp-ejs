@@ -350,7 +350,7 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
 
     // Updating Complaint and Inserting new Solution
     const complaintResult = await Complaint.findOne({ _id: id });
-    complaintResult.case_status = "in progress";
+    complaintResult.case_status = "ongoing";
     complaintResult.solutions.push(newSolution);
     await complaintResult.save();
 
