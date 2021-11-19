@@ -9,6 +9,9 @@
                     <span style="position: absolute; left: 350px; top: 50px">
                         <h1>
                             <%- result.username %>'s profile
+                            <% if (locals.result.availability.start_date || locals.result.availability.end_date) { %>
+                                <%- Date.now() >= result.availability.start_date && Date.now() <= result.availability.end_date ? '(Available) <i class="fas fa-check"></i>' : '(Away) <i class="fas fa-times"></i>' %> 
+                            <% } %>
                         </h1>
                         <h6>This profile is <%- result.is_public ? "Public" : "Private" %></h6>
                         <% if (param_id == user_id) { %>
