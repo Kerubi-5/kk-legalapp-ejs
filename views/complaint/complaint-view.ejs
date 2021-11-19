@@ -26,7 +26,7 @@
                     <div id="complaintForm">
                         <div class="d-flex justify-content-between align-items-center">
                             <h1>Impormasyon tungkol sa Kaso</h1>
-                            <button id="editButton" onclick="showModal('<%- result._id %>')" value="<%- result._id %>"
+                            <button id="editButton" onclick="complaintModal('<%- result._id %>')" value="<%- result._id %>"
                                 class="btn btn-primary">EDIT</button>
                         </div>
                         <hr>
@@ -164,7 +164,7 @@
                             data-bs-target="#staticBackdrop">
                             Update Transaction
                         </button>
-                        <small style="color: red;">Click update transaction to enter the first meeting details</small>
+                        <small style="color: red;">Click update transaction to enter solution</small>
 
                         <!-- Modal -->
                         <form action="/form/complaints/ongoing/<%- result._id %>" method="POST">
@@ -211,18 +211,18 @@
                     <div id="ongoingCase">
                         <% if (user_type == "lawyer") { %>
                         <!-- Modal Button -->
-                        <div class="d-flex justify-content-between mb-3">
+                        <!-- <div class="d-flex justify-content-between mb-3">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#staticBackdrop">
                                 Update Transaction
                             </button>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#setScheduleModal">Set Schedule</button>
-                        </div>
+                        </div> -->
                     </div>
 
                     <!-- Modal SUBMIT SOLUTION -->
-                    <form action="/form/complaints/ongoing/<%- result._id %>" method="POST">
+                    <!-- <form action="/form/complaints/ongoing/<%- // result._id %>" method="POST">
                         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
                             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -257,10 +257,10 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
 
                     <!-- Modal SET SCHEDULE -->
-                    <form action="/form/complaints/pending?_method=PATCH" method="POST">
+                    <!-- <form action="/form/complaints/pending?_method=PATCH" method="POST">
                         <div class="modal fade" id="setScheduleModal" tabindex="-1"
                             aria-labelledby="setScheduleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -295,7 +295,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
                     <% } else if (user_type == "client") { %>
                     <div class="d-flex justify-content-between mb-3">
                         <form action="/form/complaints/complete?_method=PATCH" method="POST">
@@ -315,17 +315,17 @@
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="rescheduleModalLabel">Modal title</h5>
+                                        <h5 class="modal-title" id="rescheduleModalLabel">Reschedule</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        ...
+                                        Would you like to notify lawyer for reschedule?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                            data-bs-dismiss="modal">No</button>
+                                        <button type="button" class="btn btn-primary">Yes</button>
                                     </div>
                                 </div>
                             </div>
@@ -346,7 +346,7 @@
                 <% } %>
             </div>
     </div>
-    <!-- Modal -->
+    <!-- COMPLAINT Modal -->
     <form action="/form/complaints/edit/<%- result._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -421,8 +421,9 @@
 
 <!-- JQuery Script for Complaint Submission -->
 <script>
-    function showModal(id) {
-        let url = `http://localhost:3000/form/complaints/edit/${id}`
+    function complaintModal(id) {
+        var host = window.location.protocol + "//" + window.location.host;
+        let url = host + "/form/complaints/edit/" + id
         $.ajax({
             type: "GET",
             url: url,
@@ -449,4 +450,22 @@
         }
         $("#file_list").html(file_item)
     });
+
+    function solutionModal(id) {
+        var host = window.location.protocol + "//" + window.location.host;
+        let url = host + "/form/solution/edit/" + id
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            success: (data) => {
+                $("#solutionForm").attr('action', `/form/solution/edit/${data._id}?_method=PATCH`)
+                $("#solutionModal .modal-body #summary").val(data.summary)
+                $("#solutionModal .modal-body #recommendations").val(data.recommendations)
+                $("#solutionModal .modal-body #video_link").val(data.video_link)
+                $("#solutionModal").modal('show')
+            }
+        })
+
+    }
 </script>

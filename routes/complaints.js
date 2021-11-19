@@ -150,20 +150,20 @@ router.get("/complaints/:id", isAuth, (req, res, next) => {
 
 // COMPLAINT FORM EDIT
 router
-  .route("/complaints/edit/:id")
+  .route("/complaints/edit/:id", isAuth)
   .get(async (req, res, next) => {
     try {
+      // const user_id = req.user._id
+      const complaint_id = req.params.id;
+      const result = await Complaint.findById({ _id: complaint_id })
+        .populate("client_id")
+        .populate("lawyer_id");
+      // const notifications = await Notification.find({ target: user_id })
+      // res.render('./complaint/complaint-edit', { user_id, result, notifications })
+      res.json(result);
     } catch (err) {
       next(err);
     }
-    // const user_id = req.user._id
-    const complaint_id = req.params.id;
-    const result = await Complaint.findById({ _id: complaint_id })
-      .populate("client_id")
-      .populate("lawyer_id");
-    // const notifications = await Notification.find({ target: user_id })
-    // res.render('./complaint/complaint-edit', { user_id, result, notifications })
-    res.json(result);
   })
   .patch(async (req, res, next) => {
     try {
@@ -250,6 +250,34 @@ router
       next(err);
     }
   });
+
+// SOLUTION EDIT
+router
+  .route("/solution/edit/:id", isLawyer)
+  .get(async (req, res, next) => {
+    try {
+      const solution_id = req.params.id
+      const result = await Solution.findById({ _id: solution_id })
+      res.json(result)
+    } catch (err) {
+      next(err)
+    }
+  })
+  .patch(async (req, res, next) => {
+    try {
+      const solution_id = req.params.id
+      const { summary, recommendations, video_link } = req.body
+
+      console.log(solution_id)
+
+      const result = await Solution.findByIdAndUpdate({ _id: solution_id }, { summary, recommendations, video_link })
+
+      req.flash('success_msg', 'Succesfully edited a solution with id:' + solution_id)
+      res.redirect("/form/complaints/" + result.complaint_id)
+    } catch (err) {
+      next(err)
+    }
+  })
 
 // COMPLAINT ACCEPT LAWYER SIDE
 router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
