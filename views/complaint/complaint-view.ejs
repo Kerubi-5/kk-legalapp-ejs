@@ -90,8 +90,11 @@
                     <p>The meeting schedule is <strong><time
                                 datetime="<%- result.appointment_date %>">"<%- result.appointment_date %>"</time></strong>
                     </p>
-                    <% } %>
                     <hr>
+                    <% } %>
+                    <% if (locals.solutions) { %> 
+                    <%- include("../partials/complaint-solutions") %>
+                    <% } %> 
                     <% } %>
                     <!-- PENDING CASE -->
                     <% if (user_type=="lawyer" && a_type=="pending" ) { %>
@@ -125,7 +128,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <input name="id" type="text" value="<%- result._id %>" hidden>
-                                            <input name="case_status" type="text" value="prelim meeting" hidden>
+                                            <input name="case_status" type="text" value="booked" hidden>
                                             <label for="appointment_date">Set appointment date</label>
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text" id="appointment_date"><i
@@ -149,7 +152,7 @@
                             </div>
                         </form>
                     </div>
-                    <% } else if (a_type=="prelim meeting" ){ %>
+                    <% } else if (a_type=="booked"){ %>
                     <!-- PRELIMINARY MEETING CASE -->
                     <div id="prelimMeeting">
                         <% if (user_type == "lawyer") { %>
@@ -204,179 +207,213 @@
                     <% } else if (a_type == "in progress") { %>
                     <!-- CASE IN PROGRESS -->
                     <div id="inProgress">
-                        <%- include("../partials/complaint-solutions") %>
                         <% if (user_type == "lawyer") { %>
                         <!-- Modal Button -->
-                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop">
-                            Update Transaction
-                        </button>
-
-                        <!-- Modal -->
-                        <form action="/form/complaints/ongoing/<%- result._id %>" method="POST">
-                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
-                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="staticBackdropLabel">Confirm Accept</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3">
-                                                <label class="form-label">Buod ng mga napagusapan</label>
-                                                <textarea name="summary" type="text" class="form-control" id="summary"
-                                                    required></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Mga rekomendasyon para sa kliyente</label>
-                                                <textarea name="recommendations" type="text" class="form-control"
-                                                    id="recommendations" required></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Video link ng meeting</label>
-                                                <textarea name="video_link" type="text" class="form-control"
-                                                    id="video_link" required></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Accept</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <% } else if (user_type == "client") { %>
                         <div class="d-flex justify-content-between mb-3">
-                            <form action="/form/complaints/complete?_method=PATCH" method="POST">
-                                <input name="id" value="<%- result._id %>" hidden>
-                                <button type="submit" class="btn btn-success"><i class="fas fa-thumbs-up"></i> Mark as
-                                    Resolved</button>
-                            </form>
-
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#rescheduleModal"><i class="far fa-calendar"></i>
-                                Reschedule</button>
+                                data-bs-target="#staticBackdrop">
+                                Update Transaction
+                            </button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#setScheduleModal">Set Schedule</button>
                         </div>
+                    </div>
 
-                        <form action="">
-                            <div class="modal fade" id="rescheduleModal" tabindex="-1"
-                                aria-labelledby="rescheduleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="rescheduleModalLabel">Modal title</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+                    <!-- Modal SUBMIT SOLUTION -->
+                    <form action="/form/complaints/ongoing/<%- result._id %>" method="POST">
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Confirm Accept</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Buod ng mga napagusapan</label>
+                                            <textarea name="summary" type="text" class="form-control" id="summary"
+                                                required></textarea>
                                         </div>
-                                        <div class="modal-body">
-                                            ...
+                                        <div class="mb-3">
+                                            <label class="form-label">Mga rekomendasyon para sa kliyente</label>
+                                            <textarea name="recommendations" type="text" class="form-control"
+                                                id="recommendations" required></textarea>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        <div class="mb-3">
+                                            <label class="form-label">Video link ng meeting</label>
+                                            <textarea name="video_link" type="text" class="form-control" id="video_link"
+                                                required></textarea>
                                         </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Accept</button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </form>
+
+                    <!-- Modal SET SCHEDULE -->
+                    <form action="/form/complaints/pending?_method=PATCH" method="POST">
+                        <div class="modal fade" id="setScheduleModal" tabindex="-1"
+                            aria-labelledby="setScheduleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="setScheduleModalLabel">Reschedule</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input name="id" type="text" value="<%- result._id %>" hidden>
+                                        <input name="case_status" type="text" value="booked" hidden>
+                                        <label for="appointment_date">Set appointment date</label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="appointment_date"><i
+                                                    class="fas fa-calendar"></i></span>
+                                            <input name="appointment_date" type="datetime-local" class="form-control"
+                                                aria-label="Appointment Date" aria-describedby="Appointment Date"
+                                                required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Zoom link na gagamitin</label>
+                                            <input name="meeting_link" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <% } else if (user_type == "client") { %>
+                    <div class="d-flex justify-content-between mb-3">
+                        <form action="/form/complaints/complete?_method=PATCH" method="POST">
+                            <input name="id" value="<%- result._id %>" hidden>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-thumbs-up"></i> Mark as
+                                Resolved</button>
                         </form>
-                        <% } %>
+
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#rescheduleModal"><i class="far fa-calendar"></i>
+                            Reschedule</button>
                     </div>
-                    <% } else if (a_type == "completed") { %>
-                    <!-- COMPLETED CASE -->
-                    <div id="completedCase">
-                        <h1>Case Completed [CLOSED]</h1>
-                        <hr>
-                        <%- include("../partials/complaint-solutions") %>
-                    </div>
-                    <!-- NO DATA RECORDED -->
-                    <% } else { %>
-                    <div id="noData">
-                        <h3 class="m-5">No data recorded yet</h3>
-                    </div>
+
+                    <form action="">
+                        <div class="modal fade" id="rescheduleModal" tabindex="-1"
+                            aria-labelledby="rescheduleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="rescheduleModalLabel">Modal title</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                     <% } %>
                 </div>
+                <% } else if (a_type == "completed") { %>
+                <!-- COMPLETED CASE -->
+                <div id="completedCase">
+                    <h1>Case Completed [CLOSED]</h1>
+                </div>
+                <!-- NO DATA RECORDED -->
+                <% } else { %>
+                <div id="noData">
+                    <h3 class="m-5">No data recorded yet</h3>
+                </div>
+                <% } %>
             </div>
-            <!-- Modal -->
-            <form action="/form/complaints/edit/<%- result._id %>?_method=PATCH" method="POST"
-                enctype="multipart/form-data">
-                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editModalLabel">Impormasyon tungkol sa Kaso</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+    </div>
+    <!-- Modal -->
+    <form action="/form/complaints/edit/<%- result._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Impormasyon tungkol sa Kaso</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="complaintForm">
+                            <div class="mb-3">
+                                <label for="case_no" class="form-label">#Case ID:</label>
+                                <input name="case_id" type="text" class="form-control" id="case_id" readonly>
                             </div>
-                            <div class="modal-body">
-                                <div id="complaintForm">
-                                    <div class="mb-3">
-                                        <label for="case_no" class="form-label">#Case ID:</label>
-                                        <input name="case_id" type="text" class="form-control" id="case_id" readonly>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Maikling deskripsyon ng legal na problema</label>
-                                        <input name="legal_title" type="text" class="form-control" id="legal_title">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Pangalan ng Kliyente</label>
-                                        <input type="text" class="form-control" id="client_name" readonly>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="case_facts" class="form-label">Kwento/Detalye
-                                            ng Legal na Problema</label>
-                                        <textarea name="case_facts" class="form-control" id="case_facts"
-                                            rows="3"></textarea>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="adverse_party" class="form-label">Kalabang Partido</label>
-                                        <input name="adverse_party" type="text" class="form-control" id="adverse_party">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="case_objectives" class="form-label">Mga layunin na
-                                            gustong makamit sa legal na problema</label>
-                                        <textarea name="case_objectives" class="form-control" id="case_objectives"
-                                            rows="3"></textarea>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
-                                        <input type="text" class="form-control" id="lawyer_details" readonly>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="client_questions" class="form-label">Mga
-                                            katanungan sa abogado</label>
-                                        <textarea name="client_questions" class="form-control" id="client_questions"
-                                            rows="3"></textarea>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="case_files" class="form-label">Mga dokumentong makakatulong sa
-                                            kaso</label>
-                                        <input name="case_files" id="case_files" class="form-control" type="file"
-                                            multiple="multiple" accept="application/pdf">
-                                    </div>
-                                    <div id="filename_append">
-                                        <caption>Selected files: </caption>
-                                        <ul id="file_list">
-                                        </ul>
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Maikling deskripsyon ng legal na problema</label>
+                                <input name="legal_title" type="text" class="form-control" id="legal_title">
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            <div class="mb-3">
+                                <label class="form-label">Pangalan ng Kliyente</label>
+                                <input type="text" class="form-control" id="client_name" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="case_facts" class="form-label">Kwento/Detalye
+                                    ng Legal na Problema</label>
+                                <textarea name="case_facts" class="form-control" id="case_facts" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="adverse_party" class="form-label">Kalabang Partido</label>
+                                <input name="adverse_party" type="text" class="form-control" id="adverse_party">
+                            </div>
+                            <div class="mb-3">
+                                <label for="case_objectives" class="form-label">Mga layunin na
+                                    gustong makamit sa legal na problema</label>
+                                <textarea name="case_objectives" class="form-control" id="case_objectives"
+                                    rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
+                                <input type="text" class="form-control" id="lawyer_details" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="client_questions" class="form-label">Mga
+                                    katanungan sa abogado</label>
+                                <textarea name="client_questions" class="form-control" id="client_questions"
+                                    rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="case_files" class="form-label">Mga dokumentong makakatulong sa
+                                    kaso</label>
+                                <input name="case_files" id="case_files" class="form-control" type="file"
+                                    multiple="multiple" accept="application/pdf">
+                            </div>
+                            <div id="filename_append">
+                                <caption>Selected files: </caption>
+                                <ul id="file_list">
+                                </ul>
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
                 </div>
-            </form>
-        </section>
-    </div>
+            </div>
+        </div>
+    </form>
+    </section>
+</div>
 </div>
 
 <!-- JQuery Script for Complaint Submission -->

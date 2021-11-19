@@ -30,8 +30,8 @@
                     <td><%- accountsDoc[index].user_fname %> </td>
                     <td><%- accountsDoc[index].user_lname %> </td>
                     <td><%- accountsDoc[index].user_type %> </td>
-                    <td><a href="/admin/verification/<%- accountsDoc[index]._id %>"
-                            class="btn btn-primary btn-sm">Review </a></td>
+                    <td><button type="button" class="btn btn-primary btn-sm"
+                        onclick="showModal('<%- accountsDoc[index]._id %>')">Review </button></td>
                 </tr>
                 <% } %>
             </tbody>
@@ -39,3 +39,30 @@
     </div>
 </div>
 <!--End of Account Authentication Content-->
+
+<!--Modal content-->
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">ACCOUNT INFORMATION</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="text-align: justify;">
+            </div>
+            <div class="modal-footer">
+                <a id="approve" type="button" class="btn btn-danger"><b>Lock Account</b></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end of Modal Content-->
+
+<script>
+    function showModal(data) {
+        $("#myModal .modal-body").load(`/admin/accounts/${data}`, () => {
+            $("#myModal").modal('show')
+            $("#approve").attr("href", `/admin/verification/${data}`)
+        })
+    }
+</script>
