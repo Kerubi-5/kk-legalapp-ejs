@@ -13,12 +13,21 @@
                                 <%- Date.now() >= result.availability.start_date && Date.now() <= result.availability.end_date ? '(Available) <i class="fas fa-check"></i>' : '(Away) <i class="fas fa-times"></i>' %> 
                             <% } %>
                         </h1>
+                        <% if (result.user_type == "lawyer") { %>
+                            <% if (locals.result.availability.start_date || locals.result.availability.end_date) { %>
+                            <small>The lawyer is only available through dates
+                                <%- result.availability.start_date.toLocaleDateString() %> to
+                                <%- result.availability.end_date.toLocaleDateString() %></small>
+                            <% } else { %>
+                            <small>The lawyer has not yet set the date</small>
+                            <% } %>
+                        <% } %>
                         <h6>This profile is <%- result.is_public ? "Public" : "Private" %></h6>
                         <% if (param_id == user_id) { %>
                         <form action="/users/edit/public/<%- user_id %>?_method=PATCH" method="POST">
-                            <button type="submit"
-                                class="btn btn-success"><%- result.is_public ? "Public" : "Private" %></button><small
-                                style="color: red;"> Sets the visibility from other users</small>
+                            <button type="submit" class="btn btn-success"><%- result.is_public ? "Public" : "Private" %></button>
+                            <small style="color: red;"> Sets the visibility from other users
+                            </small>
                         </form>
                         <% if (result.user_type == "lawyer") { %>
                         <hr>
@@ -27,11 +36,9 @@
                             data-bs-target="#toggleAvailabilityModal">
                             Set Available
                         </button>
-                        <% if (locals.result.availability.start_date || locals.result.availability.end_date) { %> 
-                        <small>You are now available through dates <%- result.availability.start_date.toLocaleDateString() %> to <%- result.availability.end_date.toLocaleDateString() %></small>
-                        <% } else { %> 
-                        <small>You haven't set the date</small>
-                        <% } %> 
+                        <small style="color: red;">
+                            Sets the availability date for consultation
+                        </small>
                         <!-- Modal -->
                         <form action="/users/edit/available/<%- user_id %>?_method=PATCH" method="POST">
                             <div class="modal fade" id="toggleAvailabilityModal" tabindex="-1" aria-labelledby="toggleAvailabilityModalLabel"
