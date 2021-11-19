@@ -92,9 +92,9 @@
                     </p>
                     <hr>
                     <% } %>
-                    <% if (locals.solutions) { %> 
+                    <% if (locals.solutions) { %>
                     <%- include("../partials/complaint-solutions") %>
-                    <% } %> 
+                    <% } %>
                     <% } %>
                     <!-- PENDING CASE -->
                     <% if (user_type=="lawyer" && a_type=="pending" ) { %>
@@ -138,8 +138,10 @@
                                                     aria-describedby="Appointment Date" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Zoom link na gagamitin</label>
-                                                <input name="meeting_link" type="text" class="form-control">
+                                                <label for="meeting_link" class="form-label">Zoom link na
+                                                    gagamitin</label>
+                                                <textarea id="meeting_link" name="meeting_link"
+                                                    class="form-control"></textarea>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -280,8 +282,9 @@
                                                 required>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Zoom link na gagamitin</label>
-                                            <input name="meeting_link" type="text" class="form-control">
+                                            <label for="meeting_link" class="form-label">Zoom link na gagamitin</label>
+                                            <textarea id="meeting_link" name="meeting_link"
+                                                class="form-control"></textarea>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
