@@ -1,0 +1,286 @@
+<div class="container-fluid">
+    <div class="mt-3">
+        <%- include ("../partials/messages"); %>
+    </div>
+    <div class="row">
+        <!-- DASHBOARD NAVIGATION -->
+        <div class="col-md-2 mb-3">
+            <ul class="nav flex-column rounded bg-white shadow">
+                <h4 class="m-auto mt-3">Navigation Links</h4>
+                <hr>
+                <li class="nav-item align-items-center m-auto">
+                    <a class="nav-link px-3" data-bs-toggle="collapse" href="#transactionsCollapse" role="button"
+                        aria-expanded="false" aria-controls="transactionsCollapse">
+                        <i class="far fa-file-alt me-2"></i>
+                        <span>Transactions</span>
+                        <i class="fas fa-chevron-down ms-2"></i>
+                    </a>
+                </li>
+                <div class="collapse" id="transactionsCollapse">
+                    <div>
+                        <ul class="navbar-nav">
+                            <li>
+                                <a href="/admin/accounts/lawyer" class="nav-link px-3">
+                                    <i class="fas fa-gavel me-2"></i>
+                                    <span>Pending Cases</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admin/accounts/client" class="nav-link px-3">
+                                    <i class="fas fa-gavel me-2"></i>
+                                    <span>Ongoing Cases</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <li class="nav-item align-items-center m-auto">
+                    <a class="nav-link px-3" data-bs-toggle="collapse" href="#consultFormCollapse" role="button"
+                        aria-expanded="false" aria-controls="consultFormCollapse">
+                        <i class="far fa-file-alt me-2"></i>
+                        <span>Forms</span>
+                        <i class="fas fa-chevron-down ms-2"></i>
+                    </a>
+                </li>
+                <div class="collapse" id="consultFormCollapse">
+                    <div>
+                        <ul class="navbar-nav">
+                            <li>
+                                <a href="/admin/accounts/lawyer" class="nav-link px-3">
+                                    <i class="fas fa-pencil-alt me-2"></i>
+                                    <span>Submit Complaint</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </ul>
+
+
+        </div>
+        <!-- DASHBOARD CONTENT -->
+        <div class="col-md-10">
+            <div class="border rounded bg-white shadow">
+                <!-- TRANSACTION TABLE -->
+                <div style="overflow: auto">
+                    <table class="table table-striped" overflow: auto>
+                        <thead>
+                            <thead>
+                                <!-- <th scope="col" width="10%">#Case ID</th> -->
+                                <th scope="col">Legal Title</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Date Submitted</th>
+                                <th scope="col">Appointment Date</th>
+                                <th></th>
+                            </thead>
+                            <% for( let index=0; index < complaintResults.length; index++ ) { %>
+                            <tr>
+                                <td>
+                                    <%- complaintResults[index].legal_title %>
+                                </td>
+                                <td>
+                                    <%- complaintResults[index].case_status %>
+                                </td>
+                                <td>
+                                    <%- complaintResults[index].date_submitted ? complaintResults[index].date_submitted.toLocaleString() : "" %>
+                                </td>
+                                <td>
+                                    <%-  complaintResults[index].appointment_date ? complaintResults[index].appointment_date.toLocaleString() : ""  %>
+                                </td>
+                                <td>
+                                    <a href="/form/complaints/<%- complaintResults[index]._id %>" class="btn btn-primary"><i
+                                            class="far fa-eye"></i>
+                                        View</a>
+                                </td>
+                            </tr>
+                            <% } %>
+                    </table>
+                </div>
+            </div>
+            <% if (user_doc.user_type == "client") { %>
+        
+            <!-- CONSULTATION FORM -->
+            <section id="consult-form">
+                <div id="step1" class="m-3">
+                    <!-- CONSULT FORM -->
+                    <form action="/form/consultation" method="POST" enctype="multipart/form-data">
+                        <h1>Consult Form</h1>
+                        <hr>
+                        <div class="mb-3">
+                            <label for="legal_title" class="form-label">Deskripsyon ng legal na
+                                problema</label>
+                            <select name="legal_title" id="legal_title" class="form-select">
+                                <option disabled>RA 9262: the Anti-Violence Against Women and their Children Act of 2004
+                                </option>
+                                <option value="Physical Violence">Physical Violence</option>
+                                <option value="Sexual Violence">Sexual Violence</option>
+                                <option value="Psychological Violence">Psychological Violence</option>
+                                <option value="Economic Abuse">Economic Abuse</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="case_facts" class="form-label">Kwento/Detalye
+                                ng Legal na Problema</label>
+                            <textarea name="case_facts" class="form-control" class="form-control" id="case_facts" rows="3"
+                                placeholder="Ilagay ang mga facts o kwento ng legal na problema"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adverse_party" class="form-label">Kalabang Partido</label>
+                            <input name="adverse_party" type="text" class="form-control" id="adverse_party"
+                                placeholder="Ilagay ang TBD kung hindi sigurado">
+                        </div>
+                        <div class="mb-3">
+                            <label for="case_objectives" class="form-label">Mga layunin na
+                                gustong makamit sa legal na problema</label>
+                            <textarea name="case_objectives" class="form-control" class="form-control" id="case_objectives"
+                                rows="3" placeholder="Ilagay ang TBD kung hindi sigurado"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="client_questions" class="form-label">Mga
+                                katanungan sa abogado</label>
+                            <textarea name="client_questions" class="form-control" class="form-control" id="client_questions"
+                                rows="3" placeholder="Ilagay ang TBD kung hindi sigurado"></textarea>
+                        </div>
+                        <small>
+                            <strong style="color: red;"> Kaalaman:</strong> Kinakailangan na ang lahat ng
+                            input ay may laman
+                        </small>
+                        <div class="m-3 text-center">
+                            <button class="btn btn-primary to2" type="button" value="Next">Next <i
+                                    class="fas fa-arrow-right"></i></button>
+                        </div>
+                </div>
+                <div id="step2" class="m-3" style="display:none">
+                    <!-- Available Lawyers List -->
+                    <table class="table table-striped" style="overflow-y:auto;">
+                        <% if (!(Object.keys(result).length===0)) { %>
+                        <h4>Choose one from the available lawyers</h4>
+                        <% result.forEach((lawyer)=> { %>
+                        <% if (lawyer.user_type=="lawyer" && (lawyer.availability.start_date.getTime() < todayDate.getTime() && lawyer.availability.end_date.getTime() > todayDate.getTime())) { %>
+                        <tr>
+                            <td width="20">
+                                <img src="uploads/avatar/<%- lawyer.avatar %>" style="display: table-cell; width: 100%;">
+                            </td>
+                            <td width="70%">
+                                <a target="_blank" href="/users/<%- lawyer._id %> ">
+                                    <%- lawyer.user_fname %>
+                                    <%- lawyer.user_lname %>
+                                </a>
+        
+                            </td>
+                            <td width="10%" vertical="centered" vertical>
+                                <input class="form-check-input big" type="radio" name="lawyer_id" value="<%-lawyer._id%>"
+                                    id="flexRadioDefault1">
+                            </td>
+                        </tr>
+                        <% } %>
+                        <% }) %>
+                        <% } else { %>
+                        <h4>No available lawyers at the moment</h4>
+                        <% } %>
+                    </table>
+                    <div class="d-flex justify-content-center m-3">
+                        <button class="btn btn-primary me-3 to1" type="button" value="Previous"><i
+                                class="fas fa-arrow-left"></i> Go Back</button>
+                        <button class="btn btn-primary to3" type="button" value="Previous">Confirm Lawyer
+                            <i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+                <div id="step3" style="display: none;">
+                    <div id="confirmSection" class="m-3">
+                        <h1>Review Confirmation Details</h1>
+                        <hr>
+                        <div class="mb-3">
+                            <label for="legal_title2" class="form-label">Maikling deskripsyon ng legal na
+                                problema</label>
+                            <input type="text" class="form-control" id="legal_title2"
+                                placeholder="Ano ang kabuuhang ideya ng problema" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="case_facts2" class="form-label">Kwento/Detalye
+                                ng Legal na Problema</label>
+                            <textarea class="form-control" class="form-control" id="case_facts2" rows="3" disabled></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adverse_party2" class="form-label">Kalabang Partido</label>
+                            <input type="text" class="form-control" id="adverse_party2"
+                                placeholder="Ilagay ang TBD kung hindi sure" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="case_objectives2" class="form-label">Mga layunin na
+                                gustong makamit sa legal na problema</label>
+                            <textarea class="form-control" class="form-control" id="case_objectives2" rows="3"
+                                disabled></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="client_questions2" class="form-label">Mga
+                                katanungan sa abogado</label>
+                            <textarea class="form-control" class="form-control" id="client_questions2" rows="3"
+                                disabled></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Lawyer</label>
+                            <a target="_blank" id="lawyer_link2">Visit Profile</a>
+                        </div>
+                        <div class="mb-3">
+                            <label for="case_files" class="form-label">Mga dokumentong
+                                makakatulong sa legal na problema</label>
+                            <input name="case_files" class="form-control" type="file" id="case_files" accept="application/pdf">
+                        </div>
+                        <input type="text" name="case_status" value="pending" hidden>
+                        <small>
+                            <strong style="color: red;"> Disclaimer:</strong> Anumang impormasyon o
+                            detalye na iyong ibinahagi ay irerespeto at di ilalantad o ibabahagi sa iba,
+                            sang-ayon sa batas
+                        </small>
+                    </div>
+                    <div class="d-flex justify-content-center m-3">
+                        <button class="btn btn-primary me-3 to2" type="button" value="Next"><i class="fas fa-arrow-left"></i> Go
+                            Back</button>
+                        <button type="submit" class="btn btn-primary">Submit
+                            Complaint</button>
+                    </div>
+                    </form>
+                </div>
+            </section>
+            <% } %>
+        
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".to1").on('click', function () {
+            $("#step1").fadeIn('slow');
+            $("#step2").hide();
+            $("#step3").hide();
+        });
+
+        $(".to2").on('click', function () {
+            $("#step1").hide();
+            $("#step2").fadeIn('slow');
+            $("#step3").hide();
+        });
+
+        $(".to3").on('click', function () {
+            const legal_title = $("#step1 #legal_title").val()
+            const case_facts = $("#step1 #case_facts").val()
+            const adverse_party = $("#step1 #adverse_party").val()
+            const case_objectives = $("#step1 #case_objectives").val()
+            const client_questions = $("#step1 #client_questions").val()
+            const lawyer_id = $("#step2 table input[name='lawyer_id']:checked").val();
+
+            $("#step3 #legal_title2").val(legal_title)
+            $("#step3 #case_facts2").val(case_facts)
+            $("#step3 #adverse_party2").val(adverse_party)
+            $("#step3 #case_objectives2").val(case_objectives)
+            $("#step3 #client_questions2").val(client_questions)
+            $("#step3 #lawyer_link2").attr('href', '/users/' + lawyer_id)
+
+            $("#step1").hide();
+            $("#step2").hide();
+            $("#step3").fadeIn('slow');
+        })
+    });
+</script>
