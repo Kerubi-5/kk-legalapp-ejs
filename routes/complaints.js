@@ -401,4 +401,15 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
   }
 });
 
+// ONGOING RESCHEDULE CLIENT SIDE
+router.patch('/complaints/ongoing/:id', isAuth, async (req, res, next) => {
+  try {
+    const id = req.params.id
+    await Complaint.findByIdAndUpdate({ _id: id }, { case_status: "pending", $unset: { appointment_date: "" } })
+    res.redirect('/dashboard')
+  } catch (err) {
+    next(err)
+  }
+})
+
 module.exports = router;
