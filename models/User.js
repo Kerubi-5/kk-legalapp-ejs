@@ -65,8 +65,9 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    verified_lawyer: {
-        type: Boolean
+    is_locked: {
+        type: Boolean,
+        default: false
     },
     complaints: [{
         type: String,

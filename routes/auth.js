@@ -55,7 +55,7 @@ module.exports.isClientOrLawyer = (req, res, next) => {
     (req.user.user_type == "client" || req.user.user_type == "lawyer")
   ) {
     if (!req.user.is_verified) res.redirect('/unverified')
-    else if (req.user.user_type == "lawyer" && !req.user.verified_lawyer) res.redirect('/unverified-lawyer')
+    else if (req.user.is_locked) res.redirect('/lock')
     else next()
   } else if (req.isAuthenticated() && req.user.user_type == "admin") {
     res.redirect('/admin')

@@ -37,8 +37,7 @@ router.get("/", isAdmin, async (req, res, next) => {
 router.get("/accounts", isAdmin, async (req, res, next) => {
   try {
     const accountsDoc = await User.find({
-      user_type: "lawyer",
-      verified_lawyer: false,
+      is_locked: true,
     });
 
     res.render("./admin/accounts-authentication", {
@@ -53,7 +52,7 @@ router.get("/accounts", isAdmin, async (req, res, next) => {
 // Lawyer Account Routes
 router.get("/accounts/lawyer", isAdmin, async (req, res, next) => {
   try {
-    const lawyerDocs = await User.find({ user_type: "lawyer" });
+    const lawyerDocs = await User.find({ user_type: "lawyer", is_locked: false });
     res.render("./admin/lawyers", {
       layout: "./layouts/admin-layout",
       lawyerDocs,
@@ -97,6 +96,8 @@ router.get("/pending", isAdmin, async (req, res, next) => {
   });
 });
 
+
+// COMPLAINT VERIFICATION
 router
   .route("/pending/:id")
   .get(isAdmin, async (req, res, next) => {
@@ -123,8 +124,8 @@ router.patch("/verification/:id", isAdmin, async (req, res, next) => {
   try {
     const id = req.params.id;
 
-    await User.findByIdAndUpdate({ _id: id }, { verified_lawyer: true });
-    req.flash("success_msg", "Successfully verified a user");
+    await User.findByIdAndUpdate({ _id: id }, { is_locked: false });
+    req.flash("success_msg", "Successfully unlocked a user");
     res.redirect("/admin/accounts");
   } catch (err) {
     next(err);
@@ -135,7 +136,7 @@ router.get("/accounts/lock/:id", isAdmin, async (req, res, next) => {
   try {
     const id = req.params.id;
 
-    await User.findByIdAndUpdate({ _id: id }, { is_verified: false });
+    await User.findByIdAndUpdate({ _id: id }, { is_locked: true });
     req.flash("success_msg", "Successfully locked account");
     res.redirect("/admin/accounts");
   } catch (err) {
