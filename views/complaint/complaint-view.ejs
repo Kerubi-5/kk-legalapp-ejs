@@ -37,7 +37,7 @@
                             </span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Maikling deskripsyon ng legal na problema</label>
+                            <label class="form-label">Saan napapabilang ang iyong reklamo</label>
                             <input type="text" class="form-control" value="<%- result.legal_title %>" readonly>
                         </div>
                         <div class="mb-3">
@@ -46,7 +46,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="case_facts" class="form-label">Kwento/Detalye
-                                ng Legal na Problema</label>
+                                ng iyong Problema</label>
                             <textarea class="form-control" class="form-control" rows="3"
                                 readonly><%- result.case_facts %></textarea>
                         </div>
@@ -56,7 +56,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="case_objectives" class="form-label">Mga layunin na
-                                gustong makamit sa legal na problema</label>
+                                gustong makamit sa iyong problema</label>
                             <textarea class="form-control" class="form-control" rows="3"
                                 readonly><%- result.case_objectives %></textarea>
                         </div>
@@ -99,30 +99,27 @@
                     <!-- PENDING CASE -->
                     <% if (user_type=="lawyer" && a_type=="pending" ) { %>
                         <div id="pendingCase">
-                            <label for="buttons" class="form-label" style="font-size:x-large"><b>Tanggapin ang
-                                    request?</b></label>
-                            <div class="mb-3 mt-2 d-flex">
+                            <div class="mb-3 mt-3 d-flex justify-content-between align-items-center">
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop">
-                                    Accept
-                                </button>
-                                <form action="/form/complaints/reject?_method=PATCH" method="POST">
-                                    <input name="id" type="text" value="<%- result._id %>" hidden>
-                                    <input name="case_status" type="text" value="denied" hidden>
-                                    <button type="submit" class="btn btn-danger">Reject</button>
-                                </form>
+                                <label for="buttons" class="form-label" style="font-size:x-large">Tanggapin ang
+                                    request?</label>
+                                <div class="d-flex">
+                                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#acceptRequest">
+                                        Accept request
+                                    </button>
+                                    <button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#referModal">Refer to
+                                        another lawyer</button>
+                                </div>
                             </div>
-
-                            <!-- Modal -->
+                            <!-- ACCEPT Modal -->
                             <form action="/form/complaints/pending?_method=PATCH" method="POST">
-                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                <div class="modal fade" id="acceptRequest" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="acceptRequestLabel"
                                     aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Confirm Accept</h5>
+                                                <h5 class="modal-title" id="acceptRequestLabel">Confirm Accept</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
@@ -148,6 +145,29 @@
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Close</button>
                                                 <button type="submit" class="btn btn-primary">Accept</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- Modal -->
+                            <form action="/form/complaints/refer?_method=PATCH" method="POST">
+                                <div class="modal fade" id="referModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                    aria-labelledby="referModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="referModalLabel">Modal title</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input name="id" type="text" value="<%- result._id %>" hidden>
+                                                <input name="case_status" type="text" value="pending" hidden>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -305,7 +325,7 @@
 
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#rescheduleModal"><i class="far fa-calendar"></i>
-                                    Reschedule</button>
+                                    Schedule for follow up</button>
                             </div>
 
                             <form action="/form/complaints/ongoing/<%- result._id %>?_method=PATCH" method="POST">
@@ -356,8 +376,14 @@
                                 <input name="case_id" type="text" class="form-control" id="case_id" readonly>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Maikling deskripsyon ng legal na problema</label>
-                                <input name="legal_title" type="text" class="form-control" id="legal_title">
+                                <label for="legal_title" class="form-label">Saan napapabilang ang iyong reklamo?</label>
+                                <select name="legal_title" id="legal_title" class="form-select">
+                                    <option disabled>RA 9262: the Anti-Violence Against Women and their Children Act of 2004</option>
+                                    <option value="Physical Violence">Physical Violence</option>
+                                    <option value="Sexual Violence">Sexual Violence</option>
+                                    <option value="Psychological Violence">Psychological Violence</option>
+                                    <option value="Economic Abuse">Economic Abuse</option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Pangalan ng Kliyente</label>
@@ -365,7 +391,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="case_facts" class="form-label">Kwento/Detalye
-                                    ng Legal na Problema</label>
+                                    ng iyong problema</label>
                                 <textarea name="case_facts" class="form-control" id="case_facts" rows="3"></textarea>
                             </div>
                             <div class="mb-3">
@@ -374,7 +400,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="case_objectives" class="form-label">Mga layunin na
-                                    gustong makamit sa legal na problema</label>
+                                    gustong makamit sa iyong problema</label>
                                 <textarea name="case_objectives" class="form-control" id="case_objectives"
                                     rows="3"></textarea>
                             </div>
