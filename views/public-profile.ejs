@@ -23,8 +23,8 @@
                             <% } %>
                         <% } %>
                         <h6>This profile is <%- result.is_public ? "Public" : "Private" %></h6>
-                        <% if (param_id == user_id) { %>
-                        <form action="/users/edit/public/<%- user_id %>?_method=PATCH" method="POST">
+                        <% if (param_id == currentUser._id) { %>
+                        <form action="/users/edit/public/<%- currentUser._id %>?_method=PATCH" method="POST">
                             <button type="submit" class="btn btn-success"><%- result.is_public ? "Public" : "Private" %></button>
                             <small style="color: red;"> Sets the visibility from other users
                             </small>
@@ -40,7 +40,7 @@
                             Sets the availability date for consultation
                         </small>
                         <!-- Modal -->
-                        <form action="/users/edit/available/<%- user_id %>?_method=PATCH" method="POST">
+                        <form action="/users/edit/available/<%- currentUser._id %>?_method=PATCH" method="POST">
                             <div class="modal fade" id="toggleAvailabilityModal" tabindex="-1" aria-labelledby="toggleAvailabilityModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
@@ -90,14 +90,14 @@
             </div>
             <div class="card-body">
                 <div class="col">
-                    <% if (result.is_public || param_id == user_id) { %>
+                    <% if (result.is_public || param_id == currentUser._id) { %>
                     <table class="table table-borderless">
                         <div class="row">
                             <div class="col">
                                 <h4>Personal Information</h4>
                             </div>
                             <div class="col">
-                                <% if (isAuthenticated && param_id==user_id) { %>
+                                <% if (isAuthenticated && param_id==currentUser._id) { %>
                                 <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Information <i
                                         class="fas fa-user-edit"></i></a>
                                 <% } %>
