@@ -25,7 +25,7 @@ router.get("/register/lawyer", forwardAuthenticated, (req, res) =>
   res.render("register-lawyer")
 );
 
-router.post("/register/client", async (req, res, next) => {
+router.post("/register", async (req, res, next) => {
   try {
     const {
       username,
@@ -37,106 +37,10 @@ router.post("/register/client", async (req, res, next) => {
       birthdate,
       contact_number,
       permanent_address,
+      user_type
     } = req.body;
 
-    let errors = [];
-
-    if (
-      !username ||
-      !email ||
-      !password ||
-      !password2 ||
-      !user_fname ||
-      !user_lname ||
-      !birthdate ||
-      !contact_number ||
-      !permanent_address
-    )
-      errors.push({ msg: "Please enter all fields" });
-
-    if (username.length > 20)
-      errors.push({ msg: "Username cannot be longer than 20 characters" });
-
-    if (password != password2) errors.push({ msg: "Passwords do not match" });
-
-    if (password.length < 6 || password.length > 20)
-      errors.push({
-        msg: "Password must be at least 6 characters, and not more than 20 characters long",
-      });
-
-    function renderClient() {
-      res.render("register-client", {
-        errors,
-        username,
-        email,
-        password,
-        password2,
-        user_fname,
-        user_lname,
-        birthdate,
-        contact_number,
-        permanent_address,
-      });
-    }
-
-    if (errors.length > 0) {
-      renderClient();
-    } else {
-      const userExists = await User.findOne({ username: username });
-      const emailExists = await User.findOne({ email: email });
-
-      if (userExists || emailExists) {
-        if (userExists) errors.push({ msg: "Username already exist" });
-        if (emailExists) errors.push({ msg: "Email already exist" });
-        renderClient();
-      } else {
-        newUser = new User({
-          username,
-          email,
-          password,
-          user_fname,
-          user_lname,
-          birthdate,
-          contact_number,
-          permanent_address,
-          user_type: "client",
-        });
-
-        newUser.password = authUtils.hashPassword(password);
-        newUser.save();
-
-        const rand = newUser._id;
-        const title =
-          "Registration confirmation with 3JBG Legal Web Application!";
-        const link = "http://" + req.get("host") + "/verify?id=" + rand;
-        const msg = `<h1>Hello ${user_fname},</h1><br> Please Click on the link to verify your email.<br><a href=${link}>Click here to verify</a>`;
-        sendMail(email, title, msg);
-
-        req.flash(
-          "success_msg",
-          "You are now registered please log in to continue"
-        );
-        res.redirect("/users/login");
-      }
-    }
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.post("/register/lawyer", async (req, res, next) => {
-  try {
-    const {
-      username,
-      email,
-      password,
-      password2,
-      user_fname,
-      user_lname,
-      birthdate,
-      contact_number,
-      permanent_address,
-    } = req.body;
+    const RolesEnum = Object.freeze({ LAWYER: "lawyer", CLIENT: "client" })
 
     let errors = [];
 
@@ -166,8 +70,14 @@ router.post("/register/lawyer", async (req, res, next) => {
         msg: "Password must be at least 6 characters, and not more than 20 characters long",
       });
 
-    function renderLawyer() {
-      res.render("register-lawyer", {
+    const user_identifier = (user_type) => {
+      if (user_type == RolesEnum.LAWYER) return "register-lawyer"
+      else if (user_type == RolesEnum.CLIENT) return "register-client"
+      else return false
+    }
+
+    function renderPage() {
+      res.render(user_identifier(user_type), {
         errors,
         username,
         email,
@@ -182,7 +92,7 @@ router.post("/register/lawyer", async (req, res, next) => {
     }
 
     if (errors.length > 0) {
-      renderLawyer();
+      renderPage();
     } else {
       const userExists = await User.findOne({ username: username });
       const emailExists = await User.findOne({ email: email });
@@ -190,10 +100,10 @@ router.post("/register/lawyer", async (req, res, next) => {
       if (userExists || emailExists) {
         if (userExists) errors.push({ msg: "Username already exist" });
         if (emailExists) errors.push({ msg: "Email already exist" });
-        renderLawyer();
+        renderPage();
       } else {
-        const fileObj = req.files.lawyer_credential;
-        const lawyer_credential =
+        const fileObj = req.files.credential;
+        const credential =
           Date.now() + "-" + Math.round(Math.random() * 1e9) + fileObj.name;
 
         newUser = new User({
@@ -205,12 +115,11 @@ router.post("/register/lawyer", async (req, res, next) => {
           birthdate,
           contact_number,
           permanent_address,
-          lawyer_credential,
-          user_type: "lawyer",
-          verified_lawyer: false,
+          user_type: user_type == RolesEnum.LAWYER ? RolesEnum.LAWYER : RolesEnum.CLIENT,
+          credential,
         });
 
-        fileObj.mv("./public/uploads/credentials/" + lawyer_credential);
+        fileObj.mv("./public/uploads/credentials/" + credential);
 
         newUser.password = authUtils.hashPassword(password);
         newUser.save();

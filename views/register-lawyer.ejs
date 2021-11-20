@@ -7,11 +7,12 @@
                 </h1>
                 <%- include ("./partials/messages"); %>
                 <!-- LAWYER REGISTRATION -->
-                <form action="/users/register/lawyer" method="POST" enctype="multipart/form-data">
+                <form action="/users/register" method="POST" enctype="multipart/form-data">
                     <!-- USERNAME -->
                     <%- include("./partials/registration-form") %>
                     <!-- Modal for Privacy Rights -->
                     <%- include ("./partials/privacy-form-modal") %>
+                    <input name="user_type" type="text" value="lawyer" hidden>
                 </form>
                 <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
             </div>

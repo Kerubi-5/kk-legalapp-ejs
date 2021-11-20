@@ -8,11 +8,12 @@
         <%- include ("./partials/messages"); %>
 
         <!-- CLIENT REGISTRATION -->
-        <form action="/users/register/client" method="POST">
+        <form action="/users/register" method="POST" enctype="multipart/form-data">
           <!-- USERNAME -->
           <%- include("./partials/registration-form") %>
           <!-- Modal for Privacy Rights -->
           <%- include ("./partials/privacy-form-modal") %>
+          <input name="user_type" type="text" value="client" hidden>
         </form>
         <p class="lead mt-4">Have An Account? <a href="/users/login">Login</a></p>
       </div>
