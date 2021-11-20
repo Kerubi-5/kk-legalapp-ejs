@@ -46,6 +46,9 @@
                 </div>
                 <div class="modal-footer">
                     <button id="acceptBtn" value="accept" type="submit" class="btn btn-success">Accept</button>
+                    <form id="rejectForm" method="POST">
+                        <button id="rejectBtn" value="reject" type="submit" class="btn btn-danger">Reject</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -59,6 +62,7 @@
         $("#myModal .modal-body").load(`/admin/pending/${data}`, () => {
             $("#myModal").modal('show')
             $("#verifyCase").attr("action", `/admin/pending/${data}?_method=PATCH`)
+            $("#rejectForm").attr("action", `/form/complaints/reject/${data}?_method=PATCH`)
         })
     }
 </script>

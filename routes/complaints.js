@@ -18,6 +18,8 @@ const sendMail = require("../utils/transporter");
 // Node FS
 const fs = require("fs");
 
+const CaseStatusesEnum = Object.freeze({ PENDING: "pending", BOOKED: "booked", ONGOING: "ongoing", COMPLETED: "completed", REJECTED: "denied" })
+
 // COMPLAINT POST SUBMIT CLIENT SIDE
 router.post("/consultation", isClient, async (req, res, next) => {
   try {
@@ -339,7 +341,7 @@ router.patch("/complaints/reject", isLawyer, async (req, res, next) => {
     const filter = req.body.id;
     complaintResult = await Complaint.findOneAndUpdate(
       { _id: filter },
-      { case_status: "denied" }
+      { case_status: CaseStatusesEnum.REJECTED }
     );
 
     res.redirect("/form/complaints/" + filter);
@@ -354,7 +356,7 @@ router.patch("/complaints/complete", isAuth, async (req, res, next) => {
     const id = req.body.id;
     await Complaint.findByIdAndUpdate(
       { _id: id },
-      { case_status: "completed" }
+      { case_status: CaseStatusesEnum.COMPLETED }
     );
 
     res.redirect("/form/complaints/" + req.body.id);
@@ -378,7 +380,7 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
 
     // Updating Complaint and Inserting new Solution
     const complaintResult = await Complaint.findOne({ _id: id });
-    complaintResult.case_status = "ongoing";
+    complaintResult.case_status = CaseStatusesEnum.ONGOING;
     complaintResult.solutions.push(newSolution);
     await complaintResult.save();
 
@@ -407,7 +409,7 @@ router.patch("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
     const id = req.params.id;
     await Complaint.findByIdAndUpdate(
       { _id: id },
-      { case_status: "pending", $unset: { appointment_date: "" } }
+      { case_status: CaseStatusesEnum.PENDING, $unset: { appointment_date: "" } }
     );
     res.redirect("/dashboard");
   } catch (err) {
