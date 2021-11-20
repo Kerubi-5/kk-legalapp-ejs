@@ -336,10 +336,9 @@ router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
 router.patch("/complaints/reject", isLawyer, async (req, res, next) => {
   try {
     const filter = req.body.id;
-    const case_status = req.body.case_status;
     complaintResult = await Complaint.findOneAndUpdate(
       { _id: filter },
-      { case_status: case_status }
+      { case_status: "denied" }
     );
 
     res.redirect("/form/complaints/" + filter);
