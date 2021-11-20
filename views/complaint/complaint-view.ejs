@@ -37,7 +37,7 @@
                             </span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Maikling deskripsyon ng legal na problema</label>
+                            <label class="form-label">Saan napapabilang ang iyong reklamo</label>
                             <input type="text" class="form-control" value="<%- result.legal_title %>" readonly>
                         </div>
                         <div class="mb-3">
@@ -46,7 +46,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="case_facts" class="form-label">Kwento/Detalye
-                                ng Legal na Problema</label>
+                                ng iyong Problema</label>
                             <textarea class="form-control" class="form-control" rows="3"
                                 readonly><%- result.case_facts %></textarea>
                         </div>
@@ -56,7 +56,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="case_objectives" class="form-label">Mga layunin na
-                                gustong makamit sa legal na problema</label>
+                                gustong makamit sa iyong problema</label>
                             <textarea class="form-control" class="form-control" rows="3"
                                 readonly><%- result.case_objectives %></textarea>
                         </div>
@@ -356,8 +356,14 @@
                                 <input name="case_id" type="text" class="form-control" id="case_id" readonly>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Maikling deskripsyon ng legal na problema</label>
-                                <input name="legal_title" type="text" class="form-control" id="legal_title">
+                                <label for="legal_title" class="form-label">Saan napapabilang ang iyong reklamo?</label>
+                                <select name="legal_title" id="legal_title" class="form-select">
+                                    <option disabled>RA 9262: the Anti-Violence Against Women and their Children Act of 2004</option>
+                                    <option value="Physical Violence">Physical Violence</option>
+                                    <option value="Sexual Violence">Sexual Violence</option>
+                                    <option value="Psychological Violence">Psychological Violence</option>
+                                    <option value="Economic Abuse">Economic Abuse</option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Pangalan ng Kliyente</label>
@@ -365,7 +371,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="case_facts" class="form-label">Kwento/Detalye
-                                    ng Legal na Problema</label>
+                                    ng iyong problema</label>
                                 <textarea name="case_facts" class="form-control" id="case_facts" rows="3"></textarea>
                             </div>
                             <div class="mb-3">
@@ -374,7 +380,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="case_objectives" class="form-label">Mga layunin na
-                                    gustong makamit sa legal na problema</label>
+                                    gustong makamit sa iyong problema</label>
                                 <textarea name="case_objectives" class="form-control" id="case_objectives"
                                     rows="3"></textarea>
                             </div>
