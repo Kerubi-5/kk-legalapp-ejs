@@ -44,8 +44,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // Lawyer Related Fields
-    lawyer_credential: {
+    // VERIFICATION PURPOSES
+    credential: {
         type: String,
     },
     // Hide information
