@@ -41,10 +41,6 @@
                             <input type="text" class="form-control" value="<%- result.legal_title %>" readonly>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Pangalan ng Kliyente</label>
-                            <input type="text" class="form-control" value="<%- result.client_id.user_fname %>" readonly>
-                        </div>
-                        <div class="mb-3">
                             <label for="case_facts" class="form-label">Kwento/Detalye
                                 ng iyong Problema</label>
                             <textarea class="form-control" class="form-control" rows="3"
@@ -59,10 +55,6 @@
                                 gustong makamit sa iyong problema</label>
                             <textarea class="form-control" class="form-control" rows="3"
                                 readonly><%- result.case_objectives %></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
-                            <input type="text" class="form-control" readonly value="<%- result.lawyer_id.user_fname %>">
                         </div>
                         <div class="mb-5">
                             <label for="client_questions" class="form-label">Mga
@@ -84,278 +76,195 @@
                     <h1>Detalye ng mga napagmeetingan</h1>
                     <hr>
                     <% if (result.meeting_link) { %>
-                        <p>Zoom meeting: <a href="/external?link=<%- result.meeting_link %>"
-                                target="_blank"><%- result.meeting_link %></a></p>
-                        <% if (locals.result.appointment_date){ %>
-                        <p>The meeting schedule is <strong><time
-                                    datetime="<%- result.appointment_date %>">"<%- result.appointment_date %>"</time></strong>
-                        </p>
-                        <hr>
-                        <% } %>
-                        <% if (locals.solutions) { %>
-                        <%- include("../partials/complaint-solutions") %>
-                        <% } %>
+                    <p>Zoom meeting: <a href="/external?link=<%- result.meeting_link %>"
+                            target="_blank"><%- result.meeting_link %></a></p>
+                    <% if (locals.result.appointment_date){ %>
+                    <p>The meeting schedule is <strong><time
+                                datetime="<%- result.appointment_date %>">"<%- result.appointment_date %>"</time></strong>
+                    </p>
+                    <hr>
+                    <% } %>
+                    <% if (locals.solutions) { %>
+                    <%- include("../partials/complaint-solutions") %>
+                    <% } %>
                     <% } %>
                     <!-- PENDING CASE -->
-                    <% if (user_type=="lawyer" && a_type=="pending" ) { %>
-                        <div id="pendingCase">
-                            <div class="mb-3 mt-3 d-flex justify-content-between align-items-center">
-                                <!-- Button trigger modal -->
-                                <label for="buttons" class="form-label" style="font-size:x-large">Tanggapin ang
-                                    request?</label>
-                                <div class="d-flex">
-                                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#acceptRequest">
-                                        Accept request
-                                    </button>
-                                    <button type="submit" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#referModal">Refer to
-                                        another lawyer</button>
-                                </div>
-                            </div>
-                            <!-- ACCEPT Modal -->
-                            <form action="/form/complaints/pending?_method=PATCH" method="POST">
-                                <div class="modal fade" id="acceptRequest" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="acceptRequestLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="acceptRequestLabel">Confirm Accept</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <input name="id" type="text" value="<%- result._id %>" hidden>
-                                                <input name="case_status" type="text" value="booked" hidden>
-                                                <label for="appointment_date">Set appointment date</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="appointment_date"><i
-                                                            class="fas fa-calendar"></i></span>
-                                                    <input name="appointment_date" type="datetime-local"
-                                                        class="form-control" aria-label="Appointment Date"
-                                                        aria-describedby="Appointment Date" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="meeting_link" class="form-label">Zoom link na
-                                                        gagamitin</label>
-                                                    <textarea id="meeting_link" name="meeting_link"
-                                                        class="form-control"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Accept</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <!-- Modal -->
-                            <form action="/form/complaints/refer?_method=PATCH" method="POST">
-                                <div class="modal fade" id="referModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                    aria-labelledby="referModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="referModalLabel">Modal title</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <input name="id" type="text" value="<%- result._id %>" hidden>
-                                                <input name="case_status" type="text" value="pending" hidden>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    <!-- BOOKED MEETING CASE -->
-                    <% } else if (a_type=="booked"){ %>
-                        <div id="bookedCase">
-                            <% if (user_type == "lawyer") { %>
-                            <br>
+                    <% if (user_type=="lawyer" && result.case_status=="pending" ) { %>
+                    <div id="pendingCase">
+                        <div class="mb-3 mt-3 d-flex justify-content-between align-items-center">
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop">
-                                Update Transaction
-                            </button>
-                            <small style="color: red;">Click update transaction to enter solution</small>
-
-                            <!-- Modal -->
-                            <form action="/form/complaints/ongoing/<%- result._id %>" method="POST">
-                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Confirm Accept</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Buod ng mga napagusapan</label>
-                                                    <textarea name="summary" type="text" class="form-control" id="summary"
-                                                        required></textarea>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Mga rekomendasyon para sa kliyente</label>
-                                                    <textarea name="recommendations" type="text" class="form-control"
-                                                        id="recommendations" required></textarea>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Video link ng meeting</label>
-                                                    <textarea name="video_link" type="text" class="form-control"
-                                                        id="video_link" required></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Accept</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <% } %>
+                            <label for="buttons" class="form-label" style="font-size:x-large">Tanggapin ang
+                                request?</label>
+                            <div class="d-flex">
+                                <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal"
+                                    data-bs-target="#acceptRequest">
+                                    Accept request
+                                </button>
+                                <button type="submit" class="btn btn-secondary" data-bs-toggle="modal"
+                                    data-bs-target="#referModal">Refer to
+                                    another lawyer</button>
+                            </div>
                         </div>
-                    <!-- ONGOING MEETING CASE -->
-                    <% } else if (a_type == "ongoing") { %>
-                        <div id="ongoingCase">
-                            <% if (user_type == "lawyer") { %>
-                            <!-- Modal Button -->
-                            <!-- <div class="d-flex justify-content-between mb-3">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#staticBackdrop">
-                                        Update Transaction
-                                    </button>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#setScheduleModal">Set Schedule</button>
-                                </div> -->
-                        </div>
-                    <!-- Modal SUBMIT SOLUTION -->
-                    <!-- <form action="/form/complaints/ongoing/<%- // result._id %>" method="POST">
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Confirm Accept</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label class="form-label">Buod ng mga napagusapan</label>
-                                            <textarea name="summary" type="text" class="form-control" id="summary"
-                                                required></textarea>
+                        <!-- ACCEPT Modal -->
+                        <form action="/form/complaints/pending?_method=PATCH" method="POST">
+                            <div class="modal fade" id="acceptRequest" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="acceptRequestLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="acceptRequestLabel">Confirm Accept</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Mga rekomendasyon para sa kliyente</label>
-                                            <textarea name="recommendations" type="text" class="form-control"
-                                                id="recommendations" required></textarea>
+                                        <div class="modal-body">
+                                            <input name="id" type="text" value="<%- result._id %>" hidden>
+                                            <input name="case_status" type="text" value="booked" hidden>
+                                            <label for="appointment_date">Set appointment date</label>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="appointment_date"><i
+                                                        class="fas fa-calendar"></i></span>
+                                                <input name="appointment_date" type="datetime-local"
+                                                    class="form-control" aria-label="Appointment Date"
+                                                    aria-describedby="Appointment Date" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="meeting_link" class="form-label">Zoom link na
+                                                    gagamitin</label>
+                                                <textarea id="meeting_link" name="meeting_link"
+                                                    class="form-control"></textarea>
+                                            </div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Video link ng meeting</label>
-                                            <textarea name="video_link" type="text" class="form-control" id="video_link"
-                                                required></textarea>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Accept</button>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Accept</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form> -->
+                        </form>
 
-                    <!-- Modal SET SCHEDULE -->
-                    <!-- <form action="/form/complaints/pending?_method=PATCH" method="POST">
-                        <div class="modal fade" id="setScheduleModal" tabindex="-1"
-                            aria-labelledby="setScheduleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="setScheduleModalLabel">Reschedule</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <input name="id" type="text" value="<%- result._id %>" hidden>
-                                        <input name="case_status" type="text" value="booked" hidden>
-                                        <label for="appointment_date">Set appointment date</label>
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="appointment_date"><i
-                                                    class="fas fa-calendar"></i></span>
-                                            <input name="appointment_date" type="datetime-local" class="form-control"
-                                                aria-label="Appointment Date" aria-describedby="Appointment Date"
-                                                required>
+                        <!-- Modal -->
+                        <form action="/form/complaints/refer?_method=PATCH" method="POST">
+                            <div class="modal fade" id="referModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                                tabindex="-1" aria-labelledby="referModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="referModalLabel">Modal title</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="meeting_link" class="form-label">Zoom link na gagamitin</label>
-                                            <textarea id="meeting_link" name="meeting_link"
-                                                class="form-control"></textarea>
+                                        <div class="modal-body">
+                                            <input name="id" type="text" value="<%- result._id %>" hidden>
+                                            <input name="case_status" type="text" value="pending" hidden>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form> -->
-                        <% } else if (user_type == "client") { %>
-                            <div class="d-flex justify-content-between mb-3">
-                                <form action="/form/complaints/complete?_method=PATCH" method="POST">
-                                    <input name="id" value="<%- result._id %>" hidden>
-                                    <button type="submit" class="btn btn-success"><i class="fas fa-thumbs-up"></i> Mark as
-                                        Resolved</button>
-                                </form>
-
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#rescheduleModal"><i class="far fa-calendar"></i>
-                                    Schedule for follow up</button>
-                            </div>
-
-                            <form action="/form/complaints/ongoing/<%- result._id %>?_method=PATCH" method="POST">
-                                <div class="modal fade" id="rescheduleModal" tabindex="-1"
-                                    aria-labelledby="rescheduleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="rescheduleModalLabel">Reschedule</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Would you like to notify lawyer for reschedule?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">No</button>
-                                                <button type="submit" class="btn btn-primary">Yes</button>
-                                            </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- BOOKED MEETING CASE -->
+                    <% } else if (result.case_status=="booked"){ %>
+                    <div id="bookedCase">
+                        <% if (user_type == "lawyer") { %>
+                        <br>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop">
+                            Update Transaction
+                        </button>
+                        <small style="color: red;">Click update transaction to enter solution</small>
+
+                        <!-- Modal -->
+                        <form action="/form/complaints/ongoing/<%- result._id %>" method="POST">
+                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Confirm Accept</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Buod ng mga napagusapan</label>
+                                                <textarea name="summary" type="text" class="form-control" id="summary"
+                                                    required></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Mga rekomendasyon para sa kliyente</label>
+                                                <textarea name="recommendations" type="text" class="form-control"
+                                                    id="recommendations" required></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Video link ng meeting</label>
+                                                <textarea name="video_link" type="text" class="form-control"
+                                                    id="video_link" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Accept</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <% } %>
-                    <!-- COMPLETED CASE -->
-                    <% } else if (a_type == "completed") { %>
-                        <div id="completedCase">
-                            <h1>Case Completed [CLOSED]</h1>
+                    </div>
+                    <!-- ONGOING MEETING CASE -->
+                    <% } else if (result.case_status == "ongoing") { %>
+                    <div id="ongoingCase">
+                        <% if (user_type == "client") { %>
+                        <div class="d-flex justify-content-between mb-3">
+                            <form action="/form/complaints/complete?_method=PATCH" method="POST">
+                                <input name="id" value="<%- result._id %>" hidden>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-thumbs-up"></i> Mark as
+                                    Resolved</button>
+                            </form>
+                    
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rescheduleModal"><i
+                                    class="far fa-calendar"></i>
+                                Schedule for follow up</button>
                         </div>
+                                            
+                        <form action="/form/complaints/ongoing/<%- result._id %>?_method=PATCH" method="POST">
+                            <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-labelledby="rescheduleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="rescheduleModalLabel">Reschedule</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Would you like to notify lawyer for reschedule?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                            <button type="submit" class="btn btn-primary">Yes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <% } %>
+                    </div>
+                    <!-- COMPLETED CASE -->
+                    <% } else if (result.case_status == "completed") { %>
+                    <div id="completedCase">
+                        <h1>Case Completed [CLOSED]</h1>
+                    </div>
                     <% } %>
                 </div>
             </div>
@@ -378,16 +287,13 @@
                             <div class="mb-3">
                                 <label for="legal_title" class="form-label">Saan napapabilang ang iyong reklamo?</label>
                                 <select name="legal_title" id="legal_title" class="form-select">
-                                    <option disabled>RA 9262: the Anti-Violence Against Women and their Children Act of 2004</option>
+                                    <option disabled>RA 9262: the Anti-Violence Against Women and their Children Act of
+                                        2004</option>
                                     <option value="Physical Violence">Physical Violence</option>
                                     <option value="Sexual Violence">Sexual Violence</option>
                                     <option value="Psychological Violence">Psychological Violence</option>
                                     <option value="Economic Abuse">Economic Abuse</option>
                                 </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Pangalan ng Kliyente</label>
-                                <input type="text" class="form-control" id="client_name" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="case_facts" class="form-label">Kwento/Detalye
@@ -403,10 +309,6 @@
                                     gustong makamit sa iyong problema</label>
                                 <textarea name="case_objectives" class="form-control" id="case_objectives"
                                     rows="3"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
-                                <input type="text" class="form-control" id="lawyer_details" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="client_questions" class="form-label">Mga
