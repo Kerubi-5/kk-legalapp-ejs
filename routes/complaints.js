@@ -11,6 +11,7 @@ const Solution = require("../models/Solution");
 const isClient = require("./auth").isClient;
 const isLawyer = require("./auth").isLawyer;
 const isAuth = require("./auth").isAuth;
+const isAdmin = require("./auth").isAdmin;
 
 // Node Mailer
 const sendMail = require("../utils/transporter");
@@ -18,7 +19,13 @@ const sendMail = require("../utils/transporter");
 // Node FS
 const fs = require("fs");
 
-const CaseStatusesEnum = Object.freeze({ PENDING: "pending", BOOKED: "booked", ONGOING: "ongoing", COMPLETED: "completed", REJECTED: "denied" })
+const CaseStatusesEnum = Object.freeze({
+  PENDING: "pending",
+  BOOKED: "booked",
+  ONGOING: "ongoing",
+  COMPLETED: "completed",
+  REJECTED: "denied",
+});
 
 // COMPLAINT POST SUBMIT CLIENT SIDE
 router.post("/consultation", isClient, async (req, res, next) => {
@@ -336,7 +343,7 @@ router.patch("/complaints/pending", isLawyer, async (req, res, next) => {
   }
 });
 
-router.patch("/complaints/reject", isLawyer, async (req, res, next) => {
+router.patch("/complaints/reject", isAdmin, async (req, res, next) => {
   try {
     const filter = req.body.id;
     complaintResult = await Complaint.findOneAndUpdate(
@@ -366,8 +373,9 @@ router.patch("/complaints/complete", isAuth, async (req, res, next) => {
 });
 
 // LAWYER SIDE COMPLAINT UPDATE AND ADD NEW SOLUTION
-router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
+router.post("/complaints/ongoing/:id", isLawyer, async (req, res, next) => {
   try {
+    const lawyer_id = req.user._id;
     const id = req.params.id;
     const { summary, recommendations, video_link } = req.body;
 
@@ -376,6 +384,7 @@ router.post("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
       summary: summary,
       recommendations: recommendations,
       video_link: video_link,
+      lawyer_in_charge: lawyer_id,
     });
 
     // Updating Complaint and Inserting new Solution
@@ -409,7 +418,10 @@ router.patch("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
     const id = req.params.id;
     await Complaint.findByIdAndUpdate(
       { _id: id },
-      { case_status: CaseStatusesEnum.PENDING, $unset: { appointment_date: "" } }
+      {
+        case_status: CaseStatusesEnum.PENDING,
+        $unset: { appointment_date: "" },
+      }
     );
     res.redirect("/dashboard");
   } catch (err) {

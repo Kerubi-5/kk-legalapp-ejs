@@ -29,6 +29,10 @@ const SolutionSchema = new mongoose.Schema({
   supporting_document: {
     type: String,
   },
+  lawyer_in_charge: {
+    type: String,
+    ref: "User",
+  },
 });
 
 module.exports = mongoose.model("Solution", SolutionSchema);
