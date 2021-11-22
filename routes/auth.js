@@ -54,13 +54,13 @@ module.exports.isClientOrLawyer = (req, res, next) => {
     req.isAuthenticated() &&
     (req.user.user_type == "client" || req.user.user_type == "lawyer")
   ) {
-    if (!req.user.is_verified) res.redirect('/unverified')
-    else if (req.user.is_locked) res.redirect('/lock')
-    else next()
+    if (!req.user.is_verified) res.redirect("/unverified");
+    else if (req.user.is_locked) res.redirect("/lock");
+    else next();
   } else if (req.isAuthenticated() && req.user.user_type == "admin") {
-    res.redirect('/admin')
+    res.redirect("/admin");
   } else {
-    req.flash("error_msg", "You need to login to continue")
+    req.flash("error_msg", "You need to login to continue");
     res.redirect("/users/login");
   }
 };

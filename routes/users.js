@@ -37,10 +37,10 @@ router.post("/register", async (req, res, next) => {
       birthdate,
       contact_number,
       permanent_address,
-      user_type
+      user_type,
     } = req.body;
 
-    const RolesEnum = Object.freeze({ LAWYER: "lawyer", CLIENT: "client" })
+    const RolesEnum = Object.freeze({ LAWYER: "lawyer", CLIENT: "client" });
 
     let errors = [];
 
@@ -71,10 +71,10 @@ router.post("/register", async (req, res, next) => {
       });
 
     const user_identifier = (user_type) => {
-      if (user_type == RolesEnum.LAWYER) return "register-lawyer"
-      else if (user_type == RolesEnum.CLIENT) return "register-client"
-      else return false
-    }
+      if (user_type == RolesEnum.LAWYER) return "register-lawyer";
+      else if (user_type == RolesEnum.CLIENT) return "register-client";
+      else return false;
+    };
 
     function renderPage() {
       res.render(user_identifier(user_type), {
@@ -115,7 +115,8 @@ router.post("/register", async (req, res, next) => {
           birthdate,
           contact_number,
           permanent_address,
-          user_type: user_type == RolesEnum.LAWYER ? RolesEnum.LAWYER : RolesEnum.CLIENT,
+          user_type:
+            user_type == RolesEnum.LAWYER ? RolesEnum.LAWYER : RolesEnum.CLIENT,
           credential,
         });
 

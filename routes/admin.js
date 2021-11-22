@@ -52,7 +52,10 @@ router.get("/accounts", isAdmin, async (req, res, next) => {
 // Lawyer Account Routes
 router.get("/accounts/lawyer", isAdmin, async (req, res, next) => {
   try {
-    const lawyerDocs = await User.find({ user_type: "lawyer", is_locked: false });
+    const lawyerDocs = await User.find({
+      user_type: "lawyer",
+      is_locked: false,
+    });
     res.render("./admin/lawyers", {
       layout: "./layouts/admin-layout",
       lawyerDocs,
@@ -95,7 +98,6 @@ router.get("/pending", isAdmin, async (req, res, next) => {
     complaints: complaintResults,
   });
 });
-
 
 // COMPLAINT VERIFICATION
 router

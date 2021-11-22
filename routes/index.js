@@ -66,7 +66,7 @@ router.get("/unverified", (req, res, next) => {
 
 router.get("/lock", (req, res, next) => {
   try {
-    res.render("./pages/lock", { layout: "./pages/layout-page" })
+    res.render("./pages/lock", { layout: "./pages/layout-page" });
   } catch (err) {
     next(err);
   }
