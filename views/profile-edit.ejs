@@ -89,32 +89,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    // add row
-    $("#addRow").click(() => {
-        const html = `
-            <div class="inputFormRow">
-                <hr>
-                <div class="col-12">
-                    <label for="organization" class="form-label">Organization</label>
-                    <input name="organization[]" type="text" class="form-control" id="organization"
-                        placeholder="Polytechnic University of the Philippines" required>
-                </div>
-                <div class="col-12">
-                    <label for="description" class="form-label">Description</label>
-                    <input name="description[]" type="text" class="form-control" id="description"
-                        placeholder="Bachelors of Degree" required>
-                </div>
-                    <button type="button" class="removeRow mt-3 mb-3 btn btn-danger">Remove</button>
-            </div>
-        `;
-
-        $('#backgroundRow').append(html);
-    });
-
-    // remove row
-    $("#backgroundRow").on('click', '.removeRow', function() {
-        $(this).closest(".inputFormRow").remove()
-    })
-</script>

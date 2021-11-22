@@ -222,39 +222,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(document).ready(function () {
-        $(".to1").on('click', function () {
-            $("#step1").fadeIn('slow');
-            $("#step2").hide();
-            $("#step3").hide();
-        });
-
-        $(".to2").on('click', function () {
-            $("#step1").hide();
-            $("#step2").fadeIn('slow');
-            $("#step3").hide();
-        });
-
-        $(".to3").on('click', function () {
-            const legal_title = $("#step1 #legal_title").val()
-            const case_facts = $("#step1 #case_facts").val()
-            const adverse_party = $("#step1 #adverse_party").val()
-            const case_objectives = $("#step1 #case_objectives").val()
-            const client_questions = $("#step1 #client_questions").val()
-            const lawyer_id = $("#step2 table input[name='lawyer_id']:checked").val();
-
-            $("#step3 #legal_title2").val(legal_title)
-            $("#step3 #case_facts2").val(case_facts)
-            $("#step3 #adverse_party2").val(adverse_party)
-            $("#step3 #case_objectives2").val(case_objectives)
-            $("#step3 #client_questions2").val(client_questions)
-            $("#step3 #lawyer_link2").attr('href', '/users/' + lawyer_id)
-
-            $("#step1").hide();
-            $("#step2").hide();
-            $("#step3").fadeIn('slow');
-        })
-    });
-</script>
