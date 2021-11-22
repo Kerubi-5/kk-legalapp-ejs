@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
-const { customAlphabet } = require("nanoid");
-const alphabet =
-  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-const nanoid = customAlphabet(alphabet, 12);
+const nanoid = require("../utils/nanoid");
 
 const SolutionSchema = new mongoose.Schema({
   _id: {
