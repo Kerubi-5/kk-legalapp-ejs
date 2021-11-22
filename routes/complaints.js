@@ -119,39 +119,31 @@ router.post("/consultation", isClient, async (req, res, next) => {
 });
 
 // COMPLAINT VIEW TRANSACTION ONGOING
-router.get("/complaints/:id", isAuth, (req, res, next) => {
+router.get("/complaints/:id", isAuth, async (req, res, next) => {
   try {
     const user_id = req.user._id;
+    const user_type = req.user.user_type;
     const complaint_id = req.params.id;
 
-    Complaint.findOne({ _id: complaint_id })
-      .populate("client_id")
-      .populate("lawyer_id")
-      .populate("solutions")
-      .exec(async (err, result) => {
-        if (err) next(err);
+    const complaintResult = await Complaint.findById({
+      _id: complaint_id,
+    }).populate("solutions");
+    const notifications = await Notification.find({ target: user_id });
 
-        let user_doc = await User.findOne({ _id: user_id });
-
-        const notifications = await Notification.find({ target: user_id });
-        const user_type = user_doc.user_type;
-
-        // Only users involved in this complaint will be able to see the content of the complaint
-        if (
-          user_id === result.client_id._id ||
-          user_id === result.lawyer_id._id
-        )
-          res.render("./complaint/complaint-view", {
-            currentUser: req.user,
-            result,
-            user_type: user_type,
-            a_type: result.case_status,
-            notifications,
-            solutions: result.solutions,
-          });
-        else
-          throw new Error("You do not have authority to view this complaint");
+    if (
+      user_id === complaintResult.client_id ||
+      user_id === complaintResult.lawyer_id
+    ) {
+      res.render("./complaint/complaint-view", {
+        currentUser: req.user,
+        result: complaintResult,
+        user_type: user_type,
+        notifications,
+        solutions: complaintResult.solutions,
       });
+    } else {
+      throw new Error("You do not have the authority to view this complaint");
+    }
   } catch (err) {
     next(err);
   }
@@ -163,9 +155,7 @@ router
   .get(async (req, res, next) => {
     try {
       const complaint_id = req.params.id;
-      const result = await Complaint.findById({ _id: complaint_id })
-        .populate("client_id")
-        .populate("lawyer_id");
+      const result = await Complaint.findById({ _id: complaint_id });
       res.json(result);
     } catch (err) {
       next(err);
