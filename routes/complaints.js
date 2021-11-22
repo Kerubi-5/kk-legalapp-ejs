@@ -419,4 +419,32 @@ router.patch("/complaints/ongoing/:id", isAuth, async (req, res, next) => {
   }
 });
 
+// REFER LAWYER
+router.route("/complaints/refer")
+  .get(async (req, res, next) => {
+    try {
+      const available_lawyers = await User.find({
+        user_type: "lawyer",
+        "availability.start_date": { $lte: todayDate },
+        "availability.end_date": { $gte: todayDate },
+      });
+
+      res.json(available_lawyers)
+    } catch (err) {
+      next(err)
+    }
+  })
+
+  .patch(async (req, res, next) => {
+    try {
+      const { lawyer_id, complaint_id } = req.body
+
+      await Complaint.findByIdAndUpdate({ _id: complaint_id }, { lawyer_id: lawyer_id })
+
+      res.redirect('/dashboard')
+    } catch (err) {
+      next(err)
+    }
+  })
+
 module.exports = router;
