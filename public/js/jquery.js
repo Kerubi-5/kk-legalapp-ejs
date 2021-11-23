@@ -5,6 +5,11 @@
 // Remove notification
 $(".close-notification").click(function () {
   var value = $(this).val();
+  $.ajax({
+    method: "DELETE",
+    url: "/notification/" + value + "?method=DELETE",
+  });
+
   $(this).closest(".dropdown-item").remove();
   var counter = parseInt($(".notif-counter").text());
   counter = counter - 1;
@@ -13,11 +18,6 @@ $(".close-notification").click(function () {
   }
 
   $(".notif-counter").text(counter);
-
-  $.ajax({
-    method: "GET",
-    url: "/notification/" + value,
-  });
 });
 
 $("ul .dropdown-menu .dropdown-item button").click(function (e) {

@@ -45,12 +45,10 @@ router.get("/dashboard", isClientOrLawyer, async (req, res, next) => {
   }
 });
 
-router.get("/notification/:id", isAuth, async (req, res, next) => {
+router.delete("/notification/:id", isAuth, async (req, res, next) => {
   try {
     const id = req.params.id;
     await Notification.findByIdAndDelete({ _id: id });
-
-    res.redirect("/dashboard");
   } catch (err) {
     next(err);
   }
