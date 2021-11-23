@@ -136,9 +136,9 @@ $("#referButton").click(() => {
     success: (data) => {
       data.forEach((lawyer) => {
         let html = `
-        <div class="d-flex justify-content-around mb-3">
-        <div>
-            <img src="/uploads/avatar/${lawyer.avatar}" width="200" height="100">
+        <div class="d-flex justify-content-around align-items-center border mb-3">
+        <div class="mt-3 mb-3">
+            <img class="img-thumbnail" src="/uploads/avatar/${lawyer.avatar}" width="100" height="100">
         </div>
         <div>
             <a target="_blank" href="/users/${lawyer._id}">
