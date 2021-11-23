@@ -48,7 +48,7 @@ $(document).ready(function () {
     const adverse_party = $("#step1 #adverse_party").val();
     const case_objectives = $("#step1 #case_objectives").val();
     const client_questions = $("#step1 #client_questions").val();
-    const lawyer_id = $("#step2 table input[name='lawyer_id']:checked").val();
+    const lawyer_id = $("#step2 div input[name='lawyer_id']:checked").val();
 
     $("#step3 #legal_title2").val(legal_title);
     $("#step3 #case_facts2").val(case_facts);
@@ -140,14 +140,14 @@ $("#referButton").click(() => {
         <div class="mt-3 mb-3">
             <img class="img-thumbnail" src="/uploads/avatar/${lawyer.avatar}" width="100" height="100">
         </div>
-        <div>
+        <div class="mt-3 mb-3">
             <a target="_blank" href="/users/${lawyer._id}">
                 ${lawyer.user_fname}
                 ${lawyer.user_lname}
             </a>
       
         </div>
-        <div>
+        <div class="mt-3 mb-3">
             <input class="form-check-input big" type="radio" name="lawyer_id"
                 value="${lawyer._id}">
         </div>
