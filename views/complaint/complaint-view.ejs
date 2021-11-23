@@ -100,8 +100,7 @@
                                     data-bs-target="#acceptRequest">
                                     Accept request
                                 </button>
-                                <button type="submit" class="btn btn-secondary" data-bs-toggle="modal"
-                                    data-bs-target="#referModal">Refer to
+                                <button id="referButton" type="button" class="btn btn-secondary">Refer to
                                     another lawyer</button>
                             </div>
                         </div>
@@ -146,24 +145,28 @@
                         </form>
 
                         <!-- Modal -->
-                        <form action="/form/complaints/refer?_method=PATCH" method="POST">
+                        <form action="/form/refer?_method=PATCH" method="POST">
                             <div class="modal fade" id="referModal" data-bs-backdrop="static" data-bs-keyboard="false"
                                 tabindex="-1" aria-labelledby="referModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="referModalLabel">Modal title</h5>
+                                            <h5 class="modal-title" id="referModalLabel">Refer to another lawyer</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <input name="id" type="text" value="<%- result._id %>" hidden>
+                                            <input name="complaint_id" type="text" value="<%- result._id %>" hidden>
                                             <input name="case_status" type="text" value="pending" hidden>
+
+                                            <div id="lawyerListInModal">
+
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="submit" class="btn btn-primary">Refer</button>
                                         </div>
                                     </div>
                                 </div>

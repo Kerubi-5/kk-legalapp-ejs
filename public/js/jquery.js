@@ -122,6 +122,44 @@ function solutionModal(id) {
   });
 }
 
+// REFER ANOTHER LAWYER
+$("#referButton").click(() => {
+  var host = window.location.protocol + "//" + window.location.host;
+  let url = host + "/form/refer";
+  let html;
+  $("#lawyerListInModal").empty();
+
+  $.ajax({
+    type: "GET",
+    url: url,
+    dataType: "json",
+    success: (data) => {
+      data.forEach((lawyer) => {
+        let html = `
+        <div class="d-flex justify-content-around mb-3">
+        <div>
+            <img src="/uploads/avatar/${lawyer.avatar}" width="200" height="100">
+        </div>
+        <div>
+            <a target="_blank" href="/users/${lawyer._id}">
+                ${lawyer.user_fname}
+                ${lawyer.user_lname}
+            </a>
+      
+        </div>
+        <div>
+            <input class="form-check-input big" type="radio" name="lawyer_id"
+                value="${lawyer._id}">
+        </div>
+        </div>
+        `;
+        $("#lawyerListInModal").append(html);
+        $("#referModal").modal("show");
+      });
+    },
+  });
+});
+
 /**
  * -------------- PROFILE EDIT ----------------
  */
