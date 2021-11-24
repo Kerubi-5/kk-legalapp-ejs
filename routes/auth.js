@@ -1,3 +1,5 @@
+const AuthRoles = require("../controllers/EnumTypes/AuthRoles")
+
 module.exports.isAuth = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
@@ -17,7 +19,7 @@ module.exports.isNotAuth = (req, res, next) => {
 };
 
 module.exports.isClient = (req, res, next) => {
-  if (req.isAuthenticated() && req.user.user_type == "client") {
+  if (req.isAuthenticated() && req.user.user_type == AuthRoles.CLIENT) {
     next();
   } else {
     req.flash("error_msg", "You need to login to continue");
@@ -26,7 +28,7 @@ module.exports.isClient = (req, res, next) => {
 };
 
 module.exports.isLawyer = (req, res, next) => {
-  if (req.isAuthenticated() && req.user.user_type == "lawyer") {
+  if (req.isAuthenticated() && req.user.user_type == AuthRoles.LAWYER) {
     return next();
   } else {
     req.flash("error_msg", "You need to login to continue");
@@ -35,9 +37,9 @@ module.exports.isLawyer = (req, res, next) => {
 };
 
 module.exports.isAdmin = (req, res, next) => {
-  if (req.isAuthenticated() && req.user.user_type == "admin") {
+  if (req.isAuthenticated() && req.user.user_type == AuthRoles.ADMIN) {
     return next();
-  } else if (req.isAuthenticated() && req.user.user_type != "admin") {
+  } else if (req.isAuthenticated() && req.user.user_type != AuthRoles.ADMIN) {
     req.flash(
       "error_msg",
       "You must have admin privilleges to view this resource"
@@ -52,12 +54,12 @@ module.exports.isAdmin = (req, res, next) => {
 module.exports.isClientOrLawyer = (req, res, next) => {
   if (
     req.isAuthenticated() &&
-    (req.user.user_type == "client" || req.user.user_type == "lawyer")
+    (req.user.user_type == AuthRoles.CLIENT || req.user.user_type == AuthRoles.LAWYER)
   ) {
     if (!req.user.is_verified) res.redirect("/unverified");
     else if (req.user.is_locked) res.redirect("/lock");
     else next();
-  } else if (req.isAuthenticated() && req.user.user_type == "admin") {
+  } else if (req.isAuthenticated() && req.user.user_type == AuthRoles.ADMIN) {
     res.redirect("/admin");
   } else {
     req.flash("error_msg", "You need to login to continue");
