@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const complaintController = require("../controllers/complaintController")
+
 // Load User model
 const User = require("../models/User");
 const Notification = require("../models/Notification");
@@ -15,35 +17,7 @@ router.get("/", (req, res) => res.render("index"));
 // Protected Routes
 
 // Dashboard
-router.get("/dashboard", isClientOrLawyer, async (req, res, next) => {
-  const id = req.user._id;
-
-  try {
-    const todayDate = new Date();
-    // QUERY ALL LAWYERS ONLY AVAILBLE <= TODAY DATE AND >= TODAY DATE
-    const available_lawyers = await User.find({
-      user_type: "lawyer",
-      "availability.start_date": { $lte: todayDate },
-      "availability.end_date": { $gte: todayDate },
-    });
-    let user_doc = await User.findOne({ _id: id }).populate("complaints");
-    let complaints = user_doc.complaints;
-    const notifications = await Notification.find({ target: id });
-
-    res.render("./complaint/index", {
-      currentUser: req.user,
-      result: available_lawyers,
-      user_doc,
-      complaintResults: complaints.filter(
-        (element) => element.is_verified == true
-      ),
-      notifications,
-      todayDate,
-    });
-  } catch (err) {
-    next(err);
-  }
-});
+router.get("/dashboard", isClientOrLawyer, complaintController.index);
 
 router.delete("/notification/:id", isAuth, async (req, res, next) => {
   try {
