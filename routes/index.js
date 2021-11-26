@@ -1,42 +1,88 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
+
+const complaintController = require("../controllers/complaintController")
 
 // Load User model
-const User = require('../models/User');
+const User = require("../models/User");
+const Notification = require("../models/Notification");
 
 // Auth types
-const isClient = require('./auth').isClient
-const isNotAuth = require('./auth').isNotAuth
-const isAuth = require('./auth').isAuth
-const { ObjectId } = require('bson');
-
+const isAuth = require("./auth").isAuth;
+const isClientOrLawyer = require("./auth").isClientOrLawyer;
 
 // Welcome Page
-router.get('/', isNotAuth, (req, res) => res.render('index'))
+router.get("/", (req, res) => res.render("index"));
 
 // Protected Routes
 
 // Dashboard
-router.get('/dashboard', isAuth, (req, res) => {
-    const id = ObjectId(req.user._id)
+router.get("/dashboard", isClientOrLawyer, complaintController.index);
 
-    User.find({ user_type: "lawyer", is_available: true }).exec(async (err, data) => {
-        if (err) throw err
-
-        let user_doc = await User.findOne({ _id: id }).populate('complaints')
-
-        const user_type = user_doc.user_type
-
-        res.render('dashboard', {
-            user_id: id,
-            result: data,
-            user_doc
-        });
-    })
+router.delete("/notification/:id", isAuth, async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    await Notification.findByIdAndDelete({ _id: id });
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.get('/advice', isAuth, (req, res) => {
+router.get("/unverified", (req, res, next) => {
+  try {
+    res.render("./pages/not-verified", { layout: "./pages/layout-page" });
+  } catch (err) {
+    next(err);
+  }
+});
 
-})
+router.get("/lock", (req, res, next) => {
+  try {
+    res.render("./pages/lock", { layout: "./pages/layout-page" });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// EMAIL VERIFY
+router.get("/verify", async (req, res, next) => {
+  try {
+    const id = req.query.id;
+    if (!id) {
+      res.send("Invalid Link");
+    } else {
+      await User.findByIdAndUpdate({ _id: id }, { is_verified: true });
+      res.render("./pages/verified", { layout: "./pages/layout-page" });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/faq/english", async (req, res, next) => {
+  try {
+    res.render("faq-english");
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/faq/tagalog", async (req, res, next) => {
+  try {
+    res.render("faq-tagalog");
+  } catch (err) {
+    next(err);
+  }
+});
+
+// EXTERNAL LINK
+router.get("/external", async (req, res, next) => {
+  try {
+    const link = req.query.link;
+    res.status(301).redirect(link);
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = router;

@@ -1,31 +1,85 @@
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <div class="row">
         <div class="card">
             <div class="card-body">
                 <div class="col">
                     <% if (result) { %>
-                        <img src="/uploads/avatar/<%- result.avatar %>" class="img-thumbnail" alt="..." width="300"
-                            height="128" />
-                        <span style="position: absolute; left: 350px; top: 50px">
-                            <h1>
-                                <%- result.username %>'s profile
-                            </h1>
-                            <h6>This profile is <%- result.is_public ? "Public" : "Private" %></h6>
-
-                            <% if (param_id == user_id) { %>
-                                <form action="/users/edit/public/<%- user_id %>?_method=PATCH" method="POST">
-                                    <button type="submit" class="btn btn-success"><%- result.is_public ? "Public" : "Private" %></button>
-                                </form>
+                    <img src="/uploads/avatar/<%- result.avatar %>" class="img-thumbnail" alt="..." width="300"
+                        height="128" />
+                    <span style="position: absolute; left: 350px; top: 50px">
+                        <h1>
+                            <%- result.username %>'s profile
+                            <% if (locals.result.availability.start_date || locals.result.availability.end_date) { %>
+                                <%- Date.now() >= result.availability.start_date && Date.now() <= result.availability.end_date ? '(Available) <i class="fas fa-check"></i>' : '(Away) <i class="fas fa-times"></i>' %> 
                             <% } %>
-                        </span>
-
-                        <!-- FORM FOR UPLOADING PICTURE -->
-                        <!-- <form action="/users/edit/pic/<%- //result._id %>?_method=PATCH" method="POST" enctype="multipart/form-data">
-                                <div class="input-group" style="width: 300px;">
-                                    <input name="avatar" type="file" class="form-control" id="profile_picture" aria-describedby="profile_picture" aria-label="Upload" accept="image/png, image/jpeg" required>
-                                    <button class="btn btn-outline-secondary" type="submit" id="profile_picture">Upload</button>
-                                  </div>                               
-                            </form> -->
+                        </h1>
+                        <% if (result.user_type == "lawyer") { %>
+                            <% if (locals.result.availability.start_date || locals.result.availability.end_date) { %>
+                            <small>The lawyer is only available through dates
+                                <%- result.availability.start_date.toLocaleDateString() %> to
+                                <%- result.availability.end_date.toLocaleDateString() %></small>
+                            <% } else { %>
+                            <small>The lawyer has not yet set the date</small>
+                            <% } %>
+                        <% } %>
+                        <h6>This profile is <%- result.is_public ? "Public" : "Private" %></h6>
+                        <% if (param_id == currentUser._id) { %>
+                        <form action="/users/edit/public/<%- currentUser._id %>?_method=PATCH" method="POST">
+                            <button type="submit" class="btn btn-success"><%- result.is_public ? "Public" : "Private" %></button>
+                            <small style="color: red;"> Sets the visibility from other users
+                            </small>
+                        </form>
+                        <% if (result.user_type == "lawyer") { %>
+                        <hr>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#toggleAvailabilityModal">
+                            Set Available
+                        </button>
+                        <small style="color: red;">
+                            Sets the availability date for consultation
+                        </small>
+                        <!-- Modal -->
+                        <form action="/users/edit/available/<%- currentUser._id %>?_method=PATCH" method="POST">
+                            <div class="modal fade" id="toggleAvailabilityModal" tabindex="-1" aria-labelledby="toggleAvailabilityModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="toggleAvailabilityModalLabel">Set Date Availability</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="start_date">Start Date</label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="start_date"><i
+                                                    class="fas fa-calendar"></i></span>
+                                            <input name="start_date" type="date"
+                                                class="form-control" aria-label="Appointment Date"
+                                                aria-describedby="Appointment Date" required>
+                                        </div>
+                                        <label for="end_date">End Date</label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="end_date"><i
+                                                    class="fas fa-calendar"></i></span>
+                                            <input name="end_date" type="date"
+                                                class="form-control" aria-label="Appointment Date"
+                                                aria-describedby="Appointment Date" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                        <% } %>
+                        <% } %>
+                    </span>
                     <% } %>
                 </div>
             </div>
@@ -33,23 +87,22 @@
         <div class="card">
             <div class="mt-2">
                 <%- include ("./partials/messages"); %>
-
             </div>
-
             <div class="card-body">
                 <div class="col">
-                        <% if (result.is_public || param_id == user_id) { %>
-                            <table class="table table-borderless">
-                                <div class="row">
-                                    <div class="col">
-                                        <h4>Personal Information</h4>
-                                    </div>
+                    <% if (result.is_public || param_id == currentUser._id) { %>
+                    <table class="table table-borderless">
+                        <div class="row">
                             <div class="col">
-                                <% if (isAuthenticated && param_id==user_id) { %>
-                                    <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Personal Information</a>
+                                <h4>Personal Information</h4>
+                            </div>
+                            <div class="col">
+                                <% if (isAuthenticated && param_id==currentUser._id) { %>
+                                <a href="/users/edit/<%- result._id %>" class="btn btn-success">Edit Information <i
+                                        class="fas fa-user-edit"></i></a>
                                 <% } %>
                             </div>
-                            
+
                         </div>
                         <hr>
                         <tr>
@@ -71,25 +124,42 @@
                             </td>
                         </tr>
                         <tr>
-                            <td> Full Address </td>
-                            <td>
-                                <%- result.permanent_address %>
-                            </td>
-                        </tr>
-                        <tr>
                             <td> Contact Number </td>
                             <td>
                                 <%- result.contact_number %>
                             </td>
                         </tr>
+                        <tr>
+                            <td> Email address </td>
+                            <td>
+                                <%- result.email %>
+                            </td>
+                        </tr>
                     </table>
+                    <% } else { %>
+                    This profile's information is private
+                    <% } %>
 
-                    <% if (result.user_type=="lawyer" ) { %>
-                        <!--PUT CREDENTIALS HERE -->
-                        <% } %>
-
-                        <% } %>
-                        
+                    <% if (result.user_type == "lawyer") { %>
+                    <h4>Background</h4>
+                    <hr>
+                    <div class="container mt-3">
+                        <div class="m-auto">
+                            <div class="list-group m-3">
+                                <% for( let index = 0; index < result.background.length; index++ ) { %>
+                                <div class="gap-3 py-3 mb-3">
+                                    <div class="gap-2">
+                                        <div>
+                                            <h6 class="mb-0"><%- result.background[index].organization %></h6>
+                                            <p class="mb-0 opacity-75"><%- result.background[index].description %></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
                 </div>
             </div>
         </div>

@@ -1,0 +1,46 @@
+<div id="complaintForm">
+    <div class="mb-3">
+        <label name="case_id" for="case_no" class="form-label">#Case ID:</label>
+        <span class="badge bg-dark rounded-pill">
+            <%- result._id %>
+        </span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Maikling deskripsyon ng legal na problema</label>
+        <input type="text" class="form-control" value="<%- result.legal_title %>" readonly>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Pangalan ng Kliyente</label>
+        <input type="text" class="form-control" value="<%- result.client_id.user_fname %>" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="case_facts" class="form-label">Kwento/Detalye
+            ng Legal na Problema</label>
+        <textarea class="form-control" class="form-control" rows="3" readonly><%- result.case_facts %></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="adverse_party" class="form-label">Kalabang Partido</label>
+        <input type="text" class="form-control" readonly value="<%- result.adverse_party %>">
+    </div>
+    <div class="mb-3">
+        <label for="case_objectives" class="form-label">Mga layunin na
+            gustong makamit sa legal na problema</label>
+        <textarea class="form-control" class="form-control" rows="3" readonly><%- result.case_objectives %></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="lawyer_details" class="form-label">Pangalan ng abogado</label>
+        <input type="text" class="form-control" readonly value="<%- result.lawyer_id.user_fname %>">
+    </div>
+    <div class="mb-5">
+        <label for="client_questions" class="form-label">Mga
+            katanungan sa abogado</label>
+        <textarea class="form-control" class="form-control" rows="3" readonly><%- result.client_questions %></textarea>
+    </div>
+    <caption>Mga dokumentong makakatulong sa kaso</caption>
+    <% for( let index = 0; index < result.case_files.length; index++ ) { %>
+    <div class="mb-3">
+        <embed src="/uploads/evidences/<%- result.case_files[index] %>" type="application/pdf" width="100%"
+            height="600px" />
+    </div>
+    <% } %>
+</div>

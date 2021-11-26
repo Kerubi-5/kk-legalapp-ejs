@@ -9,29 +9,93 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <% if (isAuthenticated) { %>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/dashboard">Dashboard</a>
-          </li>
-          <% } %>
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/advice">Advice</a>
+        </li>
+        <% } %>
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/faq/tagalog">FAQ</a>
+        </li>
       </ul>
       <ul class="navbar-nav">
-      <% if (isAuthenticated) { %>
+        <% if (isAuthenticated) { %>
+        <% if (locals.notifications) { %>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-bell"></i><span
+              class="notif-counter badge badge-primary"><%- notifications.length == "0" ? "" : notifications.length %></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-dark notification"
+            aria-labelledby="navbarDropdown">
+            <% if (notifications.length) { %>
+            <% for( let index = 0; index < notifications.length; index++ ) { %>
+            <li class="dropdown-item" style="position: relative;">
+              <h6 class="me-auto"><%- notifications[index].actor %> <a
+                  href="/form/complaints/<%- notifications[index].complaint_id %>"><%- notifications[index].message %></a>
+              </h6>
+              <small><%- notifications[index].date %></small>
+              <button class="link-danger close-notification btn" value="<%- notifications[index]._id %>"><i
+                  class="far fa-window-close" style="position: absolute; right: 20px; top: 5px;"></i></button>
+            </li>
+            <% } %>
+            <% } else { %>
+            <li class="dropdown-item">
+              It seems there are no notifications at the moment
+            </li>
+            <% } %>
+          </ul>
+        </li>
+        <% } %>
+        <% if (locals.currentUser) { %>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
             <i class="fa fa-user" aria-hidden="true"></i>
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/users/<%- user_id %>">Profile</a></li>
-            <li><hr class="dropdown-divider"></li>
+          <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-dark" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/users/<%- currentUser._id %>">Profile</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
             <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
           </ul>
         </li>
+        <li class="nav-link">
+          Hello <%- currentUser.user_fname %> (<%- currentUser.user_type %>)
+        </li>
+        <% } %>
         <% } else { %>
-            <li class="nav-item"><a class="nav-link" href="/users/login">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="/users/register">Register</a></li>
-
-          <% } %>
-        </ul>
+        <li class="nav-item"><a class="nav-link" href="/users/login">Login</a></li>
+        <li class="nav-item"><a class="nav-link pointer" data-bs-toggle="modal" data-bs-target="#register">
+            Register
+          </a></li>
+        <!-- Button trigger modal -->
+        <!-- Modal -->
+        <div class="modal fade" id="register" tabindex="-1" aria-labelledby="registerLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registration Modal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                <div class="col">
+                <a class="btn btn-warning btn-lg" href="/users/register/client" style="height: 100%; width: 100%;">Client Registration</a>
+                </div>
+                <div class="col">
+                <a class="btn btn-success btn-lg" href="/users/register/lawyer" style="height: 100%; width: 100%;">Lawyer Registration</a>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </ul>
     </div>
   </div>
 </nav>

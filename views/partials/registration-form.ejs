@@ -54,10 +54,11 @@
     placeholder="Enter permanent address"
     value="<%= typeof permanent_address != 'undefined' ? permanent_address : '' %>" />
 </div>
-<div class="input-group mb-3">
-  <input type="city" id="city" name="city" class="form-control" placeholder="City"
-    value="<%= typeof city != 'undefined' ? city : '' %>" />
-  <span class="input-group-text"></span>
-  <input type="zip" id="zip" name="zip" class="form-control" placeholder="Zip"
-    value="<%= typeof zip != 'undefined' ? zip : '' %>" />
+<div class="input-group">
+  <input type="file" name="credential" class="form-control" id="credential"
+      accept="application/pdf">
+  <label class="input-group-text" for="credential"><i class="fa fa-briefcase"
+          aria-hidden="true"></i>
+  </label>
 </div>
+<small class="mb-3">Upload only PDF for credentials/ID</small>

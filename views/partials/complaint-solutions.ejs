@@ -1,0 +1,70 @@
+<% for( let index = 0; index < solutions.length; index++ ) { %>
+<div class="border p-3 m-3 shadow">
+    <div class="mb-3 d-flex justify-content-between">
+        <h4># <%- index+1 %> </h4>
+        <% if (user_type == "lawyer") { %>
+        <button class="btn btn-primary" onclick="solutionModal('<%- solutions[index]._id %>')">EDIT</button>
+        <% } %>
+    </div>
+    <label class="form-label">Petsa ng diskusyon</label>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i>
+        </span>
+        <input type="date" name="date_completed" class="form-control"
+            value="<%- solutions[index].date_completed.toISOString().split('T')[0] %>" readonly />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Buod ng mga napagusapan</label>
+        <textarea name="summary" type="text" class="form-control" readonly><%- solutions[index].summary %></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Mga rekomendasyon ng abogado</label>
+        <textarea name="recommendations" type="text" class="form-control"
+            readonly><%- solutions[index].recommendations %></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">User ID ng Abogadong namuno sa diskusyon: </label>
+        <a class="form-control" href="/users/<%- solutions[index].lawyer_in_charge %>"
+            target="_blank"><%- solutions[index].lawyer_in_charge %></a>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Video Link: </label>
+        <a class="form-control" href="/external?link=<%- solutions[index].video_link %>"
+            target="_blank"><%- solutions[index].video_link %></a>
+    </div>
+</div>
+<% } %>
+
+<!-- SOLUTION Modal -->
+<form id="solutionForm" method="POST">
+    <div class="modal fade" id="solutionModal" tabindex="-1" aria-labelledby="solutionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="solutionModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="summary" class="form-label">Buod ng mga napagusapan</label>
+                        <textarea name="summary" type="text" class="form-control" id="summary" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="recommendations" class="form-label">Mga rekomendasyon para sa kliyente</label>
+                        <textarea name="recommendations" type="text" class="form-control" id="recommendations"
+                            required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="video_link" class="form-label">Video link ng meeting</label>
+                        <textarea name="video_link" type="text" class="form-control" id="video_link"
+                            required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

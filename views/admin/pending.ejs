@@ -1,0 +1,68 @@
+<!--Pending Content-->
+<div id="authenticate-content" class="mt-5 pt-3 tab-content" role="tabpanel">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 fw-bold fs-3">
+                Pending Assistance Request
+            </div>
+        </div>
+        <br>
+        <!--Table for Account Pending-->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Case ID</th>
+                    <th scope="col">Client's Name</th>
+                    <th scope="col">Requested Lawyer</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% complaints.forEach(element => { %>
+                <tr>
+                    <th scope="row"><%- element._id %></th>
+                    <td><%- element.client_id.user_fname + " " + element.client_id.user_lname %> </td>
+                    <td><%- element.lawyer_id.user_fname + " " + element.lawyer_id.user_lname %> </td>
+                    <td><button type="button" class="btn btn-primary btn-sm"
+                            onclick="showModal('<%- element._id %>')">Review</button></td>
+                </tr>
+                <% }) %>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<!--Modal content-->
+<form id="verifyCase" method="POST">
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">REVIEW COMPLAINT</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align: justify;">
+                </div>
+                <div class="modal-footer">
+                    <button id="acceptBtn" value="accept" type="submit" class="btn btn-success">Accept</button>
+                    <form id="rejectForm" method="POST">
+                        <button id="rejectBtn" value="reject" type="submit" class="btn btn-danger">Reject</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--end of Modal Content-->
+
+<script>
+    function showModal(data) {
+        $("#myModal .modal-body").load(`/admin/pending/${data}`, () => {
+            $("#myModal").modal('show')
+            $("#verifyCase").attr("action", `/admin/pending/${data}?_method=PATCH`)
+            $("#rejectForm").attr("action", `/form/complaints/reject/${data}?_method=PATCH`)
+        })
+    }
+</script>

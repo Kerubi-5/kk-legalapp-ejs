@@ -1,0 +1,39 @@
+Change the advice into LIST GROUP form BOOSTRAP [DONE]
+Change Background [done]
+
+Added submitted date in transactions table [DONE]
+Added search box in advice section [DONE]
+Make client comment on advices [Reject]
+
+Intercept Admin First
+
+```
+{
+client_id: "DjvSgsmtRDcj",
+legal_title: "Abusadong asawa",
+case_facts: "Tuwing umuuwi ako sa tahanan ay ako ay binubugbog ng aking asawa",
+adverse_party : "Asiong Sashortga",
+case_objectives: "Gusto kong hiwalayan at dalhin ang aking mga anak palayo sa aking asawa",
+client_questions: "TBD OR May Laman",
+lawyer_id: "hv1C7BKQZiGb",
+}
+```
+
+DELETE A FILE IN EXPRESS [DONE]
+UPLOAD MULTIPLE FILES IN COMPLAINT [DONE]
+
+ADVICE HELP HOW TO [PENDING]
+
+UPDATED COMPLAINT SUBMISSION FORM [DONE]
+EDITABLE COMPLAINT FORM [DONE]
+EDITABLE SOLUTION [DONE]
+RESCHEDULING [DONE]
+SET AVAILABILITY [DONE]
+INTERCEPT COMPLAINTS BY ADMIN[DONE]
+
+
+REJECT to REFER 
+RESCHEDULE to SCHEDULE FOR FOLLOWUP [DONE]
+PROVIDE ID FOR VALIDATION OF LEGITIMACY [DONE]
+HEADER navigation put the name and user type [DONE]
+ADD REJECT BUTTON ON ADMIN SIDE [DONE]

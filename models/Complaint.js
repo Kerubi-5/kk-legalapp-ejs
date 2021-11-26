@@ -1,46 +1,63 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
+const nanoid = require("../utils/nanoid");
 
 const ComplaintSchema = new mongoose.Schema({
-    client_id: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "User"
+  _id: {
+    type: String,
+    default: () => nanoid(),
+  },
+  client_id: {
+    type: String,
+    ref: "User",
+  },
+  date_submitted: {
+    type: Date,
+    default: Date.now(),
+  },
+  legal_title: {
+    type: String,
+  },
+  case_facts: {
+    type: String,
+  },
+  adverse_party: {
+    type: String,
+  },
+  case_objectives: {
+    type: String,
+  },
+  client_questions: {
+    type: String,
+  },
+  case_files: [
+    {
+      type: String,
     },
-    date_submitted: {
-        type: Date,
-        default: Date.now()
+  ],
+  case_status: {
+    type: String,
+    default: "pending",
+  },
+  lawyer_id: {
+    type: String,
+    ref: "User",
+  },
+  appointment_date: {
+    type: Date,
+  },
+  meeting_link: {
+    type: String,
+  },
+  solutions: [
+    {
+      type: String,
+      ref: "Solution",
     },
-    legal_title: {
-        type: String
-    },
-    case_facts: {
-        type: String
-    },
-    adverse_party: {
-        type: String
-    },
-    case_objectives: {
-        type: String
-    },
-    client_questions: {
-        type: String
-    },
-    case_file: {
-        type: String
-    },
-    case_status: {
-        type: String,
-        default: "pending"
-    },
-    lawyer_id: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "User"
-    },
-    appointment_date: {
-        type: Date
-    },
-    date_completed: {
-        type: Date
-    }
-})
+  ],
+  is_verified: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-module.exports = mongoose.model('Complaint', ComplaintSchema)
+module.exports = mongoose.model("Complaint", ComplaintSchema);

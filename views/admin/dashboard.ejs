@@ -1,0 +1,136 @@
+<div id="dboard-content" class="mt-5 pt-3 tab-content" role="tabpanel">
+  <%- include("../partials/messages") %>
+  <div class="col-md-12 fw-bold fs-3 ms-3">
+    Dashboard
+  </div>
+  <div class="container">
+
+
+    <h1>Number of Registrations: </h1>
+    <div class="row">
+      <div class="col">
+        <div class="card text-center">
+          <div class="card-title bg-secondary">
+            <i class="fa fa-users fa-5x m-5" aria-hidden="true"></i>
+          </div>
+          <div class="card-body">
+            Number of Clients Registered in the website.
+            <br>
+            <h2><%- clientCount %></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card text-center">
+          <div class="card-title bg-secondary">
+            <i class="fa fa-users fa-5x m-5" aria-hidden="true"></i>
+          </div>
+          <div class="card-body">
+            Number of Lawyers Registered in the website.
+            <br>
+            <h2><%- lawyerCount %></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <h1>Advices: </h1>
+
+    <div class="row mt-3">
+      <div class="col">
+        <div class="card text-center">
+          <div class="card-title bg-secondary">
+            <i class="fa fa-pencil fa-5x m-5" aria-hidden="true"></i>
+          </div>
+          <div class="card-body">
+            Total numbers of advices posted.
+            <br>
+            <h2><%- advicesCount %></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card text-center">
+          <div class="card-title bg-secondary">
+            <i class="fa fa-check fa-5x m-5" aria-hidden="true"></i>
+          </div>
+          <div class="card-body">
+            Total number of posts marked as resolved
+            <br>
+            <h2><%- resolvedAdvicesCount %></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <h1>Consultation: </h1>
+    <div class="row mt-3">
+      <div class="col">
+        <div class="card text-center">
+          <div class="card-title bg-secondary">
+            <i class="fa fa-gavel fa-5x m-5" aria-hidden="true"></i>
+          </div>
+          <div class="card-body">
+            Total numbers of consultation submitted.
+            <br>
+            <h2><%- complaintsCount %></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card text-center">
+          <div class="card-title bg-secondary">
+            <i class="fa fa-thumbs-up fa-5x m-5" aria-hidden="true"></i>
+          </div>
+          <div class="card-body">
+            Total number of consultations marked as completed
+            <br>
+            <h2><%- complaintsCompletedCount %></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Graph of Monthly registration-->
+    <!-- <div id="chartContainer" style="height: 300px; width: 100%;">
+    </div> -->
+  </div>
+  <!--Script for graph-->
+  <!-- <script type="text/javascript">
+    window.onload = function () {
+      var chart = new CanvasJS.Chart("chartContainer",
+        {
+
+          title: {
+            text: "Total Monthly Registration"
+          },
+          data: [
+            {
+              type: "line",
+
+              dataPoints: [
+                { x: new Date(2021, 00, 1), y: 1 },
+                { x: new Date(2021, 01, 1), y: 1 },
+                { x: new Date(2021, 02, 1), y: 1 },
+                { x: new Date(2021, 03, 1), y: 1 },
+                { x: new Date(2021, 04, 1), y: 1 },
+                { x: new Date(2021, 05, 1), y: 1 },
+                { x: new Date(2021, 06, 1), y: 1 },
+                { x: new Date(2021, 07, 1), y: 1 },
+                { x: new Date(2021, 17, 1), y: 2 },
+                { x: new Date(2021, 19, 1), y: 2 },
+                { x: new Date(2021, 21, 1), y: 2 },
+                { x: new Date(2021, 23, 1), y: 10 }
+              ]
+            }
+          ]
+        });
+
+      chart.render();
+    }
+  </script>
+
+  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> -->
+  <!--End of script for graph-->
+</div>
