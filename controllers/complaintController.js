@@ -11,6 +11,7 @@ const fs = require("fs");
 
 // Enums
 const CaseStatusesEnum = require("./EnumTypes/CaseStatusesEnum")
+const ComplaintStatusesEnum = require("./EnumTypes/ComplaintStatusesEnum")
 
 exports.index = async (req, res, next) => {
 	const id = req.user._id;
@@ -52,7 +53,7 @@ exports.postComplaint = async (req, res, next) => {
 			adverse_party,
 			case_objectives,
 			client_questions,
-			case_status,
+
 		} = req.body;
 
 		let errors = [];
@@ -66,7 +67,6 @@ exports.postComplaint = async (req, res, next) => {
 			!case_facts ||
 			!adverse_party ||
 			!case_objectives ||
-			!case_status ||
 			!lawyer_id ||
 			!req.files ||
 			!req.body.lawyer_id ||
