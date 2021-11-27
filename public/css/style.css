@@ -48,17 +48,6 @@ input[type="radio"] {
   max-height: 500px;
 }
 
-/* HOMEPAGE */
-.home-banner {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../assets/images/homepage_law.jpg");
-  width: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-}
-
 .carousel-item {
   height: 25rem;
   background: black;
