@@ -383,12 +383,12 @@ exports.patchReferUpdate = async (req, res, next) => {
 		const user_id = req.user._id;
 		const { lawyer_id, complaint_id } = req.body;
 
-		await Complaint.findByIdAndUpdate(
+		const complaintDeets = await Complaint.findByIdAndUpdate(
 			{ _id: complaint_id },
 			{ lawyer_id: lawyer_id }
 		);
 
-		await User.findByIdAndUpdate(
+		const lawyerDeets = await User.findByIdAndUpdate(
 			{ _id: user_id },
 			{ $pull: { complaints: complaint_id } }
 		);
@@ -397,6 +397,16 @@ exports.patchReferUpdate = async (req, res, next) => {
 			{ _id: lawyer_id },
 			{ $push: { complaints: complaint_id } }
 		);
+
+		// Push notification
+		const pushNotify = new Notification({
+			complaint_id: complaint_id,
+			message: "has referred you to another lawyer",
+			actor: lawyerDeets.username,
+			target: complaintDeets.client_id
+		})
+
+		await pushNotify.save()
 
 		res.redirect("/dashboard");
 	} catch (err) {
