@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const nanoid = require("../utils/nanoid");
+const CaseStatusesEnum = require("../controllers/EnumTypes/CaseStatusesEnum")
+const ComplaintStatusesEnum = require("../controllers/EnumTypes/ComplaintStatusesEnum");
 
 const ComplaintSchema = new mongoose.Schema({
   _id: {
@@ -36,7 +38,11 @@ const ComplaintSchema = new mongoose.Schema({
   ],
   case_status: {
     type: String,
-    default: "pending",
+    default: CaseStatusesEnum.PENDING
+  },
+  complaint_status: {
+    type: String,
+    default: ComplaintStatusesEnum.PENDING
   },
   lawyer_id: {
     type: String,
