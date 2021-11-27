@@ -75,10 +75,11 @@
                     <!-- This is the Details Content -->
                     <h1>Detalye ng mga napagmeetingan</h1>
                     <hr>
-                    <% if (result.meeting_link) { %>
+                    <% if (locals.result.meeting_link) { %>
                     <p>Zoom meeting: <a href="/external?link=<%- result.meeting_link %>"
                             target="_blank"><%- result.meeting_link %></a></p>
-                    <% if (locals.result.appointment_date){ %>
+                    <% } %>
+                    <% if (locals.result.appointment_date) { %>
                     <p>The meeting schedule is <strong><time
                                 datetime="<%- result.appointment_date %>">"<%- result.appointment_date %>"</time></strong>
                     </p>
@@ -87,9 +88,9 @@
                     <% if (locals.solutions) { %>
                     <%- include("../partials/complaint-solutions") %>
                     <% } %>
-                    <% } %>
+
                     <!-- PENDING CASE -->
-                    <% if (user_type=="lawyer" && result.case_status=="pending" ) { %>
+                    <% if (user_type=="lawyer" && result.case_status== CaseStatusesEnum.PENDING ) { %>
                     <div id="pendingCase">
                         <div class="mb-3 mt-3 d-flex justify-content-between align-items-center">
                             <!-- Button trigger modal -->
@@ -118,7 +119,6 @@
                                         </div>
                                         <div class="modal-body">
                                             <input name="id" type="text" value="<%- result._id %>" hidden>
-                                            <input name="case_status" type="text" value="booked" hidden>
                                             <label for="appointment_date">Set appointment date</label>
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text" id="appointment_date"><i
@@ -157,10 +157,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <input name="complaint_id" type="text" value="<%- result._id %>" hidden>
-                                            <input name="case_status" type="text" value="pending" hidden>
-
                                             <div id="lawyerListInModal">
-
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -174,7 +171,7 @@
                         </form>
                     </div>
                     <!-- BOOKED MEETING CASE -->
-                    <% } else if (result.case_status=="booked"){ %>
+                    <% } else if (result.case_status== CaseStatusesEnum.BOOKED){ %>
                     <div id="bookedCase">
                         <% if (user_type == "lawyer") { %>
                         <br>
@@ -226,7 +223,7 @@
                         <% } %>
                     </div>
                     <!-- ONGOING MEETING CASE -->
-                    <% } else if (result.case_status == "ongoing") { %>
+                    <% } else if (result.case_status == CaseStatusesEnum.ONGOING) { %>
                     <div id="ongoingCase">
                         <% if (user_type == "client") { %>
                         <div class="d-flex justify-content-between mb-3">
@@ -264,7 +261,7 @@
                         <% } %>
                     </div>
                     <!-- COMPLETED CASE -->
-                    <% } else if (result.case_status == "completed") { %>
+                    <% } else if (result.case_status == CaseStatusesEnum.COMPLETED) { %>
                     <div id="completedCase">
                         <h1>Case Completed [CLOSED]</h1>
                     </div>

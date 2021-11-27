@@ -54,6 +54,7 @@ exports.postSolution = async (req, res, next) => {
 		// Updating Complaint and Inserting new Solution
 		const complaintResult = await Complaint.findOne({ _id: id });
 		complaintResult.case_status = CaseStatusesEnum.ONGOING;
+		complaintResult.complaint_status = CaseStatusesEnum.ONGOING;
 		complaintResult.solutions.push(newSolution);
 		await complaintResult.save();
 

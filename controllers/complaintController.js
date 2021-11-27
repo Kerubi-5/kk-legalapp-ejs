@@ -93,7 +93,6 @@ exports.postComplaint = async (req, res, next) => {
 				adverse_party,
 				case_objectives,
 				client_questions,
-				case_status,
 				case_files,
 				lawyer_id,
 			});
@@ -153,6 +152,7 @@ exports.findComplaintByID = async (req, res, next) => {
 				user_type: user_type,
 				notifications,
 				solutions: complaintResult.solutions,
+				CaseStatusesEnum
 			});
 		} else {
 			throw new Error("You do not have the authority to view this complaint");
@@ -261,7 +261,7 @@ exports.patchComplaintDetails = async (req, res, next) => {
 exports.acceptComplaintPending = async (req, res, next) => {
 	try {
 		const filter = req.body.id;
-		const { case_status, appointment_date, meeting_link } = req.body;
+		const { appointment_date, meeting_link } = req.body;
 		let error = false;
 
 		// DATE VARIABLES FOR COMPARISON
@@ -272,7 +272,7 @@ exports.acceptComplaintPending = async (req, res, next) => {
 			const complaintResult = await Complaint.findOneAndUpdate(
 				{ _id: filter },
 				{
-					case_status: case_status,
+					case_status: CaseStatusesEnum.BOOKED,
 					appointment_date: appointment_date,
 					meeting_link: meeting_link,
 				}
@@ -316,7 +316,10 @@ exports.rejectComplaintPending = async (req, res, next) => {
 		const filter = req.body.id;
 		complaintResult = await Complaint.findOneAndUpdate(
 			{ _id: filter },
-			{ case_status: CaseStatusesEnum.REJECTED }
+			{
+				case_status: CaseStatusesEnum.REJECTED,
+				complaint_status: ComplaintStatusesEnum.REJECTED
+			}
 		);
 
 		res.redirect("/form/complaints/" + filter);
@@ -330,7 +333,10 @@ exports.completeComplaintOngoing = async (req, res, next) => {
 		const id = req.body.id;
 		await Complaint.findByIdAndUpdate(
 			{ _id: id },
-			{ case_status: CaseStatusesEnum.COMPLETED }
+			{
+				case_status: CaseStatusesEnum.COMPLETED,
+				complaint_status: ComplaintStatusesEnum.RESOLVED
+			}
 		);
 
 		res.redirect("/form/complaints/" + req.body.id);
@@ -345,8 +351,9 @@ exports.followUpSchedule = async (req, res, next) => {
 		await Complaint.findByIdAndUpdate(
 			{ _id: id },
 			{
+				complaint_status: ComplaintStatusesEnum.FOLLOWUP,
 				case_status: CaseStatusesEnum.PENDING,
-				$unset: { appointment_date: "" },
+				$unset: { appointment_date: "", meeting_link: "" },
 			}
 		);
 		res.redirect("/dashboard");
