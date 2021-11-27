@@ -318,11 +318,12 @@ exports.rejectComplaintPending = async (req, res, next) => {
 			{ _id: filter },
 			{
 				case_status: CaseStatusesEnum.REJECTED,
-				complaint_status: ComplaintStatusesEnum.REJECTED
+				complaint_status: ComplaintStatusesEnum.REJECTED,
+				is_verified: true
 			}
 		);
 
-		res.redirect("/form/complaints/" + filter);
+		res.redirect("/admin/pending");
 	} catch (err) {
 		next(err);
 	}
