@@ -60,7 +60,10 @@ exports.lawyersView = async (req, res, next) => {
 
 exports.clientsView = async (req, res, next) => {
 	try {
-		const clientDocs = await User.find({ user_type: "client" });
+		const clientDocs = await User.find({
+			user_type: "client",
+			is_locked: false,
+		});
 		res.render("./admin/clients", {
 			layout: "./layouts/admin-layout",
 			clientDocs,

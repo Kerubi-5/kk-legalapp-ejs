@@ -24,12 +24,10 @@
     <input type="text" class="form-control" id="address" value="<%- user.permanent_address %>" readonly>
 </div>
 
-<% if (user.user_type == "lawyer") { %>
 <div class="mb-3">
     <figure>
-        <embed src="/uploads/credentials/<%- user.lawyer_credential %>" type="application/pdf" width="100%"
+        <embed src="/uploads/credentials/<%- user.credential %>" type="application/pdf" width="100%"
             height="600px" />
-        <figcaption>Lawyer's Credentials</figcaption>
+        <figcaption>Credentials</figcaption>
     </figure>
 </div>
-<% } %>

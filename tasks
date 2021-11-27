@@ -32,8 +32,13 @@ SET AVAILABILITY [DONE]
 INTERCEPT COMPLAINTS BY ADMIN[DONE]
 
 
-REJECT to REFER 
+***************** TBD *
+REJECT to REFER  [DONE]
 RESCHEDULE to SCHEDULE FOR FOLLOWUP [DONE]
 PROVIDE ID FOR VALIDATION OF LEGITIMACY [DONE]
 HEADER navigation put the name and user type [DONE]
-ADD REJECT BUTTON ON ADMIN SIDE [DONE]
+ADD REJECT BUTTON ON ADMIN SIDE [DONE] mali case status
+
+notif when being referred*
+walang id img sa modal [DONE]
+different field for case status because current one in modal is case_status [DONE]
