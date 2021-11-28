@@ -26,12 +26,6 @@ td {
   height: 3em;
 }
 
-input[type="radio"] {
-  -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
-  -moz-appearance: checkbox; /* Firefox */
-  -ms-appearance: checkbox; /* not currently supported */
-}
-
 .scrolling-active {
   background-color: black;
   transition: 0.5s;
@@ -96,4 +90,10 @@ input[type="radio"] {
   color: green;
   cursor: pointer;
   text-decoration: none;
+}
+
+@media only screen and (min-width: 600px) {
+  .input-radio {
+    text-align: center;
+  }
 }
