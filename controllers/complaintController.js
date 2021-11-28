@@ -115,14 +115,6 @@ exports.postComplaint = async (req, res, next) => {
 			lawyer_result.complaints.push(newComplaint);
 			await lawyer_result.save();
 
-			const pushNotify = new Notification({
-				complaint_id: newComplaint._id,
-				message: "has requested a consultation request",
-				actor: client_result.username,
-				target: lawyer_result._id,
-			});
-
-			await pushNotify.save();
 			req.flash("success_msg", "Complaint Successfully Processed");
 			res.redirect("/dashboard");
 		}
