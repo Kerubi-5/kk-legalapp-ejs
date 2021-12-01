@@ -2,6 +2,7 @@
 const User = require("../models/User");
 const Advice = require("../models/Advice");
 const Complaint = require("../models/Complaint");
+const Notification = require("../models/Notification")
 
 exports.index = async (req, res, next) => {
 	try {
@@ -60,7 +61,10 @@ exports.lawyersView = async (req, res, next) => {
 
 exports.clientsView = async (req, res, next) => {
 	try {
-		const clientDocs = await User.find({ user_type: "client" });
+		const clientDocs = await User.find({
+			user_type: "client",
+			is_locked: false,
+		});
 		res.render("./admin/clients", {
 			layout: "./layouts/admin-layout",
 			clientDocs,
@@ -107,7 +111,16 @@ exports.findComplaintByID = async (req, res, next) => {
 
 exports.complaintVerify = async (req, res, next) => {
 	const id = req.params.id;
-	await Complaint.findByIdAndUpdate({ _id: id }, { is_verified: true });
+	const complaintResult = await Complaint.findByIdAndUpdate({ _id: id }, { is_verified: true }).populate("client_id");
+
+	const pushNotify = new Notification({
+		complaint_id: complaintResult._id,
+		message: "has requested a consultation request",
+		actor: complaintResult.client_id.username,
+		target: complaintResult.lawyer_id,
+	});
+
+	await pushNotify.save();
 	req.flash("success_msg", "Succesfully verified a complaint");
 	res.redirect("/admin/pending");
 }

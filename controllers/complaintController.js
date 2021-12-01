@@ -11,6 +11,7 @@ const fs = require("fs");
 
 // Enums
 const CaseStatusesEnum = require("./EnumTypes/CaseStatusesEnum")
+const ComplaintStatusesEnum = require("./EnumTypes/ComplaintStatusesEnum")
 
 exports.index = async (req, res, next) => {
 	const id = req.user._id;
@@ -52,7 +53,7 @@ exports.postComplaint = async (req, res, next) => {
 			adverse_party,
 			case_objectives,
 			client_questions,
-			case_status,
+
 		} = req.body;
 
 		let errors = [];
@@ -66,7 +67,6 @@ exports.postComplaint = async (req, res, next) => {
 			!case_facts ||
 			!adverse_party ||
 			!case_objectives ||
-			!case_status ||
 			!lawyer_id ||
 			!req.files ||
 			!req.body.lawyer_id ||
@@ -93,7 +93,6 @@ exports.postComplaint = async (req, res, next) => {
 				adverse_party,
 				case_objectives,
 				client_questions,
-				case_status,
 				case_files,
 				lawyer_id,
 			});
@@ -116,14 +115,6 @@ exports.postComplaint = async (req, res, next) => {
 			lawyer_result.complaints.push(newComplaint);
 			await lawyer_result.save();
 
-			const pushNotify = new Notification({
-				complaint_id: newComplaint._id,
-				message: "has requested a consultation request",
-				actor: client_result.username,
-				target: lawyer_result._id,
-			});
-
-			await pushNotify.save();
 			req.flash("success_msg", "Complaint Successfully Processed");
 			res.redirect("/dashboard");
 		}
@@ -153,6 +144,7 @@ exports.findComplaintByID = async (req, res, next) => {
 				user_type: user_type,
 				notifications,
 				solutions: complaintResult.solutions,
+				CaseStatusesEnum
 			});
 		} else {
 			throw new Error("You do not have the authority to view this complaint");
@@ -261,7 +253,7 @@ exports.patchComplaintDetails = async (req, res, next) => {
 exports.acceptComplaintPending = async (req, res, next) => {
 	try {
 		const filter = req.body.id;
-		const { case_status, appointment_date, meeting_link } = req.body;
+		const { appointment_date, meeting_link } = req.body;
 		let error = false;
 
 		// DATE VARIABLES FOR COMPARISON
@@ -272,7 +264,7 @@ exports.acceptComplaintPending = async (req, res, next) => {
 			const complaintResult = await Complaint.findOneAndUpdate(
 				{ _id: filter },
 				{
-					case_status: case_status,
+					case_status: CaseStatusesEnum.BOOKED,
 					appointment_date: appointment_date,
 					meeting_link: meeting_link,
 				}
@@ -316,10 +308,14 @@ exports.rejectComplaintPending = async (req, res, next) => {
 		const filter = req.body.id;
 		complaintResult = await Complaint.findOneAndUpdate(
 			{ _id: filter },
-			{ case_status: CaseStatusesEnum.REJECTED }
+			{
+				case_status: CaseStatusesEnum.REJECTED,
+				complaint_status: ComplaintStatusesEnum.REJECTED,
+				is_verified: true
+			}
 		);
 
-		res.redirect("/form/complaints/" + filter);
+		res.redirect("/admin/pending");
 	} catch (err) {
 		next(err);
 	}
@@ -330,7 +326,10 @@ exports.completeComplaintOngoing = async (req, res, next) => {
 		const id = req.body.id;
 		await Complaint.findByIdAndUpdate(
 			{ _id: id },
-			{ case_status: CaseStatusesEnum.COMPLETED }
+			{
+				case_status: CaseStatusesEnum.COMPLETED,
+				complaint_status: ComplaintStatusesEnum.RESOLVED
+			}
 		);
 
 		res.redirect("/form/complaints/" + req.body.id);
@@ -345,8 +344,9 @@ exports.followUpSchedule = async (req, res, next) => {
 		await Complaint.findByIdAndUpdate(
 			{ _id: id },
 			{
+				complaint_status: ComplaintStatusesEnum.FOLLOWUP,
 				case_status: CaseStatusesEnum.PENDING,
-				$unset: { appointment_date: "" },
+				$unset: { appointment_date: "", meeting_link: "" },
 			}
 		);
 		res.redirect("/dashboard");
@@ -375,12 +375,12 @@ exports.patchReferUpdate = async (req, res, next) => {
 		const user_id = req.user._id;
 		const { lawyer_id, complaint_id } = req.body;
 
-		await Complaint.findByIdAndUpdate(
+		const complaintDeets = await Complaint.findByIdAndUpdate(
 			{ _id: complaint_id },
 			{ lawyer_id: lawyer_id }
 		);
 
-		await User.findByIdAndUpdate(
+		const lawyerDeets = await User.findByIdAndUpdate(
 			{ _id: user_id },
 			{ $pull: { complaints: complaint_id } }
 		);
@@ -389,6 +389,16 @@ exports.patchReferUpdate = async (req, res, next) => {
 			{ _id: lawyer_id },
 			{ $push: { complaints: complaint_id } }
 		);
+
+		// Push notification
+		const pushNotify = new Notification({
+			complaint_id: complaint_id,
+			message: "has referred you to another lawyer",
+			actor: lawyerDeets.username,
+			target: complaintDeets.client_id
+		})
+
+		await pushNotify.save()
 
 		res.redirect("/dashboard");
 	} catch (err) {

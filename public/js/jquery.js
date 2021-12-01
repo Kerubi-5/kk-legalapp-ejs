@@ -136,22 +136,24 @@ $("#referButton").click(() => {
     success: (data) => {
       data.forEach((lawyer) => {
         let html = `
-        <div class="d-flex justify-content-around align-items-center border mb-3">
-        <div class="mt-3 mb-3">
-            <img class="img-thumbnail" src="/uploads/avatar/${lawyer.avatar}" width="100" height="100">
-        </div>
-        <div class="mt-3 mb-3">
-            <a target="_blank" href="/users/${lawyer._id}">
+          <div class="container mb-3 border">
+            <div class="row m-3 align-items-center">
+              <div class="col-sm">
+                <img class="img-thumbnail" src="/uploads/avatar/${lawyer.avatar}"
+                width="100" height="100">
+              </div>
+              <div class="col-sm">
+                <a target="_blank" href="/users/${lawyer._id}">
                 ${lawyer.user_fname}
                 ${lawyer.user_lname}
-            </a>
-      
-        </div>
-        <div class="mt-3 mb-3">
-            <input class="form-check-input big" type="radio" name="lawyer_id"
+                </a>
+              </div>
+              <div class="col-sm input-radio">
+                <input class="form-check-input big" type="radio" name="lawyer_id"
                 value="${lawyer._id}">
-        </div>
-        </div>
+              </div>
+            </div>
+          </div>
         `;
         $("#lawyerListInModal").append(html);
         $("#referModal").modal("show");
@@ -201,3 +203,13 @@ $("#search_text").keyup(() => {
   value = $("#search_text").val();
   $("#search_query").attr("href", "/advice?filter=" + value);
 });
+
+
+// ON SUBMIT LOAD
+$(document).on('submit', 'form', (e) => {
+  // find and cache submit button within the form
+  // var button = $("#submitButton")
+  var button = $("button[type='submit']")
+  // disable and set the text
+  button.attr('disabled', true).find('#loadingStatus').removeClass("d-none")
+})

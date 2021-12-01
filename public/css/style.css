@@ -1,9 +1,5 @@
 body {
-  background-image: url("../assets/images/body-back.jpg");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
-  overflow-x: hidden;
+  background-color: rgb(224, 224, 235);
 }
 
 .index-hr {
@@ -26,17 +22,6 @@ td {
   height: 3em;
 }
 
-input[type="radio"] {
-  -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
-  -moz-appearance: checkbox; /* Firefox */
-  -ms-appearance: checkbox; /* not currently supported */
-}
-
-.scrolling-active {
-  background-color: black;
-  transition: 0.5s;
-}
-
 .disabled {
   color: white;
   background-color: grey;
@@ -46,44 +31,6 @@ input[type="radio"] {
 .notification {
   overflow-x: auto;
   max-height: 500px;
-}
-
-/* HOMEPAGE */
-.home-banner {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../assets/images/homepage_law.jpg");
-  width: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-}
-
-.carousel-item {
-  height: 25rem;
-  background: black;
-  color: whitesmoke;
-  position: relative;
-}
-
-.overlay-image {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  background-position: center;
-  background-size: cover;
-  opacity: 0.5;
-}
-
-.carousel-text {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding-bottom: 50px;
-  text-align: center;
 }
 
 /* ADVICE FORUM */
@@ -107,4 +54,10 @@ input[type="radio"] {
   color: green;
   cursor: pointer;
   text-decoration: none;
+}
+
+@media only screen and (min-width: 600px) {
+  .input-radio {
+    text-align: center;
+  }
 }
