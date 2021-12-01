@@ -1,9 +1,5 @@
 body {
-  background-image: url("../assets/images/body-back.jpg");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
-  overflow-x: hidden;
+  background-color: rgb(224, 224, 235);
 }
 
 .index-hr {
@@ -26,11 +22,6 @@ td {
   height: 3em;
 }
 
-.scrolling-active {
-  background-color: black;
-  transition: 0.5s;
-}
-
 .disabled {
   color: white;
   background-color: grey;
@@ -40,33 +31,6 @@ td {
 .notification {
   overflow-x: auto;
   max-height: 500px;
-}
-
-.carousel-item {
-  height: 25rem;
-  background: black;
-  color: whitesmoke;
-  position: relative;
-}
-
-.overlay-image {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  background-position: center;
-  background-size: cover;
-  opacity: 0.5;
-}
-
-.carousel-text {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding-bottom: 50px;
-  text-align: center;
 }
 
 /* ADVICE FORUM */
