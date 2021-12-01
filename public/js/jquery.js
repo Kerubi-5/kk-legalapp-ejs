@@ -203,3 +203,13 @@ $("#search_text").keyup(() => {
   value = $("#search_text").val();
   $("#search_query").attr("href", "/advice?filter=" + value);
 });
+
+
+// ON SUBMIT LOAD
+$(document).on('submit', 'form', (e) => {
+  // find and cache submit button within the form
+  // var button = $("#submitButton")
+  var button = $("button[type='submit']")
+  // disable and set the text
+  button.attr('disabled', true).find('#loadingStatus').removeClass("d-none")
+})
