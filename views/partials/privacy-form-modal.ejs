@@ -71,7 +71,13 @@ aria-labelledby="form_registerModalLabel" aria-hidden="true">
       </ul>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary btn-block">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="registerCheckbox">
+        <label class="form-check-label" for="registerCheckbox">
+          Agree to the terms and agreement
+        </label>
+      </div>
+      <button id="registerButton" type="submit" class="btn btn-primary btn-block" disabled>
         Register
       </button>
     </div>

@@ -24,6 +24,12 @@ $("ul .dropdown-menu .dropdown-item button").click(function (e) {
   e.stopPropagation();
 });
 
+// REGISTER
+$('#registerCheckbox').change(function () {
+  $('#registerButton').attr('disabled', !this.checked);
+});
+
+
 /**
  * -------------- DASHBOARD ----------------
  */
