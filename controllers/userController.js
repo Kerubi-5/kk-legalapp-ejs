@@ -198,7 +198,7 @@ exports.editUserPatch = async (req, res, next) => {
 		const {
 			user_fname,
 			user_lname,
-			birth_date,
+			birthdate,
 			contact_number,
 			permanent_address,
 			organization,
@@ -232,7 +232,7 @@ exports.editUserPatch = async (req, res, next) => {
 		// This does not work, add a new patch for background
 		await User.findByIdAndUpdate(
 			{ _id: filter },
-			{ user_fname, user_lname, birth_date, contact_number, permanent_address }
+			{ user_fname, user_lname, birthdate, contact_number, permanent_address }
 		);
 
 		if (user_type == RolesEnum.LAWYER && organization && description) {
