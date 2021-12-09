@@ -4,20 +4,22 @@ const passport = require("passport");
 
 // Controller
 const userController = require("../controllers/userController");
-
+const RoutesEnum = require("../controllers/EnumTypes/RoutesEnum");
 // Auth types
 const forwardAuthenticated = require("./auth").isNotAuth;
 const { isAuth } = require("./auth");
 
 // Login Page
-router.get("/login", forwardAuthenticated, (req, res) => res.render("login"));
+router.get("/login", forwardAuthenticated, (req, res) =>
+  res.render("login", { page_name: RoutesEnum.LOGIN })
+);
 
 // Register Page for Client and Lawyer
 router.get("/register/client", forwardAuthenticated, (req, res) =>
-  res.render("register-client")
+  res.render("register-client", { page_name: RoutesEnum.REGISTER })
 );
 router.get("/register/lawyer", forwardAuthenticated, (req, res) =>
-  res.render("register-lawyer")
+  res.render("register-lawyer", { page_name: RoutesEnum.REGISTER })
 );
 
 router.post("/register", userController.userRegister);
@@ -58,6 +60,10 @@ router.patch("/edit/:id", isAuth, userController.editUserPatch);
 router.patch("/edit/public/:id", isAuth, userController.setProfileVisibility);
 
 // SET DATE AVAILABILITY
-router.patch("/edit/available/:id", isAuth, userController.setLawyerAvailability);
+router.patch(
+  "/edit/available/:id",
+  isAuth,
+  userController.setLawyerAvailability
+);
 
 module.exports = router;

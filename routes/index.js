@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const complaintController = require("../controllers/complaintController")
+const complaintController = require("../controllers/complaintController");
+const RoutesEnum = require("../controllers/EnumTypes/RoutesEnum");
 
 // Load User model
 const User = require("../models/User");
@@ -61,7 +62,7 @@ router.get("/verify", async (req, res, next) => {
 
 router.get("/faq/english", async (req, res, next) => {
   try {
-    res.render("faq-english");
+    res.render("faq-english", { page_name: RoutesEnum.FAQ });
   } catch (err) {
     next(err);
   }
@@ -69,7 +70,7 @@ router.get("/faq/english", async (req, res, next) => {
 
 router.get("/faq/tagalog", async (req, res, next) => {
   try {
-    res.render("faq-tagalog");
+    res.render("faq-tagalog", { page_name: RoutesEnum.FAQ });
   } catch (err) {
     next(err);
   }
