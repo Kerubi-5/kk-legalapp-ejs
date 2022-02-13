@@ -36,4 +36,9 @@ Now you can run the program type "npm run dev" to run and visit the site
 #### advice 🤝
 #### notifications 🔔
 
+### Technologies used ⚙
+#### Express.js
+#### EJS
+#### Heroku
+#### Passport.js
 
