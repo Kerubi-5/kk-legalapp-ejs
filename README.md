@@ -29,12 +29,19 @@ Add this line under the scripts
   
 Now you can run the program type "npm run dev" to run and visit the site
 
+### UML
+![Web based legal](https://user-images.githubusercontent.com/55902501/170497739-1f82bb18-3f6e-4a5e-9266-984c9c70214b.png)
 
 ### Database Schema
 #### user 👥
 #### complaints ⚖
 #### advice 🤝
 #### notifications 🔔
+![Database Schema](https://user-images.githubusercontent.com/55902501/170497343-a5522590-f483-49be-ac64-7ea4b2588586.png)
+
+### Class Diagram
+![Class Diagram](https://user-images.githubusercontent.com/55902501/170498296-bcbbcd5c-334b-4972-a74e-a7581b26fbdd.png)
+
 
 ### Technologies used ⚙
 #### Express.js
