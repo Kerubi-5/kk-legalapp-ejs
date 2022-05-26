@@ -44,8 +44,12 @@ Now you can run the program type "npm run dev" to run and visit the site
 
 
 ### Technologies used ⚙
-#### Express.js
-#### EJS
-#### Heroku
-#### Passport.js
+#### Express.js (Backend)
+#### Passport.js (Auth)
+#### Nodemailer.js (For sending emails)
+#### EJS (Template HTML)
+#### Bootstrap (Design System / Layout)
+#### JQuery (Ajax / JS Functions)
+#### Heroku (Deploy Environment)
+
 
