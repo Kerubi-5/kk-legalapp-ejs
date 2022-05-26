@@ -44,6 +44,7 @@ Now you can run the program type "npm run dev" to run and visit the site
 
 
 ### Technologies used ⚙
+#### Node.js
 #### Express.js (Backend)
 #### Passport.js (Auth)
 #### Nodemailer.js (For sending emails)
